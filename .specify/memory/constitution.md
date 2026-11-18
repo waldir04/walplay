@@ -1,36 +1,45 @@
 <!--
 Sync Impact Report
 ==================
-Version change: none → 1.0.0
-Bump rationale: Initial ratification. 1.0.0 is the baseline constitution for Walplay;
-there is no prior version to remain compatible with.
+Version change: 1.0.0 → 1.1.0
+Bump rationale: MINOR. No principle is added, removed, or renumbered, and the amendment,
+versioning, and compliance mechanisms are unchanged. Guidance is materially expanded and
+corrected against the authoritative Walday brand references: missing shared design tokens and
+type/space scales are added, the logo implementation is aligned with `branding.md`, the
+contradictory raw-hex logo exception is withdrawn, a Walday-only row-action mandate is
+generalized, and stale statements about `docs/product-overview.md` are corrected.
 
-Modified principles: none (new document).
+Modified principles:
+- VII. Styling, Design Tokens, and Visual Consistency — token inventory aligned with the
+  shared design system; the raw-hex brand-mark exception is removed in favor of
+  token-driven color; control-boundary and target-size rules made explicit.
+- XVI. Documentation and Technical Communication — clarified that Walplay does not maintain
+  its own design-system or branding documents while the shared references suffice.
+- XIX. Data Integrity and Persistence with Prisma — Walday-specific guest-to-account
+  migration wording generalized to any local-to-remote migration.
+
+Modified sections:
+- Visual Identity and Design System — palette extended with `surface-subtle`,
+  `border-strong`, `text-inverse`, and the `primary-hover` alias; exact type scale and spacing
+  scale added; focus treatment stated concretely; brand-logo implementation rewritten to match
+  the authoritative Walday logo (token-driven stroke, HTML wordmark, `aria-hidden` mark,
+  `showText` prop, lockup geometry); compliance checks updated.
+- Architectural Decisions Intentionally Deferred — product-overview reference refreshed; region
+  determination and artwork licensing added.
+- Known-gaps register — refreshed; product overview now exists.
 
 Added sections:
-- Core Principles I–XXI.
-- Visual Identity and Design System (Walday Dark UI / Calm Tech Dark).
-- Technology Stack and Architectural Boundaries.
-- Development Workflow, Quality Gates, and Definition of Done.
-- Architectural Decisions Intentionally Deferred.
-- Governance.
+- Governance § Shared identity and adaptation.
 
 Removed sections: none.
 
-Adaptation notes:
-- Walday product-specific rules were excluded: weather providers and weather caching,
-  daily tasks and agenda management, planning suggestions, task-row interactions,
-  weather-specific visual indicators, and guest-data migration mandates.
-- Walplay-specific requirements were added: mandatory frontend arrow functions,
-  content-provider and playback integration rules, the zero-unexpected-warnings policy,
-  and the Conventional Commits workflow.
-
 Follow-up TODOs:
-- Ratification date is recorded as the initial adoption date, 2026-11-18.
-- `docs/product-overview.md` does not exist yet in the Walplay repository; product scope
-  MUST be defined there before feature specifications are authored.
-- Provider selection, playback feasibility, and live-television support remain deferred
-  pending validated product requirements and technical research.
+- None outstanding in the governance content. Ratification date remains the initial adoption
+  date, 2026-11-18.
+- Deferred outside this document: the Walplay repository does not yet contain the Spec Kit
+  template layers or `.specify/scripts/`; this amendment relies on the core Spec Kit
+  `constitution-template` resolved from the workspace toolchain. Initialize the full Spec Kit
+  scaffolding in the Walplay repository before relying on preset or extension template layers.
 -->
 
 # Walplay Constitution
@@ -42,7 +51,8 @@ governs engineering standards.
 
 Walplay is part of the same product family as Walday. The shared engineering standards and the
 shared visual identity are defined here once and apply to every Walplay surface. The Walday
-reference material in `docs/reference/walday/constitution.md` and
+reference material in `docs/reference/walday/constitution.md`,
+`docs/reference/walday/design-system.md`, `docs/reference/walday/branding.md`, and
 `docs/reference/walday/logo.svg` is the authoritative source for the shared brand identity; this
 constitution is the authoritative source for Walplay engineering governance.
 
@@ -291,12 +301,14 @@ Design tokens:
 - Design tokens MUST have a single source of truth: the Tailwind v4 `@theme` block.
   Duplicated token definitions in any legacy configuration MUST be consolidated into that
   source when the affected area is touched.
-- The semantic palette MUST define at least `canvas`, `surface`, `surface-raised`, `border`,
-  `text`, `text-muted`, `primary`, `primary-strong`, `danger`, `success`, `warning`, `focus`,
-  `tag-border`, and `tag-text`, and MUST meet WCAG AA contrast where used for text and
-  interface elements.
-- Components MUST NOT contain raw hex colors; they MUST use semantic tokens. The only
-exception is the brand mark defined in Visual Identity §6.
+- The semantic palette MUST define at least `canvas`, `surface`, `surface-raised`,
+  `surface-subtle`, `border`, `border-strong`, `text`, `text-muted`, `text-inverse`, `primary`,
+  `primary-strong`, `success`, `warning`, `danger`, `focus`, `tag-border`, and `tag-text`, and
+  MUST meet WCAG AA contrast where used for text and interface elements.
+- Components MUST NOT contain raw hex colors or framework palette classes; they MUST use
+  semantic tokens. Literal palette values are permitted only inside the `@theme` token
+  definitions and inside static SVG assets such as the favicon; they are prohibited in
+  component code, including the brand logo (Visual Identity §6).
 - Typography MUST follow an explicit hierarchy (display, title, body, caption) with consistent
   spacing, radius, shadow, and density scales.
 - Visual implementation MUST align with the Walday Dark UI identity defined in
@@ -308,12 +320,14 @@ Layout and interaction:
 
 - Use semantic HTML and follow a logical heading hierarchy.
 - `focus-visible` styling is mandatory on every interactive element and MUST be consistent
-  across the application.
+  across the application. The shared outline is defined in Visual Identity §5; removing a
+  visible focus indicator is prohibited.
 - Layouts MUST be mobile-first and fully responsive, verified at 360, 768, 1024, and 1440
   pixel widths.
 - No horizontal scrolling may be introduced at supported widths, except inside a deliberately
   contained region recorded as an explicit constitutional exception.
-- Touch targets MUST be at least 24 by 24 CSS pixels (44 pixels recommended).
+- Interactive targets MUST be at least 24 by 24 CSS pixels. Primary controls and row actions
+  MUST be at least 44 by 44 CSS pixels, matching the shared implementation.
 - Motion MUST be minimal and MUST respect `prefers-reduced-motion`.
 
 Mandatory asynchronous UX states: every asynchronous surface MUST implement all of the
@@ -651,9 +665,11 @@ Backend localization:
 - Every implementation plan MUST include an explicit Constitution Check.
 - AI-generated code MUST comply with exactly the same standards as manually written code.
 
-A separate `design-system.md` or `branding.md` is not required. The shared visual identity is
-defined in this constitution and in the Walday reference material; a separate document MUST
-only be introduced if the identity grows enough to require independent maintenance.
+Walplay does not maintain its own `design-system.md` or `branding.md` while the shared identity
+fits in this constitution and the Walday references under `docs/reference/walday/`. A separate
+document MAY be introduced only when the identity or its implementation guidance grows enough
+to require independent maintenance; it MUST then reference this constitution rather than
+restate conflicting values.
 
 ### XVII. Automated Quality Gates, Git Hooks, and Commit Convention (NON-NEGOTIABLE)
 
@@ -770,9 +786,10 @@ Transactions and invariants:
   that check for conflicts.
 - Partial writes MUST NOT be possible for a single user action.
 - Transactions MUST be kept short and free of external network calls.
-- If a guest-to-account or local-to-remote migration is introduced, it MUST be explicit,
-  transactional on the server, safe against partial failure, and specified before
-  implementation.
+- If a local-only or guest usage model is introduced, any migration of that data to an account
+  or another device MUST be explicit, safe against partial failure, replay-safe, and specified
+  before implementation. The existence of such a model is an open product decision, not a
+  constitutional requirement.
 
 Modeling:
 
@@ -900,27 +917,35 @@ hardcode these hex values.
 | `canvas` | `#0B1215` | Main application background; calm, low-glare backdrop |
 | `surface` | `#131D22` | Cards, containers, and content rows |
 | `surface-raised` | `#152026` | Nested panels, hover surfaces, and elevated containers |
-| `border` | `#23323A` | Subtle 1px boundaries for cards, rows, and controls |
-| `text` | `#F3F4F6` | Headings, titles, and primary content |
+| `surface-subtle` | `#152026` | Skeleton bars and inert placeholder surfaces (same value as `surface-raised`) |
+| `border` | `#23323A` | Decorative 1px boundaries for cards, rows, and containers |
+| `border-strong` | `#5B6B73` | Interactive control boundaries: inputs, secondary buttons, checkbox and radio outlines |
+| `text` | `#F3F4F6` | Headings, titles, primary content, and the logo wordmark |
 | `text-muted` | `#8B9BA3` | Timestamps, metadata, and secondary labels |
+| `text-inverse` | `#0B1215` | Label text on `primary` and `danger` surfaces |
 | `primary` | `#34D399` | Brand logo, active indicators, and primary actions |
-| `primary-strong` | `#10B981` | Primary hover and active states |
+| `primary-strong` | `#10B981` | Primary hover and active states (`primary-hover` is an accepted alias) |
 | `success` | `#34D399` | Confirmed and completed states; MUST pair with text or an icon |
 | `warning` | `#FBBF24` | Caution, availability, and non-blocking degradation |
 | `danger` | `#F87171` | Destructive actions and error states |
-| `focus` | `#34D399` | `focus-visible` rings and active focus indication |
+| `focus` | `#34D399` | `focus-visible` outlines, rings, and active focus indication |
 | `tag-border` | `#2A3B44` | Category and status pill border |
 | `tag-text` | `#9CA3AF` | Category and status pill label |
 
 Palette rules:
 
 - Text and interactive elements MUST meet WCAG AA contrast against their actual background.
+- `border` is decorative and does not reach 3:1 contrast against `surface`. Interactive control
+  boundaries MUST use `border-strong`; a decorative `border` MUST NOT be the only indication
+  that a control exists.
+- Text placed on `primary` or `danger` surfaces MUST use `text-inverse`, not white.
 - Color MUST NOT be the sole carrier of state, category, availability, or validation meaning; a
   text label or icon MUST accompany it.
 - Darker and lighter state variants MAY be derived from these tokens but MUST preserve the
   approved hue and contrast relationships.
-- Product-specific accent surfaces MUST be derived from approved tokens. Introducing new hues
-  requires a constitutional amendment.
+- Product-specific accent surfaces MUST be derived from approved tokens. Adding a semantic token
+  that is not listed above requires an amendment; introducing a new hue value requires an
+  amendment.
 - Walday product-specific tokens (weather highlights and suggestion-card surfaces) are NOT part
   of the Walplay identity and MUST NOT be introduced without an approved requirement.
 
@@ -929,8 +954,19 @@ Palette rules:
 - The primary typeface MUST be Inter, with `system-ui` as the fallback.
 - A single geometric sans-serif family MUST be used for interface text; a second display
   typeface MUST NOT be introduced.
-- The type hierarchy (display, title, body, caption) and spacing scale MUST be reused; this
-  identity does not authorize a parallel scale.
+- The type hierarchy and spacing scale MUST be reused; this identity does not authorize a
+  parallel scale. The canonical type scale is:
+
+| Step | Size / line height | Weight | Use |
+|---|---|---|---|
+| `display` | `2.25rem` / `2.5rem` | `700` | Primary page heading on the home surface |
+| `title` | `1.5rem` / `2rem` | `600` | Route headings, section headings, dialog titles, empty and error headings |
+| `body` | `1rem` / `1.5rem` | none by default | Body copy, buttons, inputs, row titles |
+| `caption` | `0.875rem` / `1.25rem` | none by default | Metadata, labels, navigation, pills, helper and error text |
+
+- Weight MUST be applied per component; `body` and `caption` do not carry a default weight.
+- Inter MUST be self-hosted and bundled with the application (for example
+  `@fontsource-variable/inter`); a third-party font request at runtime is prohibited.
 - All numeric data where vertical alignment matters MUST render with `tabular-nums`, including
   timestamps, durations, episode numbers, counts, ratings, and progress percentages.
 - Headings MUST express real document structure; typography MUST NOT be used to fake heading
@@ -938,83 +974,135 @@ Palette rules:
 
 ### 4. Shape, Spacing, and Row Density
 
-- Main cards and list rows MUST use a 16px radius (`rounded-2xl`).
-- Buttons MUST use an 8px radius (`rounded-lg`).
+- Main cards and list rows MUST use a 16px radius (`1rem`, `--radius-card`, `rounded-2xl`).
+- Buttons and inputs MUST use an 8px radius (`0.5rem`, `--radius-control`).
 - Category, status, and metadata pills MUST use a fully rounded shape (`rounded-full`).
 - Card padding MUST be generous (20px to 24px). Vertical gaps between list rows MUST be 12px
   to 16px.
-- Boundaries MUST be expressed with the subtle border token first. Shadows MUST remain minimal
-  and MUST NOT provide the only separation between surfaces.
-- A list row MUST show at most three primary data points: the leading visual or status
-  control, the title with its supporting metadata, and a trailing pill or primary action.
-- Secondary actions (edit, remove, reveal more) MUST be hidden by default and revealed smoothly
-  on row hover. They MUST also be revealed on keyboard focus and MUST remain visible or
-  otherwise directly reachable on touch and narrow viewports; hover MUST NOT be the only
-  access path.
-- Revealing secondary actions MUST NOT shift the row layout.
+- The shared spacing scale is: page padding `1rem`, page padding at `sm` and above `1.5rem`,
+  section rhythm `1.5rem`, compact stack `0.5rem`, and control padding `0.75rem`. Additional
+  steps MAY come from the default Tailwind spacing scale, but page-level padding and section
+  rhythm MUST NOT be redefined.
+- Boundaries MUST be expressed with the `border` token first. Shadows MUST remain minimal and
+  MUST NOT provide the only separation between surfaces.
+- A list row MUST show at most three primary data points: a leading visual or status control,
+  the title with its supporting metadata, and a trailing pill or primary action.
+- Secondary row or card actions MAY be revealed on hover for wide, fine-pointer viewports. When
+  they are, they MUST also become visible on keyboard focus and MUST remain visible or directly
+  reachable on touch and narrow viewports; hover MUST NOT be the only access path. This
+  constitution does not require any surface to hide its actions by default.
+- Revealing secondary actions MUST NOT shift the layout.
 - Category and status pills MUST be implemented with the `tag-border` and `tag-text` tokens,
   not arbitrary hex values.
 
 ### 5. Motion, States, and Micro-interactions
 
-- Hover borders and state transitions MUST use `150ms ease-out`.
+- Interactive state transitions MUST use `150ms ease-out`. Entrance transitions, such as a
+  navigation drawer, MUST NOT exceed `160ms ease-out`.
 - Hover emphasis on interactive rows MAY use `primary` at 50% opacity on the border.
 - All motion MUST respect `prefers-reduced-motion`; reduced-motion users MUST receive the same
-  state changes without essential animation.
+  state changes without essential animation, and scroll behavior MUST fall back to `auto`.
+- The shared `:focus-visible` treatment is a `2px` solid `focus` outline with a `2px` offset.
+  A component MAY substitute an equivalent `2px` ring when an outline would be clipped, but it
+  MUST NOT remove or reduce the visible focus indication.
 - Empty states MUST use a calm dark card with a subtle mint icon, a clear explanation, and a
   primary call-to-action when the user can act.
 - Success, warning, danger, and conflict states MUST use semantic tokens, include text or an
   icon, and MUST NOT rely on color alone.
-- `focus-visible` styling is mandatory on every interactive element, including row actions
-  that appear on hover.
+- `focus-visible` styling is mandatory on every interactive element, including actions that
+  are revealed on hover.
 - Transitions MUST NOT animate layout-affecting properties in ways that cause visible shift.
 
 ### 6. Brand Logo
 
-The Walplay logo MUST preserve the exact same geometric W monogram used by Walday: the same
-smooth, rounded wave/check strokes, the same mint color (`#34D399`), the same proportions, and
-the same off-white wordmark treatment. The wordmark MUST read `Walplay` instead of `Walday`.
+Walplay uses the shared Walday W monogram with the `Walplay` wordmark. The monogram geometry is
+identical to Walday: the five-point open polyline `M5 10 L11 22 L16 13 L21 22 L27 10` inside a
+`0 0 32 32` viewBox, rendered at 28 × 28 CSS pixels with `fill="none"`, `strokeWidth="3.6"`,
+and round caps and joins. The wordmark MUST read `Walplay` instead of `Walday`.
+
+The `branding.md` guidance that a product family member may adopt a distinct monogram path is
+superseded for Walplay by an explicit product decision: Walplay MUST keep the exact Walday W.
+Redesigning, redrawing, or approximating the mark is prohibited.
 
 Implementation requirements:
 
 - The logo MUST be an inline SVG React component named `WalplayLogo.tsx` placed under
-  `frontend/src/shared/ui/`.
-- It MUST reuse the Walday geometry without redesign:
+  `frontend/src/shared/ui/`, written with arrow function syntax (Principle IV).
+- The component MUST accept `className` and `showText` props; `showText` defaults to `true`.
+- The monogram MUST use `stroke="currentColor"` with the `primary` token applied to the SVG, so
+  the mint color comes from the token and not from a literal hex value in the component.
+- The monogram MUST be `aria-hidden="true"` and MUST NOT carry its own accessible name.
+- The wordmark MUST be live HTML text inside the same lockup, rendered with the `text` token
+  and `text-xl font-semibold tracking-tight`. SVG text and image-based wordmarks are
+  prohibited.
+- The lockup MUST be a horizontal inline-flex row with a 10px gap (`gap-2.5`), vertically
+  centered, with the monogram first and `shrink-0` so it never compresses.
+- Icon-only usage MUST be available through `showText={false}` and MUST keep the 28 × 28 mark.
+- The accessible application name MUST come from the `app.name` translation resource, applied
+  to the link that wraps the logo, not from the mark itself.
+- The logo MUST NOT be recolored per state, animated, or paired with a tagline. Hover, active,
+  and disabled variants do not exist.
+- Raster logos, externally loaded logo images, `<img>` elements, and third-party brand marks
+  MUST NOT be used.
+- The favicon (`public/logo.svg`, 32 × 32) MUST use the canvas color as a rounded background
+  with the mint W as a decorative mark. Static SVG assets are the only files permitted to
+  contain literal palette values.
+
+Reference form:
 
 ```tsx
-<svg
-  width="28"
-  height="28"
-  viewBox="0 0 32 32"
-  fill="none"
-  xmlns="http://www.w3.org/2000/svg"
-  stroke="#34D399"
-  strokeWidth="3.6"
-  strokeLinecap="round"
-  strokeLinejoin="round"
->
-  <path d="M5 10 L11 22 L16 13 L21 22 L27 10" />
-</svg>
+const WALPLAY_MONOGRAM_PATH = 'M5 10 L11 22 L16 13 L21 22 L27 10'
+
+export interface WalplayLogoProps {
+  className?: string
+  showText?: boolean
+}
+
+export const WalplayLogo = ({ className = '', showText = true }: WalplayLogoProps) => {
+  return (
+    <span className={`inline-flex select-none items-center gap-2.5 ${className}`}>
+      <svg
+        width="28"
+        height="28"
+        viewBox="0 0 32 32"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        stroke="currentColor"
+        strokeWidth="3.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+        className="shrink-0 text-primary"
+      >
+        <path d={WALPLAY_MONOGRAM_PATH} />
+      </svg>
+      {showText ? (
+        <span className="text-xl font-semibold tracking-tight text-text">Walplay</span>
+      ) : null}
+    </span>
+  )
+}
 ```
 
-- The path geometry, stroke width, stroke caps, stroke joins, viewBox, and mint stroke MUST NOT
-  be altered or replaced with a different brand symbol.
-- The logo is the only approved raw-hex surface: because the mark is the brand asset itself, it
-  MAY reference `#34D399` directly. Every other component MUST consume the `primary` token.
-- The wordmark MUST use the off-white text token, not pure white.
-- Raster logos, externally loaded logo images, and third-party brand marks MUST NOT be used.
-- The component MUST expose accessible text so the logo is not unlabeled when it conveys the
-  product name.
-- The Walday reference file `docs/reference/walday/logo.svg` is the authoritative source for
-  the geometry.
+- The path geometry, stroke width, stroke caps, stroke joins, viewBox, rendered size, and
+  lockup proportions MUST NOT be altered or replaced with a different brand symbol.
+- The Walday reference files `docs/reference/walday/logo.svg` and
+  `docs/reference/walday/branding.md` are authoritative for the monogram and for the lockup
+  treatment.
 
 ### 7. Compliance and Verification
 
 - New UI and any UI touched by a change MUST use the Walday Dark UI tokens, radii, spacing,
   typography, and interaction behavior defined here.
-- Reviews MUST verify: no raw hex in components other than the brand logo, no pure-black canvas,
-  correct `tabular-nums`, token-only pills, keyboard and touch access to row actions, and WCAG
-  AA contrast.
+- Reviews MUST verify: no raw hex or framework palette classes in component code, no pure-black
+  canvas, `border-strong` on interactive control boundaries, `text-inverse` on `primary` and
+  `danger` surfaces, correct `tabular-nums`, token-only pills, keyboard and touch access to
+  conditional actions, and WCAG AA contrast.
+- Reviews MUST verify the logo: exact monogram path and stroke values, token-driven stroke, an
+  `aria-hidden` mark, an HTML `Walplay` wordmark, the 10px lockup gap, and no per-state
+  recoloring or animation.
+- Automated checks SHOULD cover the token values and the logo contract when a test harness
+  exists; a visual identity rule without a test MUST still be verified manually in review.
 - Responsive verification MUST cover 360, 768, 1024, and 1440 pixel widths and 200% browser
   zoom, with no horizontal scrolling and no hover-only behavior.
 - Dark mode MUST be the default and only approved theme.
@@ -1023,7 +1111,7 @@ Implementation requirements:
 
 ## Technology Stack and Architectural Boundaries
 
-The following stack is approved as of version 1.0.0 of this constitution. Versions indicate the
+The following stack is approved as of version 1.1.0 of this constitution. Versions indicate the
 approved major line; routine minor and patch updates within it do not require an amendment.
 
 | Area | Approved technology | Notes |
@@ -1163,8 +1251,9 @@ The constitution MUST NOT prematurely lock down decisions that require further p
 technical analysis. The following remain open until the relevant specification and planning
 work:
 
-- Product scope, feature set, and business rules. `docs/product-overview.md` does not exist yet
-  and MUST be established before feature specifications are authored.
+- Product scope detail beyond `docs/product-overview.md` v1.0.0: the exact catalog, the
+  initially supported regions, and the supported content languages. These remain open product
+  decisions and MUST be settled in feature specifications, not here.
 - Authentication provider selection, account model, and configuration.
 - Session management and token strategy.
 - API versioning strategy.
@@ -1179,8 +1268,10 @@ work:
 - Selection of content metadata, streaming availability, and playback providers.
 - Feasibility, authorization, legal constraints, and technical viability of video playback and
   live television.
+- How the user's region is determined or selected, and how travel or relocation is handled.
+- Artwork licensing, caching, and display rules for provider-supplied artwork.
 - PWA offline capabilities and synchronization behavior.
-- Guest or local-only usage models and any migration to an account.
+- Whether a local-only or guest usage model exists, and any migration to an account.
 
 These decisions MUST be made through the Spec Kit workflow and documented when they have
 meaningful architectural impact. Do not introduce infrastructure or design patterns solely
@@ -1202,6 +1293,25 @@ The constitution is the authoritative source of Walplay engineering standards.
 - The Walday reference material governs shared brand identity; this constitution governs
   Walplay engineering. A genuine conflict between the two MUST be resolved by amendment, not
   by silent divergence.
+
+### Shared identity and adaptation
+
+- `docs/reference/walday/constitution.md`, `design-system.md`, `branding.md`, and `logo.svg`
+  are the source of truth for shared brand and design decisions. Reuse them instead of
+  defining an alternative.
+- Do not copy Walday product requirements into Walplay. Weather providers and weather
+  caching, daily planning and agenda behavior, suggestion surfaces, task completion and
+  task-row interaction, weather-specific visual indicators, and Walday-specific guest-data
+  rules have no force here.
+- Shared foundations do not force identical layouts. Walplay screens and components MUST serve
+  entertainment discovery, title details, availability, and personal lists.
+- Walday documents distinguish implemented behavior from guidance. Where a rule is marked as
+  guidance that may vary between products, Walplay follows the explicit decisions in this
+  constitution.
+- A shared design change that affects both products MUST be recorded here and evaluated for
+  Walday. Walplay MUST NOT diverge from the shared identity silently.
+- When the shared identity needs to evolve, document the reason in the amendment and state
+  whether Walday must adopt the same change.
 
 ### Recorded exceptions
 
@@ -1249,21 +1359,26 @@ The constitution uses semantic versioning:
   priority over cosmetic compliance.
 - Deviations MUST be recorded in the known-gaps register below or in an ADR until resolved.
 
-### Known-gaps register (as of 1.0.0)
+### Known-gaps register (as of 1.1.0)
 
 These gaps are tracked, not accepted as compliant behavior. Each MUST be closed when the
 affected area is touched.
 
-- `docs/product-overview.md` has not been authored; Principles and product-dependent
-  decisions remain untestable until product scope is defined.
-- The backend application does not exist yet; Principles V, XI, XIX, and XX describe its
-  mandatory target state.
-- The frontend design tokens, dark theme, shared UI primitives, and `WalplayLogo.tsx` are not
-  yet implemented; the Visual Identity section describes their mandatory target state.
+- The frontend and backend applications do not exist yet. Principles III–VII, XI, XVIII, and
+  XIX and the Visual Identity section describe their mandatory target state.
+- The `@theme` design tokens, dark theme, and shared UI primitives are not yet implemented.
+- `WalplayLogo.tsx` is not yet implemented; the exact monogram, lockup, and accessibility
+  contract are defined in Visual Identity §6.
 - Provider integrations and playback capability are unselected and unvalidated; no integration
   may be implemented until a specification approves it.
+- `docs/product-overview.md` v1.0.0 exists, but several MVP gates remain open: provider
+  selection, the persistence and account model, and legal review. Features that depend on those
+  gates MUST NOT be specified as confirmed.
+- The Walplay repository does not yet contain the Spec Kit template layers or
+  `.specify/scripts/`; Spec Kit commands that resolve project templates MUST NOT assume they
+  exist until the scaffolding is initialized.
 
 The constitution evolves as the project matures, but every change MUST preserve its role as a
 consistent engineering standard.
 
-**Version**: 1.0.0 | **Ratified**: 2026-11-18 | **Last Amended**: 2026-11-18
+**Version**: 1.1.0 | **Ratified**: 2026-11-18 | **Last Amended**: 2026-11-18
