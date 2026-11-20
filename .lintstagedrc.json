@@ -1,0 +1,8 @@
+{
+  "frontend/**/*.{ts,tsx,js,json,css,md}": [
+    "frontend/node_modules/.bin/prettier --config frontend/.prettierrc.json --write"
+  ],
+  "frontend/src/**/*.{ts,tsx}": [
+    "frontend/node_modules/.bin/eslint --config frontend/eslint.config.js --max-warnings 0"
+  ]
+}

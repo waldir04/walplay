@@ -1,33 +1,31 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.1.0 → 1.1.1
-Bump rationale: PATCH. The constitution was reorganized onto the Spec Kit constitution
-template scaffold: one Core Principles section, two additional top-level sections, and
-Governance. No principle, obligation, or governance rule was added, removed, or redefined.
-Stale statements were corrected: the repository now contains the Spec Kit template layers and
-scripts, and version references were refreshed.
+Version change: 1.1.1 → 1.2.0
+Bump rationale: MINOR. A new normative rule was added: specification Git branches must be
+prefixed by change type (`feat/`, `docs/`, or `fix/`) while the `specs/` folder remains
+`NNN-slug`. This materially expands the Git and specification-workflow guidance; no existing
+principle was removed, redefined, or weakened.
 
 Modified principles:
-- None.
+- XVII. Automated Quality Gates, Git Hooks, and Commit Convention: added a cross-reference
+  requiring specification branches to follow the branch-naming rules. No obligation removed.
 
 Modified sections:
-- Visual Identity and Design System and Technology Stack and Architectural Boundaries are
-  nested under the new Additional Constraints and Technology Standards section.
-- Architectural Decisions Intentionally Deferred moved under Section 2.
-- Known-gaps register: removed the stale entry stating that the Spec Kit template layers and
-  `.specify/scripts/` are absent; they are now present.
-- Technology Stack version reference updated to 1.1.1.
+- Development Workflow, Quality Gates, and Definition of Done: added the "Git branch naming
+  for specifications" subsection.
+- Known-gaps register heading and technology version references updated to 1.2.0.
 
 Added sections:
-- Additional Constraints and Technology Standards (template Section 2 grouping; existing
-  content preserved).
+- Git branch naming for specifications (subsection of Development Workflow).
 
 Removed sections:
-- None. All content is preserved.
+- None.
 
 Follow-up TODOs:
-- None.
+- None. The pre-existing `001-app-foundation` branch was renamed to
+  `feat/001-app-foundation` and its specification updated, so no legacy branch violates this
+  rule.
 -->
 
 # Walplay Constitution
@@ -709,6 +707,8 @@ docs(readme): update setup instructions
 - Commit-message validation MUST be automated (for example with commitlint) and invoked from
   the Git hook or CI.
 - Hook tooling MUST remain development-only and MUST NOT introduce runtime dependencies.
+- Branches created for a specification MUST follow the naming rules defined in
+  "Git branch naming for specifications" under Development Workflow.
 
 ### XVIII. Frontend Server State and Async UX (NON-NEGOTIABLE)
 
@@ -1101,7 +1101,7 @@ export const WalplayLogo = ({ className = '', showText = true }: WalplayLogoProp
 
 ### Technology Stack and Architectural Boundaries
 
-The following stack is approved as of version 1.1.1 of this constitution. Versions indicate the
+The following stack is approved as of version 1.2.0 of this constitution. Versions indicate the
 approved major line; routine minor and patch updates within it do not require an amendment.
 
 | Area | Approved technology | Notes |
@@ -1222,6 +1222,27 @@ tasks, then implementation.
   `docs/product-overview.md` also needs an update.
 - Product features, providers, and integrations MUST NOT be invented in a plan or constitution
   amendment. Unvalidated capabilities remain deferred.
+
+### Git branch naming for specifications
+
+A specification's folder under `specs/` MUST always be named `NNN-slug`, where `NNN` is the
+zero-padded sequential specification number and `slug` is its short name. The folder name MUST
+NOT carry a type prefix.
+
+When creating a Git branch for any specification, the author MUST first classify the type of
+change and MUST use exactly one of the following prefixes, followed by the specification number
+and slug:
+
+| Change type | Branch name |
+|---|---|
+| New feature | `feat/NNN-slug` |
+| Documentation | `docs/NNN-slug` |
+| Bug fix | `fix/NNN-slug` |
+
+- Only `feat`, `docs`, and `fix` are permitted as specification branch prefixes. Other prefixes
+  are prohibited for specification branches.
+- The `NNN-slug` segment of the branch name MUST match the `specs/` folder name exactly.
+- A branch MUST NOT be named after the folder alone; the type prefix is mandatory.
 
 ### Quality gates
 
@@ -1349,7 +1370,7 @@ The constitution uses semantic versioning:
   priority over cosmetic compliance.
 - Deviations MUST be recorded in the known-gaps register below or in an ADR until resolved.
 
-### Known-gaps register (as of 1.1.1)
+### Known-gaps register (as of 1.2.0)
 
 These gaps are tracked, not accepted as compliant behavior. Each MUST be closed when the
 affected area is touched.
@@ -1368,4 +1389,4 @@ affected area is touched.
 The constitution evolves as the project matures, but every change MUST preserve its role as a
 consistent engineering standard.
 
-**Version**: 1.1.1 | **Ratified**: 2026-11-18 | **Last Amended**: 2026-11-19
+**Version**: 1.2.0 | **Ratified**: 2026-11-18 | **Last Amended**: 2026-11-20

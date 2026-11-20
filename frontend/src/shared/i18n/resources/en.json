@@ -1,0 +1,79 @@
+{
+  "app": {
+    "name": "Walplay",
+    "tagline": "A calm place to discover films and series worth your time."
+  },
+  "navigation": {
+    "label": "Primary navigation",
+    "home": "Home",
+    "settings": "Settings",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "menuTitle": "Navigation"
+  },
+  "meta": {
+    "title": {
+      "home": "Home · Walplay",
+      "settings": "Settings · Walplay",
+      "notFound": "Page not found · Walplay",
+      "app": "Walplay"
+    }
+  },
+  "a11y": {
+    "skipToContent": "Skip to main content",
+    "navigatedTo": "Navigated to {{title}}",
+    "loading": "Page content is loading",
+    "currentPage": "Current page",
+    "languageChanged": "Interface language changed to {{language}}"
+  },
+  "home": {
+    "title": "Welcome to Walplay",
+    "empty": {
+      "title": "Your next watch starts here",
+      "description": "Walplay is a calm place to discover films and series worth your time. Discovery features are not part of this foundation yet, so there is nothing to browse here today."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Choose how Walplay speaks to you. This page contains only the preferences available in this early foundation.",
+    "language": {
+      "label": "Interface language",
+      "helper": "Changes apply immediately and are saved only in this browser.",
+      "storageNotice": "Your language preference is stored only in this browser. It may be lost if you clear browser storage or use another device."
+    }
+  },
+  "states": {
+    "loading": {
+      "title": "Preparing this page"
+    },
+    "error": {
+      "title": "This page could not be loaded",
+      "description": "Something went wrong while preparing this page. Try again, or return home.",
+      "retry": "Try again"
+    },
+    "notFound": {
+      "title": "Page not found",
+      "description": "The page you requested does not exist. It may have moved, or the address may be mistyped.",
+      "home": "Back to home"
+    },
+    "empty": {
+      "title": "Nothing here yet",
+      "description": "There is no content to show right now."
+    }
+  },
+  "languages": {
+    "en": "English",
+    "es": "Español"
+  },
+  "errors": {
+    "config": {
+      "title": "Walplay cannot start",
+      "description": "The application is missing valid configuration. Please contact the site owner or try again later."
+    },
+    "render": {
+      "title": "This page could not be displayed",
+      "description": "A problem stopped this page from rendering. The rest of the application is still available.",
+      "home": "Back to home"
+    }
+  }
+}

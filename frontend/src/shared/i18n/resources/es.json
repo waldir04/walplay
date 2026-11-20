@@ -1,0 +1,79 @@
+{
+  "app": {
+    "name": "Walplay",
+    "tagline": "Un lugar tranquilo para descubrir películas y series que merecen tu tiempo."
+  },
+  "navigation": {
+    "label": "Navegación principal",
+    "home": "Inicio",
+    "settings": "Ajustes",
+    "openMenu": "Abrir el menú de navegación",
+    "closeMenu": "Cerrar el menú de navegación",
+    "menuTitle": "Navegación"
+  },
+  "meta": {
+    "title": {
+      "home": "Inicio · Walplay",
+      "settings": "Ajustes · Walplay",
+      "notFound": "Página no encontrada · Walplay",
+      "app": "Walplay"
+    }
+  },
+  "a11y": {
+    "skipToContent": "Ir al contenido principal",
+    "navigatedTo": "Has navegado a {{title}}",
+    "loading": "El contenido de la página se está cargando",
+    "currentPage": "Página actual",
+    "languageChanged": "El idioma de la interfaz ha cambiado a {{language}}"
+  },
+  "home": {
+    "title": "Te damos la bienvenida a Walplay",
+    "empty": {
+      "title": "Tu próxima película o serie empieza aquí",
+      "description": "Walplay es un lugar tranquilo para descubrir películas y series que merecen tu tiempo. Las funciones de descubrimiento aún no forman parte de esta base, así que hoy no hay nada que explorar aquí."
+    }
+  },
+  "settings": {
+    "title": "Ajustes",
+    "description": "Elige cómo se comunica Walplay contigo. Esta página solo contiene las preferencias disponibles en esta base inicial.",
+    "language": {
+      "label": "Idioma de la interfaz",
+      "helper": "Los cambios se aplican de inmediato y solo se guardan en este navegador.",
+      "storageNotice": "Tu preferencia de idioma se guarda únicamente en este navegador. Puede perderse si borras el almacenamiento del navegador o usas otro dispositivo."
+    }
+  },
+  "states": {
+    "loading": {
+      "title": "Preparando esta página"
+    },
+    "error": {
+      "title": "No se pudo cargar esta página",
+      "description": "Algo salió mal al preparar esta página. Inténtalo de nuevo o vuelve al inicio.",
+      "retry": "Intentar de nuevo"
+    },
+    "notFound": {
+      "title": "Página no encontrada",
+      "description": "La página que solicitaste no existe. Puede que se haya movido o que la dirección esté mal escrita.",
+      "home": "Volver al inicio"
+    },
+    "empty": {
+      "title": "Aún no hay nada aquí",
+      "description": "No hay contenido que mostrar en este momento."
+    }
+  },
+  "languages": {
+    "en": "English",
+    "es": "Español"
+  },
+  "errors": {
+    "config": {
+      "title": "Walplay no puede iniciarse",
+      "description": "Falta una configuración válida para la aplicación. Ponte en contacto con la persona responsable del sitio o inténtalo más tarde."
+    },
+    "render": {
+      "title": "No se pudo mostrar esta página",
+      "description": "Un problema impidió que esta página se mostrara. El resto de la aplicación sigue disponible.",
+      "home": "Volver al inicio"
+    }
+  }
+}
