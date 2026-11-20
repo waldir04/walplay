@@ -1,0 +1,180 @@
+
+name: CI
+
+# Pull-request and post-merge quality gate for develop and main.
+# Frontend and backend checks run once each application is introduced.
+# Branch protection and required status checks are configured in GitHub
+# repository settings, never from this workflow. See docs/ci.md.
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    name: Frontend checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Detect frontend
+        id: frontend
+        working-directory: .
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if [ -f frontend/package.json ]; then
+            for file in frontend/package-lock.json frontend/.nvmrc; do
+              if [ ! -f "$file" ]; then
+                echo "::error::$file is required but missing."
+                exit 1
+              fi
+            done
+
+            echo "present=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ -n "$BASE_SHA" ] && [ "$BASE_SHA" != "0000000000000000000000000000000000000000" ]; then
+            if ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
+              echo "::error::Cannot verify frontend at base revision $BASE_SHA."
+              exit 1
+            fi
+
+            if git cat-file -e "$BASE_SHA:frontend/package.json" 2>/dev/null; then
+              echo "::error::frontend/package.json was removed; restore it."
+              exit 1
+            fi
+          fi
+
+          echo "present=false" >> "$GITHUB_OUTPUT"
+          echo "Frontend has not been introduced; skipping frontend checks."
+
+      - name: Set up Node.js
+        if: steps.frontend.outputs.present == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: frontend/.nvmrc
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        if: steps.frontend.outputs.present == 'true'
+        run: npm ci
+
+      - name: Lint
+        if: steps.frontend.outputs.present == 'true'
+        run: npm run lint
+
+      - name: Type check
+        if: steps.frontend.outputs.present == 'true'
+        run: npm run typecheck
+
+      - name: Test
+        if: steps.frontend.outputs.present == 'true'
+        run: npm run test
+
+      - name: Build
+        if: steps.frontend.outputs.present == 'true'
+        run: npm run build
+
+  backend:
+    name: Backend checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Detect backend
+        id: backend
+        working-directory: .
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if [ -e backend ]; then
+            if [ ! -d backend ]; then
+              echo "::error::backend exists but is not a directory."
+              exit 1
+            fi
+
+            for file in backend/package.json backend/package-lock.json backend/.nvmrc; do
+              if [ ! -f "$file" ]; then
+                echo "::error::$file is required because backend/ exists."
+                exit 1
+              fi
+            done
+
+            echo "present=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ -n "$BASE_SHA" ] && [ "$BASE_SHA" != "0000000000000000000000000000000000000000" ]; then
+            if ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
+              echo "::error::Cannot verify backend at base revision $BASE_SHA."
+              exit 1
+            fi
+
+            if git cat-file -e "$BASE_SHA:backend/package.json" 2>/dev/null; then
+              echo "::error::backend/package.json was removed; restore it."
+              exit 1
+            fi
+          fi
+
+          echo "present=false" >> "$GITHUB_OUTPUT"
+          echo "Backend has not been introduced; skipping backend checks."
+
+      - name: Set up Node.js
+        if: steps.backend.outputs.present == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: backend/.nvmrc
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        if: steps.backend.outputs.present == 'true'
+        run: npm ci
+
+      - name: Lint
+        if: steps.backend.outputs.present == 'true'
+        run: npm run lint
+
+      - name: Type check
+        if: steps.backend.outputs.present == 'true'
+        run: npm run typecheck
+
+      - name: Test
+        if: steps.backend.outputs.present == 'true'
+        run: npm run test
+
+      - name: Build
+        if: steps.backend.outputs.present == 'true'
+        run: npm run build
