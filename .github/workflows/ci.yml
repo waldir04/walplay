@@ -178,3 +178,48 @@ jobs:
       - name: Build
         if: steps.backend.outputs.present == 'true'
         run: npm run build
+
+  branch-name:
+    name: Branch name validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Validate branch name
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_REF: ${{ github.head_ref }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            branch="$HEAD_REF"
+          else
+            branch="$REF_NAME"
+          fi
+
+          if [ -z "$branch" ]; then
+            echo "::error::Could not determine the branch name for this event."
+            exit 1
+          fi
+
+          # develop and main are integration branches. Pushes to them are merge
+          # commits, so topic-branch naming does not apply.
+          if [ "$EVENT_NAME" = "push" ] && { [ "$branch" = "develop" ] || [ "$branch" = "main" ]; }; then
+            echo "Integration branch '$branch' is exempt from topic-branch naming."
+            exit 0
+          fi
+
+          spec_pattern='^(feat|docs|fix)/[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$'
+          other_pattern='^(chore|refactor)/[a-z0-9]+(-[a-z0-9]+)*$'
+
+          if [[ "$branch" =~ $spec_pattern ]] || [[ "$branch" =~ $other_pattern ]]; then
+            echo "Branch name '$branch' is valid."
+            exit 0
+          fi
+
+          echo "::error::Invalid branch name '$branch'."
+          echo "Specification branches must match feat/NNN-slug, docs/NNN-slug, or fix/NNN-slug."
+          echo "Non-specification branches must match chore/slug or refactor/slug."
+          echo "Use lowercase kebab-case; NNN is exactly three digits."
+          exit 1

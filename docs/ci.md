@@ -1,10 +1,11 @@
 # Continuous Integration
 
 The quality gate is defined in `.github/workflows/ci.yml`. It runs on pull requests
-targeting `develop` and `main`, and on pushes to those branches after merge. It defines two
-independent jobs, `Frontend checks` and `Backend checks`, with read-only repository
-permissions. There are no path filters and no manual trigger, so every push or pull request
-to those branches runs the workflow, including documentation-only changes.
+targeting `develop` and `main`, and on pushes to those branches after merge. It defines three
+independent jobs, `Frontend checks`, `Backend checks`, and `Branch name validation`, with
+read-only repository permissions. There are no path filters and no manual trigger, so every
+push or pull request to those branches runs the workflow, including documentation-only
+changes.
 
 ## Application detection
 
@@ -52,6 +53,26 @@ and checkout uses `fetch-depth: 0` and `persist-credentials: false`.
 `Frontend checks` and `Backend checks` each run their validation steps only when their
 detection step reports `present=true`; otherwise they log that the application has not been
 introduced and skip them. The jobs are independent and run in parallel.
+
+## Branch name validation
+
+`Branch name validation` checks only the format of the branch tied to the run:
+`github.head_ref` for pull requests and `github.ref_name` for pushes. It accepts:
+
+| Kind | Accepted format |
+| ---- | --------------- |
+| Specification branch | `feat/NNN-slug`, `docs/NNN-slug`, `fix/NNN-slug` |
+| Non-specification branch | `chore/slug`, `refactor/slug` |
+
+`NNN` is exactly three digits. `slug` is lowercase alphanumeric segments separated by single
+hyphens. Uppercase letters, underscores, spaces, empty segments, repeated or trailing
+hyphens, missing prefixes, and unsupported prefixes fail the job. Pushes to the integration
+branches `develop` and `main` are exempt, because they are merge targets rather than topic
+branches.
+
+The job validates the branch-name format only. It does not check that `specs/NNN-slug`
+exists or that the branch slug matches a specification folder; that correspondence remains a
+project convention enforced through the constitution and development workflow.
 
 ## Concurrency
 
@@ -108,15 +129,17 @@ For each branch, open **Settings → Branches → Add branch protection rule** (
 1. **Branch name pattern**: `develop` (repeat the rule for `main`).
 2. Enable **Require a pull request before merging**.
 3. Enable **Require status checks to pass before merging**.
-4. Search for and select the **`Frontend checks`** and **`Backend checks`** status checks.
+4. Search for and select the **`Frontend checks`**, **`Backend checks`**, and **`Branch name
+   validation`** status checks.
 5. Recommended: enable **Require branches to be up to date before merging**.
 6. Recommended: enable **Do not allow bypassing the above settings** so administrators are
    also blocked by the gate.
 7. Save the rule.
 
-The workflow reports exactly two checks: `Frontend checks` and `Backend checks`. Both jobs
-always report a conclusion: they pass when their application is absent and run the full
-script contract once it is introduced. Requiring both is therefore safe before either
+The workflow reports exactly three checks: `Frontend checks`, `Backend checks`, and `Branch
+name validation`. The application jobs always report a conclusion: they pass when their
+application is absent and run the full script contract once it is introduced. The branch job
+passes when the branch name is valid. Requiring all three is therefore safe before either
 application exists, and starts gating an application as soon as it appears.
 
 Notes:

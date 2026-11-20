@@ -1,31 +1,30 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.1.1 → 1.2.0
-Bump rationale: MINOR. A new normative rule was added: specification Git branches must be
-prefixed by change type (`feat/`, `docs/`, or `fix/`) while the `specs/` folder remains
-`NNN-slug`. This materially expands the Git and specification-workflow guidance; no existing
-principle was removed, redefined, or weakened.
+Version change: 1.2.0 → 1.3.0
+Bump rationale: MINOR. New normative rules were added for non-specification Git branches
+(`chore/slug` and `refactor/slug`) and shared branch-name requirements (lowercase kebab-case,
+descriptive names, no additional prefixes without justification). Existing specification
+branch and `specs/` folder rules are preserved unchanged.
 
 Modified principles:
-- XVII. Automated Quality Gates, Git Hooks, and Commit Convention: added a cross-reference
-  requiring specification branches to follow the branch-naming rules. No obligation removed.
+- XVII. Automated Quality Gates, Git Hooks, and Commit Convention: the branch-naming
+  cross-reference now covers specification and non-specification branches.
 
 Modified sections:
 - Development Workflow, Quality Gates, and Definition of Done: added the "Git branch naming
-  for specifications" subsection.
-- Known-gaps register heading and technology version references updated to 1.2.0.
+  for non-specification branches" subsection.
+- Known-gaps register heading and technology version references updated to 1.3.0.
 
 Added sections:
-- Git branch naming for specifications (subsection of Development Workflow).
+- Git branch naming for non-specification branches (subsection of Development Workflow).
 
 Removed sections:
 - None.
 
 Follow-up TODOs:
-- None. The pre-existing `001-app-foundation` branch was renamed to
-  `feat/001-app-foundation` and its specification updated, so no legacy branch violates this
-  rule.
+- None. CI validates branch-name format only; the correspondence between branch slugs and
+  `specs/` folders remains a workflow convention, not a CI check.
 -->
 
 # Walplay Constitution
@@ -707,8 +706,8 @@ docs(readme): update setup instructions
 - Commit-message validation MUST be automated (for example with commitlint) and invoked from
   the Git hook or CI.
 - Hook tooling MUST remain development-only and MUST NOT introduce runtime dependencies.
-- Branches created for a specification MUST follow the naming rules defined in
-  "Git branch naming for specifications" under Development Workflow.
+- Branches MUST follow the naming rules defined under Development Workflow, in "Git branch
+  naming for specifications" and "Git branch naming for non-specification branches".
 
 ### XVIII. Frontend Server State and Async UX (NON-NEGOTIABLE)
 
@@ -1101,7 +1100,7 @@ export const WalplayLogo = ({ className = '', showText = true }: WalplayLogoProp
 
 ### Technology Stack and Architectural Boundaries
 
-The following stack is approved as of version 1.2.0 of this constitution. Versions indicate the
+The following stack is approved as of version 1.3.0 of this constitution. Versions indicate the
 approved major line; routine minor and patch updates within it do not require an amendment.
 
 | Area | Approved technology | Notes |
@@ -1244,6 +1243,28 @@ and slug:
 - The `NNN-slug` segment of the branch name MUST match the `specs/` folder name exactly.
 - A branch MUST NOT be named after the folder alone; the type prefix is mandatory.
 
+### Git branch naming for non-specification branches
+
+Changes that are not tied to a specification MUST use one of the following prefixes:
+
+| Change type | Branch name |
+|---|---|
+| Maintenance | `chore/slug` |
+| Refactoring | `refactor/slug` |
+
+- `chore/` and `refactor/` branches MUST NOT carry a specification number.
+- Only `chore` and `refactor` are permitted as non-specification branch prefixes.
+- Additional branch prefixes MUST NOT be introduced without explicit justification recorded
+  in the change or an ADR.
+
+Branch names in all categories MUST use lowercase kebab-case: lowercase alphanumeric
+segments separated by single hyphens. Branch names MUST be descriptive of the change they
+contain. Uppercase letters, underscores, spaces, empty segments, and trailing or repeated
+hyphens are prohibited.
+
+The specification branch rules above and the `specs/` folder rules are unaffected by this
+section. Non-specification branches do not require a corresponding specification folder.
+
 ### Quality gates
 
 - Every application MUST expose `lint`, `typecheck`, `test`, and `build` scripts and they MUST
@@ -1370,7 +1391,7 @@ The constitution uses semantic versioning:
   priority over cosmetic compliance.
 - Deviations MUST be recorded in the known-gaps register below or in an ADR until resolved.
 
-### Known-gaps register (as of 1.2.0)
+### Known-gaps register (as of 1.3.0)
 
 These gaps are tracked, not accepted as compliant behavior. Each MUST be closed when the
 affected area is touched.
@@ -1389,4 +1410,4 @@ affected area is touched.
 The constitution evolves as the project matures, but every change MUST preserve its role as a
 consistent engineering standard.
 
-**Version**: 1.2.0 | **Ratified**: 2026-11-18 | **Last Amended**: 2026-11-20
+**Version**: 1.3.0 | **Ratified**: 2026-11-18 | **Last Amended**: 2026-11-20
