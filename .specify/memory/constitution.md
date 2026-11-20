@@ -1,45 +1,33 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.0.0 → 1.1.0
-Bump rationale: MINOR. No principle is added, removed, or renumbered, and the amendment,
-versioning, and compliance mechanisms are unchanged. Guidance is materially expanded and
-corrected against the authoritative Walday brand references: missing shared design tokens and
-type/space scales are added, the logo implementation is aligned with `branding.md`, the
-contradictory raw-hex logo exception is withdrawn, a Walday-only row-action mandate is
-generalized, and stale statements about `docs/product-overview.md` are corrected.
+Version change: 1.1.0 → 1.1.1
+Bump rationale: PATCH. The constitution was reorganized onto the Spec Kit constitution
+template scaffold: one Core Principles section, two additional top-level sections, and
+Governance. No principle, obligation, or governance rule was added, removed, or redefined.
+Stale statements were corrected: the repository now contains the Spec Kit template layers and
+scripts, and version references were refreshed.
 
 Modified principles:
-- VII. Styling, Design Tokens, and Visual Consistency — token inventory aligned with the
-  shared design system; the raw-hex brand-mark exception is removed in favor of
-  token-driven color; control-boundary and target-size rules made explicit.
-- XVI. Documentation and Technical Communication — clarified that Walplay does not maintain
-  its own design-system or branding documents while the shared references suffice.
-- XIX. Data Integrity and Persistence with Prisma — Walday-specific guest-to-account
-  migration wording generalized to any local-to-remote migration.
+- None.
 
 Modified sections:
-- Visual Identity and Design System — palette extended with `surface-subtle`,
-  `border-strong`, `text-inverse`, and the `primary-hover` alias; exact type scale and spacing
-  scale added; focus treatment stated concretely; brand-logo implementation rewritten to match
-  the authoritative Walday logo (token-driven stroke, HTML wordmark, `aria-hidden` mark,
-  `showText` prop, lockup geometry); compliance checks updated.
-- Architectural Decisions Intentionally Deferred — product-overview reference refreshed; region
-  determination and artwork licensing added.
-- Known-gaps register — refreshed; product overview now exists.
+- Visual Identity and Design System and Technology Stack and Architectural Boundaries are
+  nested under the new Additional Constraints and Technology Standards section.
+- Architectural Decisions Intentionally Deferred moved under Section 2.
+- Known-gaps register: removed the stale entry stating that the Spec Kit template layers and
+  `.specify/scripts/` are absent; they are now present.
+- Technology Stack version reference updated to 1.1.1.
 
 Added sections:
-- Governance § Shared identity and adaptation.
+- Additional Constraints and Technology Standards (template Section 2 grouping; existing
+  content preserved).
 
-Removed sections: none.
+Removed sections:
+- None. All content is preserved.
 
 Follow-up TODOs:
-- None outstanding in the governance content. Ratification date remains the initial adoption
-  date, 2026-11-18.
-- Deferred outside this document: the Walplay repository does not yet contain the Spec Kit
-  template layers or `.specify/scripts/`; this amendment relies on the core Spec Kit
-  `constitution-template` resolved from the workspace toolchain. Initialize the full Spec Kit
-  scaffolding in the Walplay repository before relying on preset or extension template layers.
+- None.
 -->
 
 # Walplay Constitution
@@ -884,7 +872,9 @@ is closed.
   version upgrades, replacements, or removals require a constitutional amendment.
 - Frontend and backend MUST remain independently deployable.
 
-## Visual Identity and Design System (Walday Dark UI / Calm Tech Dark)
+## Additional Constraints and Technology Standards
+
+### Visual Identity and Design System (Walday Dark UI / Calm Tech Dark)
 
 The Walday Dark UI is the mandatory visual identity for every Walplay user-facing surface. It is
 shared with Walday and is not an opportunity to introduce a different visual direction.
@@ -892,7 +882,7 @@ Principle VII governs token mechanics and styling technology; this section defin
 visual values and interaction character. When both apply, the stricter accessibility requirement
 wins.
 
-### 1. Personality and Visual Direction
+#### 1. Personality and Visual Direction
 
 - Walplay MUST present the same calm, refined dark mode ("Calm Tech Dark") as Walday, adapted
   to an entertainment-focused experience.
@@ -906,7 +896,7 @@ wins.
 - The brand logo MUST be the shared Walday W monogram with the `Walplay` wordmark, as defined
   in §6.
 
-### 2. Canonical Dark Palette
+#### 2. Canonical Dark Palette
 
 The following values are the canonical token definitions. They MUST be defined once in the
 Tailwind v4 `@theme` block and consumed through semantic token names. Components MUST NOT
@@ -949,7 +939,7 @@ Palette rules:
 - Walday product-specific tokens (weather highlights and suggestion-card surfaces) are NOT part
   of the Walplay identity and MUST NOT be introduced without an approved requirement.
 
-### 3. Typography and Numerals
+#### 3. Typography and Numerals
 
 - The primary typeface MUST be Inter, with `system-ui` as the fallback.
 - A single geometric sans-serif family MUST be used for interface text; a second display
@@ -972,7 +962,7 @@ Palette rules:
 - Headings MUST express real document structure; typography MUST NOT be used to fake heading
   hierarchy.
 
-### 4. Shape, Spacing, and Row Density
+#### 4. Shape, Spacing, and Row Density
 
 - Main cards and list rows MUST use a 16px radius (`1rem`, `--radius-card`, `rounded-2xl`).
 - Buttons and inputs MUST use an 8px radius (`0.5rem`, `--radius-control`).
@@ -995,7 +985,7 @@ Palette rules:
 - Category and status pills MUST be implemented with the `tag-border` and `tag-text` tokens,
   not arbitrary hex values.
 
-### 5. Motion, States, and Micro-interactions
+#### 5. Motion, States, and Micro-interactions
 
 - Interactive state transitions MUST use `150ms ease-out`. Entrance transitions, such as a
   navigation drawer, MUST NOT exceed `160ms ease-out`.
@@ -1013,7 +1003,7 @@ Palette rules:
   are revealed on hover.
 - Transitions MUST NOT animate layout-affecting properties in ways that cause visible shift.
 
-### 6. Brand Logo
+#### 6. Brand Logo
 
 Walplay uses the shared Walday W monogram with the `Walplay` wordmark. The monogram geometry is
 identical to Walday: the five-point open polyline `M5 10 L11 22 L16 13 L21 22 L27 10` inside a
@@ -1090,7 +1080,7 @@ export const WalplayLogo = ({ className = '', showText = true }: WalplayLogoProp
   `docs/reference/walday/branding.md` are authoritative for the monogram and for the lockup
   treatment.
 
-### 7. Compliance and Verification
+#### 7. Compliance and Verification
 
 - New UI and any UI touched by a change MUST use the Walday Dark UI tokens, radii, spacing,
   typography, and interaction behavior defined here.
@@ -1109,9 +1099,9 @@ export const WalplayLogo = ({ className = '', showText = true }: WalplayLogoProp
 - Any surface that predates this constitution MUST be migrated when the affected area is
   touched and MUST NOT be used as precedent for new work.
 
-## Technology Stack and Architectural Boundaries
+### Technology Stack and Architectural Boundaries
 
-The following stack is approved as of version 1.1.0 of this constitution. Versions indicate the
+The following stack is approved as of version 1.1.1 of this constitution. Versions indicate the
 approved major line; routine minor and patch updates within it do not require an amendment.
 
 | Area | Approved technology | Notes |
@@ -1176,6 +1166,38 @@ Backend standards:
 - Use transactions when business consistency requires them.
 - Keep API responses consistent.
 - Avoid unnecessary abstractions or infrastructure.
+
+### Architectural Decisions Intentionally Deferred
+
+The constitution MUST NOT prematurely lock down decisions that require further product or
+technical analysis. The following remain open until the relevant specification and planning
+work:
+
+- Product scope detail beyond `docs/product-overview.md` v1.0.0: the exact catalog, the
+  initially supported regions, and the supported content languages. These remain open product
+  decisions and MUST be settled in feature specifications, not here.
+- Authentication provider selection, account model, and configuration.
+- Session management and token strategy.
+- API versioning strategy.
+- Hosting, deployment, and environment topology.
+- Monitoring, logging, and observability tooling.
+- Specific caching policies beyond the requirements in Principles X and XX, and performance
+  budgets.
+- The mechanism for sharing API contracts between frontend and backend.
+- Where rate limiting is enforced (edge/proxy versus application middleware).
+- Detailed database schema and relationships, defined per feature specification within the
+  constraints of Principle XIX.
+- Selection of content metadata, streaming availability, and playback providers.
+- Feasibility, authorization, legal constraints, and technical viability of video playback and
+  live television.
+- How the user's region is determined or selected, and how travel or relocation is handled.
+- Artwork licensing, caching, and display rules for provider-supplied artwork.
+- PWA offline capabilities and synchronization behavior.
+- Whether a local-only or guest usage model exists, and any migration to an account.
+
+These decisions MUST be made through the Spec Kit workflow and documented when they have
+meaningful architectural impact. Do not introduce infrastructure or design patterns solely
+because they are common in larger systems.
 
 ## Development Workflow, Quality Gates, and Definition of Done
 
@@ -1244,38 +1266,6 @@ A task is complete only when all of the following hold:
 - Exceptions MUST be recorded and justified; silent deviations are defects.
 - AI-generated code MUST meet the same quality, security, testing, and review standards as
   manually written code.
-
-## Architectural Decisions Intentionally Deferred
-
-The constitution MUST NOT prematurely lock down decisions that require further product or
-technical analysis. The following remain open until the relevant specification and planning
-work:
-
-- Product scope detail beyond `docs/product-overview.md` v1.0.0: the exact catalog, the
-  initially supported regions, and the supported content languages. These remain open product
-  decisions and MUST be settled in feature specifications, not here.
-- Authentication provider selection, account model, and configuration.
-- Session management and token strategy.
-- API versioning strategy.
-- Hosting, deployment, and environment topology.
-- Monitoring, logging, and observability tooling.
-- Specific caching policies beyond the requirements in Principles X and XX, and performance
-  budgets.
-- The mechanism for sharing API contracts between frontend and backend.
-- Where rate limiting is enforced (edge/proxy versus application middleware).
-- Detailed database schema and relationships, defined per feature specification within the
-  constraints of Principle XIX.
-- Selection of content metadata, streaming availability, and playback providers.
-- Feasibility, authorization, legal constraints, and technical viability of video playback and
-  live television.
-- How the user's region is determined or selected, and how travel or relocation is handled.
-- Artwork licensing, caching, and display rules for provider-supplied artwork.
-- PWA offline capabilities and synchronization behavior.
-- Whether a local-only or guest usage model exists, and any migration to an account.
-
-These decisions MUST be made through the Spec Kit workflow and documented when they have
-meaningful architectural impact. Do not introduce infrastructure or design patterns solely
-because they are common in larger systems.
 
 ## Governance
 
@@ -1359,7 +1349,7 @@ The constitution uses semantic versioning:
   priority over cosmetic compliance.
 - Deviations MUST be recorded in the known-gaps register below or in an ADR until resolved.
 
-### Known-gaps register (as of 1.1.0)
+### Known-gaps register (as of 1.1.1)
 
 These gaps are tracked, not accepted as compliant behavior. Each MUST be closed when the
 affected area is touched.
@@ -1374,11 +1364,8 @@ affected area is touched.
 - `docs/product-overview.md` v1.0.0 exists, but several MVP gates remain open: provider
   selection, the persistence and account model, and legal review. Features that depend on those
   gates MUST NOT be specified as confirmed.
-- The Walplay repository does not yet contain the Spec Kit template layers or
-  `.specify/scripts/`; Spec Kit commands that resolve project templates MUST NOT assume they
-  exist until the scaffolding is initialized.
 
 The constitution evolves as the project matures, but every change MUST preserve its role as a
 consistent engineering standard.
 
-**Version**: 1.1.0 | **Ratified**: 2026-11-18 | **Last Amended**: 2026-11-18
+**Version**: 1.1.1 | **Ratified**: 2026-11-18 | **Last Amended**: 2026-11-19
