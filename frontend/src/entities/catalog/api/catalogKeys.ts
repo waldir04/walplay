@@ -11,4 +11,6 @@ export const catalogKeys = {
     [...catalogKeys.all, 'category', mediaType, section, language] as const,
   item: (mediaType: MediaType, itemId: string, language: InterfaceLanguage) =>
     [...catalogKeys.all, 'item', mediaType, itemId, language] as const,
+  search: (identity: string, language: InterfaceLanguage) =>
+    [...catalogKeys.all, 'search', identity, language] as const,
 } as const

@@ -2,6 +2,7 @@ import { render } from '@testing-library/react'
 import type { ReactElement } from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { MemoryRouter } from 'react-router'
+import type { InitialEntry } from 'react-router'
 import type { QueryClient } from '@tanstack/react-query'
 
 import { i18n } from '@/app/i18n'
@@ -9,7 +10,7 @@ import { QueryClientProvider, createQueryClient } from '@/app/providers/QueryCli
 import type { SupportedLocaleCode } from '@/shared/config/constants'
 
 export interface RenderWithProvidersOptions {
-  initialEntries?: string[]
+  initialEntries?: InitialEntry[]
   locale?: SupportedLocaleCode
   queryClient?: QueryClient
 }

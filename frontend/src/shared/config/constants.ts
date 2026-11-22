@@ -6,3 +6,6 @@ export const SUPPORTED_LOCALE_CODES = ['en', 'es'] as const
 export type SupportedLocaleCode = (typeof SUPPORTED_LOCALE_CODES)[number]
 export const WIDE_LAYOUT_BREAKPOINT = 768
 export const MAIN_CONTENT_ID = 'main-content'
+export const SEARCH_MIN_QUERY_LENGTH = 2
+export const SEARCH_MAX_QUERY_LENGTH = 200
+export const SEARCH_SETTLE_MS = 350

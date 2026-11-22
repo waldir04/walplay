@@ -7,8 +7,10 @@ import { createTmdbClient } from './providers/tmdb/tmdb.client.js'
 import { createGenreResolver } from './providers/tmdb/tmdb.genres.js'
 import { createImageResolver } from './providers/tmdb/tmdb.images.js'
 import { createTmdbProvider } from './providers/tmdb/tmdb.provider.js'
+import { createTmdbSearchProvider } from './providers/tmdb/tmdb.search.provider.js'
 import { CatalogCache } from './services/catalog-cache.js'
 import { CatalogService } from './services/catalog.service.js'
+import { SearchService } from './services/search.service.js'
 
 const loadLocalEnvironment = (): void => {
   if (!existsSync('.env.local')) {
@@ -43,19 +45,21 @@ const start = (): void => {
     timeoutMs: config.tmdbTimeoutMs,
     maxRetries: config.tmdbMaxRetries,
   })
-  const provider = createTmdbProvider({
-    client,
-    images: createImageResolver(client, { ttlMs: config.tmdbImageConfigTtlMs }),
-    genres: createGenreResolver(client),
-  })
-  const cache = new CatalogCache({
+  const genres = createGenreResolver(client)
+  const images = createImageResolver(client, { ttlMs: config.tmdbImageConfigTtlMs })
+  const provider = createTmdbProvider({ client, images, genres })
+  const searchProvider = createTmdbSearchProvider({ client, images, genres })
+  const cacheOptions = {
     freshTtlMs: config.tmdbCacheTtlMs,
     staleTtlMs: config.tmdbCacheStaleMs,
     maxEntries: config.tmdbCacheMaxEntries,
-  })
+  }
+  const cache = new CatalogCache(cacheOptions)
+  const searchCache = new CatalogCache(cacheOptions)
   const app = createApp({
     config,
     service: new CatalogService({ provider, cache }),
+    searchService: new SearchService({ provider: searchProvider, cache: searchCache }),
     logger,
   })
 

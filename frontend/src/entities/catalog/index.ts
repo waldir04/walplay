@@ -55,6 +55,38 @@ export {
   stateForErrorCode,
 } from './model/catalogError'
 export type { CatalogStateCopyKeys, CatalogUiState } from './model/catalogError'
+export {
+  SEARCH_COPY_KEYS,
+  SEARCH_ERROR_CODE_TO_STATE,
+  SEARCH_STATE_COPY_KEYS,
+  searchStateCopyKeys,
+  searchStateForError,
+  searchStateForErrorCode,
+} from './model/searchState'
+export type { SearchStateCopyKeys, SearchUiState } from './model/searchState'
+export {
+  buildSearchQuery,
+  classifySearchQuery,
+  countSearchQueryCodePoints,
+  countSearchQueryNonWhitespace,
+  hasSearchQueryParameter,
+  isValidSearchQueryText,
+  normalizeSearchIdentity,
+  parseSearchQueryAddress,
+  searchOriginPath,
+  searchQueryTextSchema,
+} from './model/searchQuery'
+export type { SearchQuery, SearchQueryValidity } from './model/searchQuery'
+export {
+  flattenSearchPages,
+  searchPageEnvelopeSchema,
+  searchResultPageSchema,
+} from './model/searchPage'
+export type {
+  AccumulatedSearchResults,
+  SearchPageEnvelope,
+  SearchResultPage,
+} from './model/searchPage'
 export { catalogKeys } from './api/catalogKeys'
 export {
   CATALOG_GC_TIME_MS,
@@ -65,13 +97,20 @@ export {
   useCategoryQuery,
   useSectionPreviewQuery,
 } from './api/catalogQueries'
+export { resolveNextSearchPage, useSearchQuery } from './api/searchQueries'
 export {
   createCatalogClient,
   fetchCapabilities,
   fetchItem,
+  fetchSearchPage,
   fetchSectionPage,
 } from './api/catalogClient'
-export type { CatalogClient, ItemRequest, SectionPageRequest } from './api/catalogClient'
+export type {
+  CatalogClient,
+  ItemRequest,
+  SearchPageRequest,
+  SectionPageRequest,
+} from './api/catalogClient'
 export { PosterFallback } from './ui/PosterFallback'
 export { CatalogCard } from './ui/CatalogCard'
 export { CatalogGrid } from './ui/CatalogGrid'

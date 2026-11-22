@@ -44,4 +44,22 @@ describe('catalog key factory', () => {
     expect(catalogKeys.capabilities()[0]).toBe('catalog')
     expect(catalogKeys.category('movie', 'popular', 'en')[0]).toBe('catalog')
   })
+
+  it('builds a search key from identity and language only', () => {
+    expect(catalogKeys.search('the matrix', 'en')).toEqual([
+      'catalog',
+      'search',
+      'the matrix',
+      'en',
+    ])
+  })
+
+  it('isolates search identity and language', () => {
+    const keys = new Set([
+      JSON.stringify(catalogKeys.search('the matrix', 'en')),
+      JSON.stringify(catalogKeys.search('the matrix', 'es')),
+      JSON.stringify(catalogKeys.search('arrival', 'en')),
+    ])
+    expect(keys.size).toBe(3)
+  })
 })

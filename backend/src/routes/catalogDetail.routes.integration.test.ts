@@ -5,6 +5,7 @@ import { encodeItemId } from '../lib/itemId.js'
 import { CatalogCache } from '../services/catalog-cache.js'
 import { CatalogService } from '../services/catalog.service.js'
 import { TEST_CONFIG, createFakeProvider, sampleItem } from '../test/fixtures/fakeProvider.js'
+import { createTestSearchService } from '../test/fixtures/fakeSearchProvider.js'
 import type { FakeProvider } from '../test/fixtures/fakeProvider.js'
 import { startTestServer } from '../test/fixtures/testServer.js'
 import type { TestServer } from '../test/fixtures/testServer.js'
@@ -15,7 +16,11 @@ let provider: FakeProvider
 beforeEach(async () => {
   provider = createFakeProvider()
   const cache = new CatalogCache({ freshTtlMs: 1000, staleTtlMs: 10_000, maxEntries: 10 })
-  const app = createApp({ config: TEST_CONFIG, service: new CatalogService({ provider, cache }) })
+  const app = createApp({
+    config: TEST_CONFIG,
+    service: new CatalogService({ provider, cache }),
+    searchService: createTestSearchService(),
+  })
   server = await startTestServer(app)
 })
 

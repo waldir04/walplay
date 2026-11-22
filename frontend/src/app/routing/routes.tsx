@@ -20,6 +20,7 @@ export const pageImporters: Record<PageKind, () => Promise<PageModule>> = {
   'catalog-category': () => import('@/pages/catalog-category'),
   'title-detail': () => import('@/pages/title-detail'),
   'catalog-not-found': () => import('@/pages/catalog-not-found'),
+  search: () => import('@/pages/search'),
 }
 
 const routeByKind = (kind: PageKind): AppRoute => {
@@ -79,6 +80,7 @@ export const appRouteObjects: RouteObject[] = [
           ...landingRoutes,
           ...categoryRoutes,
           ...detailRoutes,
+          contentRoute('search', 'search'),
           catalogRoute('catalog-not-found', 'browse/*', CATALOG_ROUTE_TITLES.notFound),
           contentRoute('not-found', '*'),
         ],
