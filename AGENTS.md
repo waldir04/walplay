@@ -9,18 +9,38 @@ All branches MUST follow the rules in `.specify/memory/constitution.md` under **
 ## Git Commit Rules
 
 - Before invoking /speckit.git.commit, review git status and git diff to identify all pending changes.
-
 - Follow all applicable commit conventions and Git hook requirements defined in `.specify/memory/constitution.md` under **Automated Quality Gates, Git Hooks, and Commit Convention (NON-NEGOTIABLE)**. Do not duplicate or redefine these rules here.
-
 - Stage only files related to the current task. Never include unrelated changes or existing user modifications.
-
 - If unrelated or ambiguous changes are present, ask the user for clarification before staging or committing.
-
 - Manual invocation of /speckit.git.commit MUST work independently of automatic hooks and auto_commit configuration.
-
 - Creating commits MUST require explicit user authorization. Never create commits automatically.
-
 - Never push changes unless explicitly requested by the user.
+- After any commit is successfully created, including commits created by Spec Kit hooks or automated workflows, you MUST continue with the Pull Request Rules before ending your response.
+- Do not consider reporting the commit hash and summary as completion of the requested workflow.
+- If the commit was created successfully, generate and display the complete GitHub-ready Pull Request description in the same response.
+- If the target branch cannot be determined, ask the user before generating the description.
+
+## Pull Request Rules
+
+- Follow the repository's `.github/pull_request_template.md` when generating Pull Request descriptions.
+- After completing the implementation and creating the requested commit(s), generate a GitHub-ready Pull Request description.
+- Analyze the complete set of changes introduced by the current feature branch compared to its target branch. Do not rely exclusively on the latest commit.
+- Include the related GitHub Issue when available, using the appropriate GitHub closing keyword (e.g., `Closes #123`).
+- Summarize the purpose, main changes, and relevant technical decisions.
+- Report only tests, builds, and quality checks that were actually executed.
+- Include screenshots or recordings when relevant to UI changes and available.
+- For UI changes, identify which screens or interactions require screenshots.
+- Do not fabricate screenshots or use mockups as evidence of implemented functionality.
+- If screenshots are not available, leave the section as a placeholder and inform the user what should be captured.
+- For backend-only changes, omit the Screenshots section.
+- Do not invent functionality, test results, metrics, or implementation details.
+- Keep the description concise and focused on the current task.
+- Output the complete description in Markdown, ready to copy into GitHub.
+- After any commit is successfully created, including commits created by Spec Kit hooks or automated workflows, you MUST continue with these rules before ending your response.
+- Do not consider reporting the commit hash and summary as completion of the requested workflow.
+- If the target branch cannot be determined, ask the user before generating the description.
+- Do not create, publish, or submit a Pull Request unless explicitly requested by the user.
+- Never push changes unless explicitly requested by the user, as defined in Git Commit Rules.
 
 ## Product Context
 
