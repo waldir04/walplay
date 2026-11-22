@@ -7,6 +7,7 @@ describe('usePageTitle', () => {
   it.each([
     ['/', 'Home · Walplay'],
     ['/settings', 'Settings · Walplay'],
+    ['/search', 'Search · Walplay'],
     ['/missing-page', 'Page not found · Walplay'],
   ])('sets the localized title for %s', async (path, expectedTitle) => {
     renderApp([path])

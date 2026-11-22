@@ -13,6 +13,7 @@ import {
   catalogSectionCapabilitySchema,
 } from '../model/catalogSection'
 import type { SectionId } from '../model/catalogSection'
+import { searchPageEnvelopeSchema } from '../model/searchPage'
 
 const capabilitiesEnvelopeSchema = z.object({
   data: z.object({ sections: z.array(catalogSectionCapabilitySchema).readonly() }),
@@ -31,6 +32,7 @@ const itemEnvelopeSchema = z.object({
 export type CapabilitiesBody = z.infer<typeof capabilitiesEnvelopeSchema>
 export type SectionPageBody = z.infer<typeof pageEnvelopeSchema>
 export type ItemBody = z.infer<typeof itemEnvelopeSchema>
+export type SearchPageBody = z.infer<typeof searchPageEnvelopeSchema>
 
 export interface SectionPageRequest {
   readonly mediaType: MediaType
@@ -45,10 +47,17 @@ export interface ItemRequest {
   readonly language: InterfaceLanguage
 }
 
+export interface SearchPageRequest {
+  readonly query: string
+  readonly language: InterfaceLanguage
+  readonly page: number
+}
+
 export interface CatalogClient {
   readonly getCapabilities: () => Promise<CapabilitiesBody>
   readonly getSectionPage: (request: SectionPageRequest) => Promise<SectionPageBody>
   readonly getItem: (request: ItemRequest) => Promise<ItemBody>
+  readonly getSearchPage: (request: SearchPageRequest) => Promise<SearchPageBody>
 }
 
 export const createCatalogClient = (http: HttpClient): CatalogClient => {
@@ -74,7 +83,17 @@ export const createCatalogClient = (http: HttpClient): CatalogClient => {
     return response.body
   }
 
-  return Object.freeze({ getCapabilities, getSectionPage, getItem })
+  const getSearchPage = async ({
+    query,
+    language,
+    page,
+  }: SearchPageRequest): Promise<SearchPageBody> => {
+    const path = `/api/search?query=${encodeURIComponent(query)}&language=${language}&page=${page}`
+    const response = await http.get(path, searchPageEnvelopeSchema)
+    return response.body
+  }
+
+  return Object.freeze({ getCapabilities, getSectionPage, getItem, getSearchPage })
 }
 
 let cachedCatalogClient: CatalogClient | null = null
@@ -94,3 +113,6 @@ export const fetchSectionPage = (request: SectionPageRequest): Promise<SectionPa
 
 export const fetchItem = (request: ItemRequest): Promise<ItemBody> =>
   getCatalogClient().getItem(request)
+
+export const fetchSearchPage = (request: SearchPageRequest): Promise<SearchPageBody> =>
+  getCatalogClient().getSearchPage(request)

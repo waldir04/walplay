@@ -94,3 +94,39 @@ describe('PrimaryNavigation prefix matching', () => {
     expect(screen.getByRole('link', { name: /Browse/ })).not.toHaveAttribute('aria-current')
   })
 })
+
+describe('PrimaryNavigation search destination', () => {
+  const items = [
+    { to: '/browse', label: 'Browse', matchPrefix: '/browse/' },
+    { to: '/search', label: 'Search' },
+  ]
+
+  it('marks Search current only on the exact search path', async () => {
+    await renderWithProviders(<PrimaryNavigation items={items} ariaLabel="Primary navigation" />, {
+      initialEntries: ['/search'],
+    })
+
+    expect(screen.getByRole('link', { name: /Search/ })).toHaveAttribute('aria-current', 'page')
+    expect(screen.getByRole('link', { name: /Browse/ })).not.toHaveAttribute('aria-current')
+  })
+
+  it('keeps Search current with an active query and off catalog and detail routes', async () => {
+    const search = await renderWithProviders(
+      <PrimaryNavigation items={items} ariaLabel="Primary navigation" />,
+      { initialEntries: ['/search?q=the+matrix'] }
+    )
+    expect(screen.getByRole('link', { name: /Search/ })).toHaveAttribute('aria-current', 'page')
+    search.unmount()
+
+    for (const entry of ['/browse/movies', '/browse/movies/title/abc12345']) {
+      const rendered = await renderWithProviders(
+        <PrimaryNavigation items={items} ariaLabel="Primary navigation" />,
+        { initialEntries: [entry] }
+      )
+      expect(screen.getByRole('link', { name: /Search/ }), entry).not.toHaveAttribute(
+        'aria-current'
+      )
+      rendered.unmount()
+    }
+  })
+})

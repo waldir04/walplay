@@ -10,7 +10,8 @@
     "openMenu": "Open navigation menu",
     "closeMenu": "Close navigation menu",
     "menuTitle": "Navigation",
-    "browse": "Browse"
+    "browse": "Browse",
+    "search": "Search"
   },
   "meta": {
     "title": {
@@ -21,7 +22,8 @@
       "browse": "Browse · Walplay",
       "catalogCategory": "Category · Walplay",
       "titleDetail": "Title · Walplay",
-      "catalogNotFound": "Catalog not found · Walplay"
+      "catalogNotFound": "Catalog not found · Walplay",
+      "search": "Search · Walplay"
     }
   },
   "a11y": {
@@ -86,6 +88,72 @@
       "home": "Back to home"
     }
   },
+  "search": {
+    "form": {
+      "regionLabel": "Search movies and TV shows",
+      "label": "Search movies and TV shows",
+      "hint": "Enter at least {{min}} characters and no more than {{max}}.",
+      "submit": "Search",
+      "clear": "Clear search"
+    },
+    "guidance": {
+      "initial": {
+        "title": "Find something to watch",
+        "description": "Search by title to see movies and TV shows together."
+      },
+      "tooShort": "Enter at least {{min}} characters to search.",
+      "tooLong": "Enter no more than {{max}} characters to search.",
+      "queryInvalid": {
+        "title": "This search cannot be completed",
+        "description": "Check the title and try a different search."
+      }
+    },
+    "results": {
+      "heading": "Results for “{{query}}”",
+      "collectionLabel": "Search results for {{query}}",
+      "count_one": "{{count}} title shown",
+      "count_other": "{{count}} titles shown",
+      "loadingLabel": "Search results are loading"
+    },
+    "states": {
+      "searching": "Searching for {{query}}",
+      "found_one": "{{count}} title found for {{query}}",
+      "found_other": "{{count}} titles found for {{query}}",
+      "noResults": {
+        "title": "No titles matched “{{query}}”",
+        "description": "Check the spelling or try a different title. You can edit or clear the search above."
+      },
+      "unavailable": {
+        "title": "Search is temporarily unavailable",
+        "description": "Search could not be completed right now. Try again, or use the rest of the application."
+      },
+      "rateLimited": {
+        "title": "Search is temporarily limited",
+        "description": "Too many requests reached the provider. Try again in a moment."
+      },
+      "timedOut": {
+        "title": "Search took too long",
+        "description": "The provider did not answer in time. Try again."
+      },
+      "stale": {
+        "lastUpdated": "Cached results from {{date}}"
+      },
+      "interimEmpty": "This page had no titles. Load more to keep looking.",
+      "endOfResults": "End of results for {{query}}",
+      "appended_one": "{{count}} more title added",
+      "appended_other": "{{count}} more titles added",
+      "pageError": {
+        "title": "More results could not be loaded",
+        "description": "Your current results are still available. Try loading this page again."
+      }
+    },
+    "actions": {
+      "retry": "Try again",
+      "loadMore": "Load more",
+      "editQuery": "Edit search",
+      "clearQuery": "Clear search"
+    }
+  },
   "catalog": {
     "landing": {
       "heading": "Browse {{mediaType}}"
@@ -110,6 +178,7 @@
       "loadMore": "Load more",
       "retry": "Try again",
       "returnToCatalog": "Return to the catalog",
+      "returnToSearch": "Return to search",
       "switchMediaType": "Switch media type"
     },
     "card": {

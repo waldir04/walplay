@@ -75,7 +75,9 @@ export const TitleDetailPage = () => {
           {heading}
         </h1>
         <Link to={returnTarget.path} className="min-h-11 w-fit px-1 text-caption">
-          {t('catalog.actions.returnToCatalog')}
+          {returnTarget.isSearch
+            ? t('catalog.actions.returnToSearch')
+            : t('catalog.actions.returnToCatalog')}
         </Link>
       </div>
 

@@ -6,6 +6,7 @@ export type PageKind =
   | 'catalog-category'
   | 'title-detail'
   | 'catalog-not-found'
+  | 'search'
 
 export interface AppRoute {
   readonly path: string
@@ -37,6 +38,15 @@ export const APP_ROUTES: readonly AppRoute[] = [
     navigationLabelKey: 'navigation.browse',
     loadsOnDemand: true,
     matchPrefix: '/browse/',
+  },
+  {
+    path: '/search',
+    kind: 'search',
+    navigable: true,
+    isDefault: false,
+    titleKey: 'meta.title.search',
+    navigationLabelKey: 'navigation.search',
+    loadsOnDemand: true,
   },
   {
     path: '/settings',

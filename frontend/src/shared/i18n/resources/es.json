@@ -10,7 +10,8 @@
     "openMenu": "Abrir el menú de navegación",
     "closeMenu": "Cerrar el menú de navegación",
     "menuTitle": "Navegación",
-    "browse": "Explorar"
+    "browse": "Explorar",
+    "search": "Buscar"
   },
   "meta": {
     "title": {
@@ -21,7 +22,8 @@
       "browse": "Explorar · Walplay",
       "catalogCategory": "Categoría · Walplay",
       "titleDetail": "Título · Walplay",
-      "catalogNotFound": "Catálogo no encontrado · Walplay"
+      "catalogNotFound": "Catálogo no encontrado · Walplay",
+      "search": "Buscar · Walplay"
     }
   },
   "a11y": {
@@ -86,6 +88,72 @@
       "home": "Volver al inicio"
     }
   },
+  "search": {
+    "form": {
+      "regionLabel": "Buscar películas y series",
+      "label": "Buscar películas y series",
+      "hint": "Introduce al menos {{min}} caracteres y no más de {{max}}.",
+      "submit": "Buscar",
+      "clear": "Borrar la búsqueda"
+    },
+    "guidance": {
+      "initial": {
+        "title": "Encuentra algo que ver",
+        "description": "Busca por título para ver películas y series juntas."
+      },
+      "tooShort": "Introduce al menos {{min}} caracteres para buscar.",
+      "tooLong": "Introduce como máximo {{max}} caracteres para buscar.",
+      "queryInvalid": {
+        "title": "Esta búsqueda no se puede completar",
+        "description": "Revisa el título e intenta otra búsqueda."
+      }
+    },
+    "results": {
+      "heading": "Resultados de «{{query}}»",
+      "collectionLabel": "Resultados de búsqueda de {{query}}",
+      "count_one": "{{count}} título mostrado",
+      "count_other": "{{count}} títulos mostrados",
+      "loadingLabel": "Los resultados de búsqueda se están cargando"
+    },
+    "states": {
+      "searching": "Buscando {{query}}",
+      "found_one": "Se encontró {{count}} título para {{query}}",
+      "found_other": "Se encontraron {{count}} títulos para {{query}}",
+      "noResults": {
+        "title": "Ningún título coincide con «{{query}}»",
+        "description": "Revisa la ortografía o prueba otro título. Puedes editar o borrar la búsqueda arriba."
+      },
+      "unavailable": {
+        "title": "La búsqueda no está disponible temporalmente",
+        "description": "La búsqueda no se pudo completar ahora mismo. Inténtalo de nuevo o usa el resto de la aplicación."
+      },
+      "rateLimited": {
+        "title": "La búsqueda está limitada temporalmente",
+        "description": "Se enviaron demasiadas solicitudes al proveedor. Inténtalo de nuevo en un momento."
+      },
+      "timedOut": {
+        "title": "La búsqueda tardó demasiado",
+        "description": "El proveedor no respondió a tiempo. Inténtalo de nuevo."
+      },
+      "stale": {
+        "lastUpdated": "Resultados en caché de {{date}}"
+      },
+      "interimEmpty": "Esta página no tenía títulos. Carga más para seguir buscando.",
+      "endOfResults": "Final de los resultados de {{query}}",
+      "appended_one": "Se añadió {{count}} título más",
+      "appended_other": "Se añadieron {{count}} títulos más",
+      "pageError": {
+        "title": "No se pudieron cargar más resultados",
+        "description": "Tus resultados actuales siguen disponibles. Intenta cargar esta página de nuevo."
+      }
+    },
+    "actions": {
+      "retry": "Intentar de nuevo",
+      "loadMore": "Cargar más",
+      "editQuery": "Editar la búsqueda",
+      "clearQuery": "Borrar la búsqueda"
+    }
+  },
   "catalog": {
     "landing": {
       "heading": "Explorar {{mediaType}}"
@@ -110,6 +178,7 @@
       "loadMore": "Cargar más",
       "retry": "Intentar de nuevo",
       "returnToCatalog": "Volver al catálogo",
+      "returnToSearch": "Volver a la búsqueda",
       "switchMediaType": "Cambiar de tipo de contenido"
     },
     "card": {
