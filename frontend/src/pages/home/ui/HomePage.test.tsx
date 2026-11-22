@@ -6,7 +6,7 @@ import { renderWithProviders } from '@/test/renderWithProviders'
 import { HomePage } from './HomePage'
 
 describe('HomePage', () => {
-  it('explains the purpose and renders the empty state', async () => {
+  it('explains the purpose and offers a working catalog entry', async () => {
     await renderWithProviders(<HomePage />)
 
     expect(
@@ -15,9 +15,11 @@ describe('HomePage', () => {
     expect(
       screen.getByText('A calm place to discover films and series worth your time.')
     ).toBeInTheDocument()
-    expect(
-      screen.getByRole('heading', { level: 2, name: 'Your next watch starts here' })
-    ).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: 'Start browsing' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Browse the catalog' })).toHaveAttribute(
+      'href',
+      '/browse'
+    )
   })
 
   it('exposes a focusable page heading for route focus management', async () => {
@@ -28,11 +30,11 @@ describe('HomePage', () => {
     expect(heading.id).toBe('page-heading')
   })
 
-  it('contains no fabricated entertainment content or actions', async () => {
+  it('contains no fabricated entertainment content', async () => {
     const { container } = await renderWithProviders(<HomePage />)
 
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
-    expect(screen.queryByRole('link')).not.toBeInTheDocument()
+    expect(screen.getAllByRole('link')).toHaveLength(1)
     expect(container.querySelectorAll('img, picture, video')).toHaveLength(0)
     expect(container.textContent).not.toMatch(/\b(?:rating|watch now|availability)\b/i)
   })

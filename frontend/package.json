@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.6",
+    "@tanstack/react-query": "^5.108.2",
     "i18next": "^25.3.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

@@ -9,14 +9,19 @@
     "settings": "Settings",
     "openMenu": "Open navigation menu",
     "closeMenu": "Close navigation menu",
-    "menuTitle": "Navigation"
+    "menuTitle": "Navigation",
+    "browse": "Browse"
   },
   "meta": {
     "title": {
       "home": "Home · Walplay",
       "settings": "Settings · Walplay",
       "notFound": "Page not found · Walplay",
-      "app": "Walplay"
+      "app": "Walplay",
+      "browse": "Browse · Walplay",
+      "catalogCategory": "Category · Walplay",
+      "titleDetail": "Title · Walplay",
+      "catalogNotFound": "Catalog not found · Walplay"
     }
   },
   "a11y": {
@@ -31,6 +36,11 @@
     "empty": {
       "title": "Your next watch starts here",
       "description": "Walplay is a calm place to discover films and series worth your time. Discovery features are not part of this foundation yet, so there is nothing to browse here today."
+    },
+    "browse": {
+      "title": "Start browsing",
+      "description": "Open the catalog to see what is trending, popular, and top rated right now.",
+      "action": "Browse the catalog"
     }
   },
   "settings": {
@@ -74,6 +84,85 @@
       "title": "This page could not be displayed",
       "description": "A problem stopped this page from rendering. The rest of the application is still available.",
       "home": "Back to home"
+    }
+  },
+  "catalog": {
+    "landing": {
+      "heading": "Browse {{mediaType}}"
+    },
+    "mediaType": {
+      "label": "Media type",
+      "movie": "Movies",
+      "tv": "TV Shows"
+    },
+    "sections": {
+      "trending": "Trending",
+      "popular": "Popular",
+      "topRated": "Top rated"
+    },
+    "category": {
+      "heading": "{{category}} · {{mediaType}}",
+      "popular": "Popular",
+      "topRated": "Top rated"
+    },
+    "actions": {
+      "seeAll": "See all {{section}}",
+      "loadMore": "Load more",
+      "retry": "Try again",
+      "returnToCatalog": "Return to the catalog",
+      "switchMediaType": "Switch media type"
+    },
+    "card": {
+      "mediaType": "{{mediaType}}",
+      "ratingLabel": "{{value}} / 10",
+      "ratingA11y": "{{value}} out of {{scale}}",
+      "yearA11y": "Released in {{year}}",
+      "fallback": "{{title}}, {{mediaType}}"
+    },
+    "states": {
+      "loading": "Catalog content is loading",
+      "sectionLoading": "This section is loading",
+      "empty": {
+        "title": "No titles available right now",
+        "description": "There are no titles to show here at the moment. Try again shortly."
+      },
+      "error": {
+        "title": "This section could not be loaded",
+        "description": "The catalog is temporarily unavailable here. Try again, or keep browsing other sections."
+      },
+      "pageError": {
+        "title": "The catalog could not be loaded",
+        "description": "Catalog titles are temporarily unavailable. Try again, or use the rest of the application."
+      },
+      "rateLimited": {
+        "title": "The catalog is temporarily limited",
+        "description": "Too many requests reached the catalog provider. Try again in a moment."
+      },
+      "timedOut": {
+        "title": "The catalog took too long",
+        "description": "The catalog provider did not answer in time. Try again."
+      },
+      "stale": {
+        "label": "Showing cached catalog data",
+        "lastUpdated": "Cached data from {{date}}"
+      },
+      "endOfList": "You have reached the end of the list.",
+      "appended_one": "{{count}} more title added",
+      "appended_other": "{{count}} more titles added",
+      "detailsUnavailable": "Complete details are not yet available for this title.",
+      "notFound": {
+        "title": "Title not found",
+        "description": "This title is not available in the catalog. It may have been removed, or the address may be mistyped."
+      },
+      "unavailable": {
+        "title": "Title details are unavailable",
+        "description": "This title could not be loaded right now. Try again, or return to the catalog."
+      }
+    },
+    "attribution": {
+      "sectionLabel": "Provider attribution",
+      "statement": "This product uses the TMDB API but is not endorsed or certified by TMDB.",
+      "logoAlt": "TMDB"
     }
   }
 }

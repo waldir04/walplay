@@ -3,6 +3,8 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 import { installMatchMediaMock } from '@/test/matchMedia'
 import { renderApp } from '@/test/renderApp'
+import { renderWithProviders } from '@/test/renderWithProviders'
+import { PrimaryNavigation } from './PrimaryNavigation'
 
 describe('responsive navigation presentation', () => {
   it('shows the compact trigger below the wide breakpoint', async () => {
@@ -58,5 +60,37 @@ describe('PrimaryNavigation', () => {
     links.forEach((link) => {
       expect(link.className).toContain('min-h-11')
     })
+  })
+})
+
+describe('PrimaryNavigation prefix matching', () => {
+  const items = [
+    { to: '/browse', label: 'Browse', matchPrefix: '/browse/' },
+    { to: '/settings', label: 'Settings' },
+  ]
+
+  it('marks Browse active on every nested catalog address', async () => {
+    await renderWithProviders(<PrimaryNavigation items={items} ariaLabel="Primary navigation" />, {
+      initialEntries: ['/browse/movies/popular'],
+    })
+
+    expect(screen.getByRole('link', { name: /Browse/ })).toHaveAttribute('aria-current', 'page')
+    expect(screen.getByRole('link', { name: 'Settings' })).not.toHaveAttribute('aria-current')
+  })
+
+  it('marks Browse active on the bare prefix and keeps other destinations exact', async () => {
+    await renderWithProviders(<PrimaryNavigation items={items} ariaLabel="Primary navigation" />, {
+      initialEntries: ['/browse'],
+    })
+
+    expect(screen.getByRole('link', { name: /Browse/ })).toHaveAttribute('aria-current', 'page')
+  })
+
+  it('does not treat a prefix-like unrelated path as Browse', async () => {
+    await renderWithProviders(<PrimaryNavigation items={items} ariaLabel="Primary navigation" />, {
+      initialEntries: ['/browse-ish'],
+    })
+
+    expect(screen.getByRole('link', { name: /Browse/ })).not.toHaveAttribute('aria-current')
   })
 })

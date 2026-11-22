@@ -56,7 +56,10 @@ describe('configuration states', () => {
   })
 
   it('keeps the visitor experience unchanged when the optional version is absent', async () => {
-    const { container, unmount } = renderAt({ VITE_APP_ENV: 'local' })
+    const { container, unmount } = renderAt({
+      VITE_APP_ENV: 'local',
+      VITE_API_BASE_URL: 'http://localhost:4000',
+    })
 
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Welcome to Walplay' })
@@ -75,8 +78,16 @@ describe('configuration states', () => {
   })
 
   it('applies the default version for empty and invalid optional values', () => {
-    const empty = parseConfig({ VITE_APP_ENV: 'local', VITE_APP_VERSION: '' })
-    const invalid = parseConfig({ VITE_APP_ENV: 'local', VITE_APP_VERSION: 'version-x' })
+    const empty = parseConfig({
+      VITE_APP_ENV: 'local',
+      VITE_APP_VERSION: '',
+      VITE_API_BASE_URL: 'http://localhost:4000',
+    })
+    const invalid = parseConfig({
+      VITE_APP_ENV: 'local',
+      VITE_APP_VERSION: 'version-x',
+      VITE_API_BASE_URL: 'http://localhost:4000',
+    })
 
     expect(empty.status).toBe('valid')
     expect(invalid.status).toBe('valid')

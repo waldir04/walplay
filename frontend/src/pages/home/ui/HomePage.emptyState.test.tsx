@@ -5,23 +5,18 @@ import { renderWithProviders } from '@/test/renderWithProviders'
 
 import { HomePage } from './HomePage'
 
-describe('HomePage empty state', () => {
-  it('offers no action because none is functional yet', async () => {
+describe('HomePage catalog entry', () => {
+  it('links to the Browse destination', async () => {
     await renderWithProviders(<HomePage />)
 
-    const emptyState = screen
-      .getByRole('heading', { level: 2, name: 'Your next watch starts here' })
-      .closest('section')
-
-    expect(emptyState).not.toBeNull()
-    expect(emptyState?.querySelector('button')).toBeNull()
-    expect(emptyState?.querySelector('a')).toBeNull()
+    const link = screen.getByRole('link', { name: 'Browse the catalog' })
+    expect(link).toHaveAttribute('href', '/browse')
   })
 
-  it('renders no non-functional call to action anywhere on the page', async () => {
+  it('adds no other catalog functionality', async () => {
     await renderWithProviders(<HomePage />)
 
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
-    expect(screen.queryByRole('link')).not.toBeInTheDocument()
+    expect(screen.getAllByRole('link')).toHaveLength(1)
   })
 })

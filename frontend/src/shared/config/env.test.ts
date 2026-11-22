@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { parseConfig } from './env'
+import { getApiBaseUrl, getAppConfig, parseConfig } from './env'
 
 const clearExpectedWarnings = (): void => {
   vi.mocked(console.warn).mockClear()
@@ -12,7 +12,11 @@ afterEach(() => {
 
 describe('parseConfig', () => {
   it('accepts a valid required environment and version', () => {
-    const result = parseConfig({ VITE_APP_ENV: 'local', VITE_APP_VERSION: '1.2.3' })
+    const result = parseConfig({
+      VITE_APP_ENV: 'local',
+      VITE_APP_VERSION: '1.2.3',
+      VITE_API_BASE_URL: 'http://localhost:4000',
+    })
 
     expect(result.status).toBe('valid')
     if (result.status !== 'valid') {
@@ -20,6 +24,7 @@ describe('parseConfig', () => {
     }
     expect(result.config.environmentName).toBe('local')
     expect(result.config.applicationVersion).toBe('1.2.3')
+    expect(result.config.apiBaseUrl).toBe('http://localhost:4000')
     expect(result.warnings).toHaveLength(0)
     expect(console.warn).not.toHaveBeenCalled()
   })
@@ -42,8 +47,45 @@ describe('parseConfig', () => {
     clearExpectedWarnings()
   })
 
+  it('applies the local API default when the URL is absent outside production', () => {
+    const result = parseConfig({ VITE_APP_ENV: 'local', VITE_APP_VERSION: '1.0.0' })
+
+    expect(result.status).toBe('valid')
+    if (result.status !== 'valid') {
+      throw new Error('expected valid configuration')
+    }
+    expect(result.config.apiBaseUrl).toBe('http://localhost:4000')
+    expect(result.warnings.join(' ')).toContain('VITE_API_BASE_URL')
+    clearExpectedWarnings()
+  })
+
+  it('requires the API URL in production', () => {
+    const result = parseConfig({ VITE_APP_ENV: 'production', VITE_APP_VERSION: '1.0.0' })
+
+    expect(result.status).toBe('invalid-required')
+    expect(result.warnings.join(' ')).toContain('VITE_API_BASE_URL')
+    expect(console.warn).toHaveBeenCalled()
+    clearExpectedWarnings()
+  })
+
+  it('rejects an invalid API URL without leaking it', () => {
+    const result = parseConfig({
+      VITE_APP_ENV: 'local',
+      VITE_APP_VERSION: '1.0.0',
+      VITE_API_BASE_URL: 'not-a-url',
+    })
+
+    expect(result.status).toBe('invalid-required')
+    expect(result.warnings.join(' ')).toContain('VITE_API_BASE_URL')
+    expect(result.warnings.join(' ')).not.toContain('not-a-url')
+    clearExpectedWarnings()
+  })
+
   it('applies the default version when the optional value is absent', () => {
-    const result = parseConfig({ VITE_APP_ENV: 'production' })
+    const result = parseConfig({
+      VITE_APP_ENV: 'production',
+      VITE_API_BASE_URL: 'https://api.walplay.example',
+    })
 
     expect(result.status).toBe('valid')
     if (result.status !== 'valid') {
@@ -56,7 +98,11 @@ describe('parseConfig', () => {
   })
 
   it('applies the default version for an empty optional value with a field-only warning', () => {
-    const result = parseConfig({ VITE_APP_ENV: 'staging', VITE_APP_VERSION: '' })
+    const result = parseConfig({
+      VITE_APP_ENV: 'staging',
+      VITE_APP_VERSION: '',
+      VITE_API_BASE_URL: 'http://localhost:4000',
+    })
 
     expect(result.status).toBe('valid')
     if (result.status !== 'valid') {
@@ -69,7 +115,11 @@ describe('parseConfig', () => {
   })
 
   it('applies the default version for an invalid optional value without leaking it', () => {
-    const result = parseConfig({ VITE_APP_ENV: 'development', VITE_APP_VERSION: 'not-a-version' })
+    const result = parseConfig({
+      VITE_APP_ENV: 'development',
+      VITE_APP_VERSION: 'not-a-version',
+      VITE_API_BASE_URL: 'http://localhost:4000',
+    })
 
     expect(result.status).toBe('valid')
     if (result.status !== 'valid') {
@@ -82,12 +132,29 @@ describe('parseConfig', () => {
   })
 
   it('freezes the parsed configuration and warnings', () => {
-    const result = parseConfig({ VITE_APP_ENV: 'local', VITE_APP_VERSION: '0.1.0' })
+    const result = parseConfig({
+      VITE_APP_ENV: 'local',
+      VITE_APP_VERSION: '0.1.0',
+      VITE_API_BASE_URL: 'http://localhost:4000',
+    })
 
     if (result.status !== 'valid') {
       throw new Error('expected valid configuration')
     }
     expect(Object.isFrozen(result.config)).toBe(true)
     expect(Object.isFrozen(result.warnings)).toBe(true)
+  })
+})
+
+describe('application config access', () => {
+  it('exposes the validated configuration and API base URL', () => {
+    vi.stubEnv('VITE_APP_ENV', 'local')
+    vi.stubEnv('VITE_APP_VERSION', '1.0.0')
+    vi.stubEnv('VITE_API_BASE_URL', 'http://localhost:4000')
+
+    expect(getAppConfig()).toMatchObject({ environmentName: 'local', applicationVersion: '1.0.0' })
+    expect(getApiBaseUrl()).toBe('http://localhost:4000')
+    vi.unstubAllEnvs()
+    clearExpectedWarnings()
   })
 })

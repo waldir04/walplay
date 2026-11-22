@@ -1,9 +1,10 @@
 # Walplay Frontend
 
-Single-page React foundation for Walplay: one responsive shell, three routes,
-genuine on-demand route loading, English/Spanish localization, and fail-fast
-startup configuration. The application is frontend-only and renders without
-network data.
+Single-page React application for Walplay: one responsive shell, the
+entertainment catalog (Browse, category, and minimal title detail), genuine
+on-demand route loading, English/Spanish localization, and fail-fast startup
+configuration. Catalog data comes from the internal Walplay backend; the browser
+never calls the external provider and never holds a provider credential.
 
 ## Prerequisites
 
@@ -21,23 +22,27 @@ npm ci
 cp .env.example .env.local
 ```
 
-`.env.local` must contain a valid `VITE_APP_ENV` (`local` is the safe default).
-No secret, endpoint, provider key, or database URL is used.
+`.env.local` must contain a valid `VITE_APP_ENV` (`local` is the safe default)
+and the internal catalog API origin in `VITE_API_BASE_URL`. No provider key,
+provider endpoint, or database URL is used in the browser.
 
 ## Environment inventory
 
 The inventory is closed. `src/shared/config/env.ts` is the only module that reads
 `import.meta.env`; every other module receives the validated configuration.
 
-| Variable           | Required | Default | Accepted values                                 | User-facing |
-| ------------------ | -------- | ------- | ----------------------------------------------- | ----------- |
-| `VITE_APP_ENV`     | yes      | —       | `local`, `development`, `staging`, `production` | no          |
-| `VITE_APP_VERSION` | no       | `0.0.0` | non-empty version-like string (e.g. `1.4.2`)    | never       |
+| Variable            | Required   | Default                 | Accepted values                                 | User-facing |
+| ------------------- | ---------- | ----------------------- | ----------------------------------------------- | ----------- |
+| `VITE_APP_ENV`      | yes        | —                       | `local`, `development`, `staging`, `production` | no          |
+| `VITE_APP_VERSION`  | no         | `0.0.0`                 | non-empty version-like string (e.g. `1.4.2`)    | never       |
+| `VITE_API_BASE_URL` | production | `http://localhost:4000` | http(s) URL                                     | no          |
 
 If `VITE_APP_ENV` is missing or invalid, the application renders only a localized
 `AppConfigError` screen. If `VITE_APP_VERSION` is missing, empty, or invalid, the
-documented default applies and a field-only developer warning is emitted. Warnings
-never contain values.
+documented default applies and a field-only developer warning is emitted. In
+production, `VITE_API_BASE_URL` is required; outside production the local default
+applies with a field-only warning. An invalid URL fails fast without echoing the
+value. Warnings never contain values.
 
 ## Scripts
 
@@ -57,12 +62,52 @@ Feature-Sliced Design under `src/`:
 
 - `app/` — bootstrap, providers, i18n initialization, route table, page loader,
   title synchronization, route announcements.
-- `pages/` — Home, Settings, and Not-found screens.
-- `widgets/app-shell/` — header, navigation, compact menu, shell regions.
-- `features/switch-language/` — language radio group and preference hook.
-- `shared/` — token-driven UI primitives, validated configuration, translation
-  resources, storage adapter, small utilities.
-- `test/` — Vitest setup, matchMedia mock, providers helper, axe helper.
+- `pages/` — Home, Settings, Browse landing, catalog category, minimal title
+  detail, catalog not-found, and the foundation not-found screens.
+- `entities/catalog/` — catalog Zod models and formatters, the API client and key
+  factory, TanStack Query hooks, and card/grid/skeleton/poster primitives.
+- `features/switch-catalog-media/` and `features/load-more-catalog/` — the
+  catalog interactions; `features/switch-language/` keeps the language control.
+- `widgets/` — app shell, catalog section previews, category lists, and provider
+  attribution.
+- `shared/` — token-driven UI primitives, the typed HTTP client, validated
+  configuration, translation resources, storage adapter, small utilities.
+- `test/` — Vitest setup, matchMedia mock, providers helper, axe helper, and
+  catalog fixtures.
+
+## Catalog implementation
+
+Routes (all inside the existing shell):
+
+| Address                                                        | Surface                                                |
+| -------------------------------------------------------------- | ------------------------------------------------------ |
+| `/browse`                                                      | Redirect with `replace` to `/browse/movies`            |
+| `/browse/movies`, `/browse/tv-shows`                           | Landing with trending, popular, and top-rated previews |
+| `/browse/:media-type/popular`, `/browse/:media-type/top-rated` | Paginated category list                                |
+| `/browse/:media-type/title/:itemId`                            | Minimal title detail, from a card or direct address    |
+| `/browse/*`                                                    | Catalog not-found inside the shell                     |
+
+- TanStack Query is the only server-state mechanism. A single `QueryClient` is
+  created at the app root with retries disabled, `staleTime` 5 minutes, `gcTime`
+  30 minutes, and no refetch-on-focus requirement.
+- Query keys live in `entities/catalog/api/catalogKeys.ts` and include media type,
+  section/category, locale, page, and item id. A language change therefore starts
+  a category at page one and discards old-language pages.
+- Landing previews are independent queries, so one failed section cannot collapse
+  the page. A page-level error appears only when every supported section fails.
+- Category lists use `useInfiniteQuery`, append-only deduplication by opaque id,
+  provider order, single-flight activation, an announced appended count, and an
+  end-of-list status.
+- Cards have exactly one interactive target. The accessible name includes the
+  title, textual media type, and optional year and rating with explicit out-of-10
+  context. Missing metadata is omitted, never fabricated; artwork failure swaps to
+  a neutral fallback with the same reserved ratio.
+- Loading uses layout-matching skeletons with `aria-busy`; errors use alert
+  semantics; append, end, and stale changes use one polite status. Reduced motion
+  suppresses skeleton animation.
+- The official TMDB mark and non-endorsement statement are rendered on every
+  provider-data surface from `shared/assets/tmdb-logo.svg`; the source URL is recorded in
+  `shared/assets/README.md`, and OD-13 legal review remains a release gate.
 
 Imports flow downward. Shared UI never imports pages, features, or widgets.
 
@@ -193,23 +238,66 @@ merged into the shell chunk.
 
 ## Quality gates and coverage
 
-Latest run in `frontend/`:
+Latest run in `frontend/` after the catalog implementation:
 
 - `npm run lint` — pass, zero warnings.
 - `npm run typecheck` — pass with all strict flags.
-- `npm run test` — 40 files, 167 tests, zero unexpected warnings.
-- Coverage: 95.88% lines, 87.55% branches, 94.64% functions. Per-file thresholds
-  of 90% pass for configuration (`env.ts`), language storage, and the page loader.
-- `npm run build` — pass with no application or third-party annotation warnings.
+- `npm run test` — 112 files, 389 tests, zero unexpected warnings.
+- Coverage: 96.93% lines, 91.84% branches, 94.36% functions. The global 80%
+  threshold and the 90% catalog thresholds pass for `entities/catalog/model/*`,
+  `entities/catalog/api/*`, `CatalogCard.tsx`, and `PosterFallback.tsx`, plus the
+  existing configuration, storage, and loader thresholds.
+- `npm run build` — pass, no warnings. Catalog pages emit one lazy chunk each:
+  browse, catalog-category, title-detail, and catalog-not-found.
 
 ## Scope boundaries
 
-This foundation contains no catalog, search, availability, watchlist, accounts,
-authentication, playback, notifications, recommendations, ratings, social
-features, backend, database, provider integration, analytics, or third-party
-tracking. It persists only `walplay.language.v1`. The home placeholder contains no
-invented titles, artwork, ratings, availability, or promotional claims, and no
-call to action because none is functional yet.
+The catalog contains no search, filters, watchlist, favorites, availability,
+playback, accounts, authentication, cast, seasons, episodes, trailers, full detail
+pages, recommendations, analytics, or third-party tracking. There is no database
+and no browser persistence beyond `walplay.language.v1`. Provider text is shown
+with attribution and is never machine-translated. The Home surface offers only a
+working Browse entry. Settings is unchanged.
+
+## Catalog security verification
+
+Recorded against `frontend/dist` after `npm run build`:
+
+- No `TMDB_ACCESS_TOKEN`, provider bearer value, `api.themoviedb.org` base URL,
+  provider DTO field name (`poster_path`, `vote_average`), provider error text, or
+  stack trace appears in any browser-delivered bundle or source map.
+- The only provider string in the bundle is the user-facing non-endorsement
+  statement from translation resources.
+- Image URLs arrive from the backend as absolute URLs on the documented provider
+  image host and carry no credential.
+- Deployment can apply a Content Security Policy that allowlists the configured
+  API origin plus `https://image.tmdb.org` for images, with no wildcard.
+- No third-party tracking or advertising script is present.
+
+Verification commands:
+
+```bash
+cd frontend
+npm run build
+grep -RInE "TMDB_ACCESS_TOKEN|api\.themoviedb\.org|poster_path|vote_average|test-token" dist || true
+ls dist/assets | grep -E "browse|catalog-category|title-detail|catalog-not-found"
+```
+
+## Catalog quickstart record
+
+| Scenario                                         | Result                                                                                                                                                                                                                                                                                                                                               |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1. Browse movies and TV shows                    | PASS (automated) — default Movies, declared section order, media switch replaces content, direct type addresses, back/forward, Browse active on nested paths, one `h1`.                                                                                                                                                                              |
+| 2. Category and title navigation                 | PASS (automated) — See all addresses, page 1 only, category-specific content, card detail from router state without a second request, direct lookup, unknown item/category not-found in the shell, validated return.                                                                                                                                 |
+| 3. Load more                                     | PASS (automated) — append below existing items, no duplicates or reordering, single request per activation, busy state, announced count, end-of-list with focus, later-page failure keeps the list and retries inline.                                                                                                                               |
+| 4. Incomplete metadata                           | PASS (automated) — missing poster/year/rating/genre omitted cleanly, image failure fallback, long Spanish titles, all-invalid page becomes an empty state, no fabricated values.                                                                                                                                                                     |
+| 5. Loading, empty, provider failures             | PASS (automated) — layout-matching skeletons, isolated section errors, one page-level all-failed error, empty/rate-limited/timeout/invalid states, labeled stale data, no technical detail, retry single-flight.                                                                                                                                     |
+| 6. Responsive, keyboard, screen reader, language | Automated PASS — 2/3/4/5-column classes, keyboard journey, one card target, axe coverage, reduced-motion skeleton, Spanish long titles, language-aware keys and category reset. Manual screen-reader and live-provider passes require a physical screen reader and an approved TMDB token; they are reviewer release checks, not automated evidence. |
+
+The SC-010 one-second post-availability budget and the SC-007 mobile profile are
+design budgets. Automated tests verify that the new-language request starts at
+page one and that the final selection wins; the wall-clock budget must be observed
+in the manual release pass with the live provider.
 
 ## Definition of Done
 
@@ -220,7 +308,9 @@ call to action because none is functional yet.
       pass; physical screen-reader pass pending reviewer execution).
 - [x] Responsive matrix at 360/768/1024/1440 px and 200% zoom recorded with no
       horizontal overflow and the correct compact/wide presentation.
-- [x] Performance check recorded: LCP 2021 ms ≤ 2.5 s and bundle budget passed.
+- [x] Performance check recorded for the shell baseline; the catalog adds four
+      lazy page chunks and deliberate query caching. The live-provider SC-007
+      profile remains a manual release check.
 - [x] No `any`, unjustified assertions, or suppressions introduced in application
       code.
 - [x] Documentation (`.env.example`, this README, ADR, quickstart) matches the
@@ -238,4 +328,5 @@ call to action because none is functional yet.
 | 6. Rapid interaction and reduced motion     | PASS — rapid-navigation tests; reduced-motion overrides present with no position animation                                                                            |
 | 7. Visual identity audit                    | PASS — token and logo assertions; no raw hex outside `@theme`, tests, and the static favicon                                                                          |
 | 8. Scope audit                              | PASS — no catalog, search, availability, watchlist, account, auth, playback, provider, database, analytics, or tracking code; only `walplay.language.v1` is persisted |
-| 9. Performance                              | PASS — LCP 2255 ms, bundle budget met                                                                                                                                 |
+| 9. Performance                              | PASS — shell baseline LCP 2255 ms; catalog chunks split per page and query caching in place                                                                           |
+| Catalog scenarios 1–6 (feature 002)         | PASS (automated) — see "Catalog quickstart record"; manual screen-reader and live-provider checks pending reviewer                                                    |

@@ -1,4 +1,11 @@
-export type PageKind = 'home' | 'settings' | 'not-found'
+export type PageKind =
+  | 'home'
+  | 'settings'
+  | 'not-found'
+  | 'browse'
+  | 'catalog-category'
+  | 'title-detail'
+  | 'catalog-not-found'
 
 export interface AppRoute {
   readonly path: string
@@ -8,6 +15,7 @@ export interface AppRoute {
   readonly titleKey: string
   readonly navigationLabelKey: string | null
   readonly loadsOnDemand: boolean
+  readonly matchPrefix?: string
 }
 
 export const APP_ROUTES: readonly AppRoute[] = [
@@ -19,6 +27,16 @@ export const APP_ROUTES: readonly AppRoute[] = [
     titleKey: 'meta.title.home',
     navigationLabelKey: 'navigation.home',
     loadsOnDemand: true,
+  },
+  {
+    path: '/browse',
+    kind: 'browse',
+    navigable: true,
+    isDefault: false,
+    titleKey: 'meta.title.browse',
+    navigationLabelKey: 'navigation.browse',
+    loadsOnDemand: true,
+    matchPrefix: '/browse/',
   },
   {
     path: '/settings',
@@ -41,3 +59,10 @@ export const APP_ROUTES: readonly AppRoute[] = [
 ]
 
 export const navigableRoutes: readonly AppRoute[] = APP_ROUTES.filter((route) => route.navigable)
+
+export const CATALOG_ROUTE_TITLES = Object.freeze({
+  browse: 'meta.title.browse',
+  category: 'meta.title.catalogCategory',
+  detail: 'meta.title.titleDetail',
+  notFound: 'meta.title.catalogNotFound',
+})

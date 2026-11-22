@@ -9,14 +9,19 @@
     "settings": "Ajustes",
     "openMenu": "Abrir el menú de navegación",
     "closeMenu": "Cerrar el menú de navegación",
-    "menuTitle": "Navegación"
+    "menuTitle": "Navegación",
+    "browse": "Explorar"
   },
   "meta": {
     "title": {
       "home": "Inicio · Walplay",
       "settings": "Ajustes · Walplay",
       "notFound": "Página no encontrada · Walplay",
-      "app": "Walplay"
+      "app": "Walplay",
+      "browse": "Explorar · Walplay",
+      "catalogCategory": "Categoría · Walplay",
+      "titleDetail": "Título · Walplay",
+      "catalogNotFound": "Catálogo no encontrado · Walplay"
     }
   },
   "a11y": {
@@ -31,6 +36,11 @@
     "empty": {
       "title": "Tu próxima película o serie empieza aquí",
       "description": "Walplay es un lugar tranquilo para descubrir películas y series que merecen tu tiempo. Las funciones de descubrimiento aún no forman parte de esta base, así que hoy no hay nada que explorar aquí."
+    },
+    "browse": {
+      "title": "Empieza a explorar",
+      "description": "Abre el catálogo para ver qué es tendencia, qué es popular y lo mejor valorado ahora mismo.",
+      "action": "Explorar el catálogo"
     }
   },
   "settings": {
@@ -74,6 +84,85 @@
       "title": "No se pudo mostrar esta página",
       "description": "Un problema impidió que esta página se mostrara. El resto de la aplicación sigue disponible.",
       "home": "Volver al inicio"
+    }
+  },
+  "catalog": {
+    "landing": {
+      "heading": "Explorar {{mediaType}}"
+    },
+    "mediaType": {
+      "label": "Tipo de contenido",
+      "movie": "Películas",
+      "tv": "Series"
+    },
+    "sections": {
+      "trending": "Tendencias",
+      "popular": "Popular",
+      "topRated": "Mejor valoradas"
+    },
+    "category": {
+      "heading": "{{category}} · {{mediaType}}",
+      "popular": "Popular",
+      "topRated": "Mejor valoradas"
+    },
+    "actions": {
+      "seeAll": "Ver todo {{section}}",
+      "loadMore": "Cargar más",
+      "retry": "Intentar de nuevo",
+      "returnToCatalog": "Volver al catálogo",
+      "switchMediaType": "Cambiar de tipo de contenido"
+    },
+    "card": {
+      "mediaType": "{{mediaType}}",
+      "ratingLabel": "{{value}} / 10",
+      "ratingA11y": "{{value}} sobre {{scale}}",
+      "yearA11y": "Estrenada en {{year}}",
+      "fallback": "{{title}}, {{mediaType}}"
+    },
+    "states": {
+      "loading": "El contenido del catálogo se está cargando",
+      "sectionLoading": "Esta sección se está cargando",
+      "empty": {
+        "title": "No hay títulos disponibles ahora",
+        "description": "Ahora mismo no hay títulos que mostrar aquí. Inténtalo de nuevo en un momento."
+      },
+      "error": {
+        "title": "No se pudo cargar esta sección",
+        "description": "El catálogo no está disponible aquí temporalmente. Inténtalo de nuevo o sigue explorando otras secciones."
+      },
+      "pageError": {
+        "title": "No se pudo cargar el catálogo",
+        "description": "Los títulos del catálogo no están disponibles temporalmente. Inténtalo de nuevo o usa el resto de la aplicación."
+      },
+      "rateLimited": {
+        "title": "El catálogo está limitado temporalmente",
+        "description": "Se enviaron demasiadas solicitudes al proveedor del catálogo. Inténtalo de nuevo en un momento."
+      },
+      "timedOut": {
+        "title": "El catálogo tardó demasiado",
+        "description": "El proveedor del catálogo no respondió a tiempo. Inténtalo de nuevo."
+      },
+      "stale": {
+        "label": "Mostrando datos del catálogo en caché",
+        "lastUpdated": "Datos en caché de {{date}}"
+      },
+      "endOfList": "Has llegado al final de la lista.",
+      "appended_one": "Se añadió {{count}} título más",
+      "appended_other": "Se añadieron {{count}} títulos más",
+      "detailsUnavailable": "Los detalles completos todavía no están disponibles para este título.",
+      "notFound": {
+        "title": "Título no encontrado",
+        "description": "Este título no está disponible en el catálogo. Puede que se haya eliminado o que la dirección esté mal escrita."
+      },
+      "unavailable": {
+        "title": "Los detalles del título no están disponibles",
+        "description": "Este título no se pudo cargar ahora mismo. Inténtalo de nuevo o vuelve al catálogo."
+      }
+    },
+    "attribution": {
+      "sectionLabel": "Atribución del proveedor",
+      "statement": "Este producto usa la API de TMDB pero no está respaldado ni certificado por TMDB.",
+      "logoAlt": "TMDB"
     }
   }
 }

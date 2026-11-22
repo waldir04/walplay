@@ -16,6 +16,7 @@ export const AppHeader = ({ isWide }: AppHeaderProps) => {
   const items: readonly PrimaryNavigationItem[] = navigationItems.map((item) => ({
     to: item.to,
     label: t(item.labelKey),
+    ...(item.matchPrefix === undefined ? {} : { matchPrefix: item.matchPrefix }),
   }))
 
   return (
