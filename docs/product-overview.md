@@ -54,7 +54,7 @@ In its intended form, Walplay is:
 
 ### Confirmed Foundation
 
-The constitution confirms that Walplay is an entertainment-focused product expected to work with external content metadata, streaming availability information, and potentially authorized video playback sources. No provider is approved, and Live TV and playback are deferred capabilities. Product claims in this document that are grounded in the constitution are marked **Confirmed**; all other specifics are **Proposed** or **Open** until validated.
+The constitution confirms that Walplay is an entertainment-focused product expected to work with external content metadata, streaming availability information, and potentially authorized video playback sources. TMDB is approved as the initial content metadata provider for the entertainment catalog feature; no streaming availability provider is approved. Live TV and playback are deferred capabilities. Product claims in this document that are grounded in the constitution are marked **Confirmed**; all other specifics are **Proposed** or **Open** until validated.
 
 ## 2. Product Vision
 
@@ -170,7 +170,7 @@ A new user should be able to complete this end-to-end outcome:
 
 The MVP depends on decisions that are not yet made:
 
-- Selection of content metadata and streaming availability providers.
+- Confirmation of TMDB as the initial content metadata provider and selection of a streaming availability provider.
 - Confirmation that the selected providers support the required search, regional availability, and attribution behavior.
 - An approved persistence and account model, including whether a local-only mode is offered.
 - Legal review of provider terms, attribution requirements, artwork usage, and any outbound linking.
@@ -223,7 +223,7 @@ Walplay depends on external content information and may later depend on authoriz
 
 | Category | Product need | Constraints | Status |
 |---|---|---|---|
-| Content metadata and artwork | Titles, descriptions, artwork, and basic descriptive information for discovery and title details. | Provider terms, attribution, artwork licensing, localized metadata, and regional catalogs must be validated. | Needed; provider deferred |
+| Content metadata and artwork | Titles, descriptions, artwork, and basic descriptive information for discovery and title details. | Provider terms, attribution, artwork licensing, localized metadata, and regional catalogs must be validated. | Needed; TMDB approved as initial provider |
 | Streaming availability | Information about where a title can be watched in a region. | Regional coverage, freshness, accuracy, attribution, and rate limits must be validated. | Needed; provider deferred |
 | Authorized outbound links | Optionally direct a user to an authorized provider after a decision. | Link-out rights, deep-link behavior, and provider terms must be confirmed. | Proposed; not approved |
 | In-app video playback | Play content inside Walplay through an authorized mechanism. | Legal permissions, licensing, DRM, regional rights, and technical feasibility must all be validated. | Deferred; not MVP |
@@ -321,12 +321,11 @@ Items in the second table are excluded from the initial scope, not necessarily r
 
 ## 12. Open Decisions
 
-The following decisions require research, validation, or explicit approval. They MUST NOT be treated as settled requirements.
+The following decisions remain open and require research, validation, or explicit approval. They MUST NOT be treated as settled requirements. Resolved decisions are recorded in Section 12.1.
 
 | ID | Decision | Why it matters | Validation needed |
 |---|---|---|---|
 | OD-01 | Exact content scope: films, series, episodes, and which regions and content languages are supported first. | Determines catalog shape, metadata needs, and the usefulness of the MVP. | User research and provider capability review |
-| OD-02 | Content metadata provider or providers. | Affects coverage, artwork rights, attribution, cost, and search quality. | Commercial and legal evaluation |
 | OD-03 | Streaming availability provider or providers. | Determines whether regional availability can be shown credibly. | Coverage, freshness, and terms evaluation |
 | OD-04 | Whether Walplay may link users out to authorized providers, and under what conditions. | Affects the end of the decision journey and provider compliance. | Provider terms review |
 | OD-05 | Feasibility of authorized in-app playback. | Could change the product's role, cost structure, and legal exposure. | Legal, licensing, DRM, and technical feasibility study |
@@ -341,6 +340,10 @@ The following decisions require research, validation, or explicit approval. They
 | OD-14 | Monetization model, if any. | Must not compromise availability honesty or recommendation integrity. | Business validation |
 | OD-15 | Product success metrics and the research plan for validating the problem. | The current problem statement is a hypothesis. | User research and product analytics planning |
 | OD-16 | Whether languages beyond English and Spanish are supported after MVP. | Affects localization architecture and provider metadata expectations. | Product decision |
+
+### 12.1 Recorded Decisions
+
+- **OD-02 — Content metadata provider (resolved 2026-11-22)**: TMDB is approved as the initial content metadata provider for the entertainment catalog feature. Commercial and legal terms review, artwork licensing, caching, and attribution requirements remain release dependencies. Streaming availability provider selection (OD-03) remains open.
 
 ## Consistency With the Constitution
 

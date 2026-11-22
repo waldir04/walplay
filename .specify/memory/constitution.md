@@ -1,30 +1,30 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.2.0 → 1.3.0
-Bump rationale: MINOR. New normative rules were added for non-specification Git branches
-(`chore/slug` and `refactor/slug`) and shared branch-name requirements (lowercase kebab-case,
-descriptive names, no additional prefixes without justification). Existing specification
-branch and `specs/` folder rules are preserved unchanged.
+Version change: 1.3.0 → 1.4.0
+Bump rationale: MINOR. Principle V now states the persistence boundary explicitly: a repository
+layer is required for persisted data, while a feature with no persistence uses
+`routes → controllers → services → provider adapters` and MUST NOT introduce an empty repository
+or an unused database. This removes the ambiguity that forced feature 002 to record a
+"justified deviation" from a non-negotiable principle.
 
 Modified principles:
-- XVII. Automated Quality Gates, Git Hooks, and Commit Convention: the branch-naming
-  cross-reference now covers specification and non-specification branches.
+- V. Backend Architecture and Modular Design: added the persistence-boundary clarification for
+  features with no persistence; the mandatory repository step is unchanged for persisted data.
 
 Modified sections:
-- Development Workflow, Quality Gates, and Definition of Done: added the "Git branch naming
-  for non-specification branches" subsection.
-- Known-gaps register heading and technology version references updated to 1.3.0.
+- Known-gaps register updated for feature 001 completion and the resolved TMDB provider decision;
+  heading and technology version references updated to 1.4.0.
 
 Added sections:
-- Git branch naming for non-specification branches (subsection of Development Workflow).
+- None.
 
 Removed sections:
 - None.
 
 Follow-up TODOs:
-- None. CI validates branch-name format only; the correspondence between branch slugs and
-  `specs/` folders remains a workflow convention, not a CI check.
+- None. The no-persistence clarification applies only to features that read or write no persisted
+  data; any feature that introduces persistence MUST include repositories.
 -->
 
 # Walplay Constitution
@@ -199,6 +199,18 @@ The backend MUST follow a layered, feature-oriented architecture.
 
 Mandatory request flow: `routes → controllers → services → repositories`, with validation,
 authentication, authorization, not-found handling, and centralized error middleware.
+
+Persistence boundary:
+
+- The repository layer exists only for features that read or write persisted data. It is the sole
+  access point to Prisma.
+- A feature with no persistence MUST NOT introduce an empty repository layer, an unused Prisma
+  module, or a database solely to satisfy the request flow.
+- In a no-persistence feature, the request flow is
+  `routes → controllers → services → provider adapters`. The provider adapter is the
+  infrastructure boundary that services depend on through an internal interface.
+- This clarification does not relax the mandatory repository step for any feature that reads or
+  writes persisted data; those features MUST include repositories.
 
 Layer responsibilities:
 
@@ -1100,7 +1112,7 @@ export const WalplayLogo = ({ className = '', showText = true }: WalplayLogoProp
 
 ### Technology Stack and Architectural Boundaries
 
-The following stack is approved as of version 1.3.0 of this constitution. Versions indicate the
+The following stack is approved as of version 1.4.0 of this constitution. Versions indicate the
 approved major line; routine minor and patch updates within it do not require an amendment.
 
 | Area | Approved technology | Notes |
@@ -1391,23 +1403,25 @@ The constitution uses semantic versioning:
   priority over cosmetic compliance.
 - Deviations MUST be recorded in the known-gaps register below or in an ADR until resolved.
 
-### Known-gaps register (as of 1.3.0)
+### Known-gaps register (as of 1.4.0)
 
 These gaps are tracked, not accepted as compliant behavior. Each MUST be closed when the
 affected area is touched.
 
-- The frontend and backend applications do not exist yet. Principles III–VII, XI, XVIII, and
-  XIX and the Visual Identity section describe their mandatory target state.
-- The `@theme` design tokens, dark theme, and shared UI primitives are not yet implemented.
-- `WalplayLogo.tsx` is not yet implemented; the exact monogram, lockup, and accessibility
-  contract are defined in Visual Identity §6.
-- Provider integrations and playback capability are unselected and unvalidated; no integration
-  may be implemented until a specification approves it.
-- `docs/product-overview.md` v1.0.0 exists, but several MVP gates remain open: provider
-  selection, the persistence and account model, and legal review. Features that depend on those
-  gates MUST NOT be specified as confirmed.
+- The backend application does not exist yet; the frontend foundation exists from feature 001.
+  Principles XI, XVIII, and XIX and the Visual Identity section describe mandatory target state
+  that is not yet fully implemented.
+- Dark theme and any remaining shared UI primitives are not yet implemented. The `@theme` design
+  tokens and `WalplayLogo.tsx` were delivered by feature 001.
+- TMDB is approved as the initial metadata provider for feature 002. Other provider integrations
+  and playback capability remain unselected and unvalidated; no integration may be implemented
+  until a specification approves it.
+- `docs/product-overview.md` v1.0.0 exists, but several MVP gates remain open: the persistence and
+  account model, streaming availability provider selection, and legal review. The TMDB provider
+  decision (OD-02) is resolved; legal review (OD-13) remains a release dependency. Features that
+  depend on open gates MUST NOT be specified as confirmed.
 
 The constitution evolves as the project matures, but every change MUST preserve its role as a
 consistent engineering standard.
 
-**Version**: 1.3.0 | **Ratified**: 2026-11-18 | **Last Amended**: 2026-11-20
+**Version**: 1.4.0 | **Ratified**: 2026-11-18 | **Last Amended**: 2026-11-22
