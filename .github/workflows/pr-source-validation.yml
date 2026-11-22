@@ -1,0 +1,28 @@
+name: PR Source Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate-source:
+    name: Validate PR Source Branch
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ensure PR comes from develop
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          BASE_REPO: ${{ github.repository }}
+        run: |
+          if [[ "$HEAD_REF" != "develop" || "$HEAD_REPO" != "$BASE_REPO" ]]; then
+            echo "Only pull requests from develop are allowed."
+            exit 1
+          fi
+
+          echo "Pull request source branch is valid."
