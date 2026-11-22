@@ -1,2 +1,39 @@
 #!/usr/bin/env sh
-cd frontend && npm run lint && npm run typecheck && npm test && npm run build
+set -eu
+
+# Run the canonical script contract for every application present.
+# An introduced application must commit its lockfile and Node version pin.
+
+if [ -f frontend/package.json ]; then
+  for file in frontend/package-lock.json frontend/.nvmrc; do
+    if [ ! -f "$file" ]; then
+      echo "pre-push: $file is required because frontend/ exists." >&2
+      exit 1
+    fi
+  done
+
+  (
+    cd frontend
+    npm run lint
+    npm run typecheck
+    npm run test
+    npm run build
+  )
+fi
+
+if [ -d backend ]; then
+  for file in backend/package.json backend/package-lock.json backend/.nvmrc; do
+    if [ ! -f "$file" ]; then
+      echo "pre-push: $file is required because backend/ exists." >&2
+      exit 1
+    fi
+  done
+
+  (
+    cd backend
+    npm run lint
+    npm run typecheck
+    npm run test
+    npm run build
+  )
+fi

@@ -29,6 +29,14 @@ if (typeof NativeRequest === 'function') {
 
 import './matchMedia'
 
+// jsdom does not implement canvas. axe-core probes canvas for icon-ligature
+// detection; returning null is a documented jsdom limitation and does not
+// affect the accessibility rules exercised by these tests.
+const canvasPrototype = window.HTMLCanvasElement?.prototype
+if (canvasPrototype) {
+  canvasPrototype.getContext = () => null
+}
+
 import '@/app/i18n'
 import { i18n } from '@/app/i18n'
 

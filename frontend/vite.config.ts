@@ -13,6 +13,12 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
+      output: {
+        manualChunks: {
+          framework: ['react', 'react-dom', 'react-router'],
+          data: ['@tanstack/react-query', 'zod'],
+        },
+      },
       onwarn: (warning, warn) => {
         // zod ships PURE annotations that Rollup cannot interpret; they are
         // third-party comments only and do not affect the produced bundle.

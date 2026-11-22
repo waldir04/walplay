@@ -8,7 +8,11 @@ describe('bootstrap', () => {
     const container = document.createElement('div')
     document.body.append(container)
 
-    const root = bootstrap(container, { VITE_APP_ENV: 'local', VITE_APP_VERSION: '1.0.0' })
+    const root = bootstrap(container, {
+      VITE_APP_ENV: 'local',
+      VITE_APP_VERSION: '1.0.0',
+      VITE_API_BASE_URL: 'http://localhost:4000',
+    })
 
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Welcome to Walplay' })

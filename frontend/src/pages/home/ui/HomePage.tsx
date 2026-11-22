@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
 import { PAGE_HEADING_ID } from '@/shared/lib/domIds'
-import { EmptyState } from '@/shared/ui'
+import { Link } from '@/shared/ui'
 
 export const HomePage = () => {
   const { t } = useTranslation()
@@ -15,7 +15,13 @@ export const HomePage = () => {
         <p className="max-w-prose text-text-muted">{t('app.tagline')}</p>
       </div>
 
-      <EmptyState title={t('home.empty.title')} description={t('home.empty.description')} />
+      <section className="flex flex-col items-start gap-stack rounded-card border border-border bg-surface p-6 sm:p-8">
+        <h2 className="text-title text-text">{t('home.browse.title')}</h2>
+        <p className="max-w-prose text-text-muted">{t('home.browse.description')}</p>
+        <Link to="/browse" className="min-h-11 px-1 font-semibold">
+          {t('home.browse.action')}
+        </Link>
+      </section>
     </div>
   )
 }

@@ -7,6 +7,7 @@ import { Link } from '@/shared/ui'
 export interface PrimaryNavigationItem {
   readonly to: string
   readonly label: string
+  readonly matchPrefix?: string
 }
 
 export interface PrimaryNavigationProps {
@@ -23,7 +24,9 @@ export const PrimaryNavigation = ({ items, ariaLabel, onNavigate }: PrimaryNavig
     <nav aria-label={ariaLabel}>
       <ul className="flex flex-col gap-1 md:flex-row md:items-center md:gap-2">
         {items.map((item) => {
-          const isActive = location.pathname === item.to
+          const isActive =
+            location.pathname === item.to ||
+            (item.matchPrefix !== undefined && location.pathname.startsWith(item.matchPrefix))
           return (
             <li key={item.to}>
               <Link
