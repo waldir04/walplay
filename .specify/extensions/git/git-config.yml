@@ -8,11 +8,14 @@ branch_numbering: sequential
 # Supported tokens: {author}, {app}, {number}, {slug}
 # {slug} must not appear before {number}; final path segment must start with {number}-.
 # Example for monorepos: "{author}/{app}/{number}-{slug}"
-branch_template: ""
+branch_template: "feat/{number}-{slug}"
 
 # Optional shorthand namespace. Leave empty to use branch_template/default behavior.
+# Walplay specification branches require a feat/, docs/, or fix/ prefix. The default
+# here is feat/ for new-feature specifications; pass GIT_BRANCH_NAME explicitly for
+# a docs/ or fix/ specification branch.
 # Example: "features/{app}" expands to "features/{app}/{number}-{slug}"
-branch_prefix: ""
+branch_prefix: "feat"
 
 # Commit message used by `git commit` during repository initialization
 init_commit_message: "[Spec Kit] Initial commit"

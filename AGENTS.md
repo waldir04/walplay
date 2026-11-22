@@ -1,5 +1,27 @@
 # Walplay Project Instructions
 
+## Git Branching Rules
+All branches MUST follow the rules in `.specify/memory/constitution.md` under **Git branch naming for specifications** and **Git branch naming for non-specification branches**. 
+
+- For specification workflows, export `GIT_BRANCH_NAME="<prefix>/NNN-<slug>"` before invoking `/speckit.specify` or `/speckit.git.feature` so the Spec Kit Git extension applies the dynamic prefix instead of its static template.
+- For non-specification tasks, create the branch directly with `git checkout -b <prefix>/<slug>` without Spec Kit numbering.
+
+## Git Commit Rules
+
+- Before invoking /speckit.git.commit, review git status and git diff to identify all pending changes.
+
+- Follow all applicable commit conventions and Git hook requirements defined in `.specify/memory/constitution.md` under **Automated Quality Gates, Git Hooks, and Commit Convention (NON-NEGOTIABLE)**. Do not duplicate or redefine these rules here.
+
+- Stage only files related to the current task. Never include unrelated changes or existing user modifications.
+
+- If unrelated or ambiguous changes are present, ask the user for clarification before staging or committing.
+
+- Manual invocation of /speckit.git.commit MUST work independently of automatic hooks and auto_commit configuration.
+
+- Creating commits MUST require explicit user authorization. Never create commits automatically.
+
+- Never push changes unless explicitly requested by the user.
+
 ## Product Context
 
 Before creating or modifying any feature specification, implementation plan, task list, or application code, you MUST review the following project documents:
