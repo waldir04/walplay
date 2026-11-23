@@ -6,9 +6,11 @@ import { createLogger } from './lib/logger.js'
 import { createTmdbClient } from './providers/tmdb/tmdb.client.js'
 import { createGenreResolver } from './providers/tmdb/tmdb.genres.js'
 import { createImageResolver } from './providers/tmdb/tmdb.images.js'
+import { createTmdbAvailabilityProvider } from './providers/tmdb/tmdb.availability.provider.js'
 import { createTmdbDetailProvider } from './providers/tmdb/tmdb.detail.provider.js'
 import { createTmdbProvider } from './providers/tmdb/tmdb.provider.js'
 import { createTmdbSearchProvider } from './providers/tmdb/tmdb.search.provider.js'
+import { AvailabilityService } from './services/availability.service.js'
 import { CatalogCache } from './services/catalog-cache.js'
 import { CatalogService } from './services/catalog.service.js'
 import { DetailService } from './services/detail.service.js'
@@ -60,11 +62,30 @@ const start = (): void => {
   const cache = new CatalogCache(cacheOptions)
   const searchCache = new CatalogCache(cacheOptions)
   const detailCache = new CatalogCache(cacheOptions)
+  const availabilityProvider = createTmdbAvailabilityProvider({
+    client,
+    images,
+    logosEnabled: config.availabilityLogosEnabled,
+    destinationHosts: config.availabilityDestinationHosts,
+  })
+  const availabilityCache = new CatalogCache({
+    freshTtlMs: config.availabilityCacheTtlMs,
+    staleTtlMs: config.availabilityCacheStaleMs,
+    maxEntries: config.availabilityCacheMaxEntries,
+  })
+  const availabilityService = new AvailabilityService({
+    provider: availabilityProvider,
+    cache: availabilityCache,
+    supportedRegions: config.availabilitySupportedRegions,
+    freshnessWindowMs: config.availabilityFreshnessWindowMs,
+    retentionMs: config.availabilityCacheStaleMs,
+  })
   const app = createApp({
     config,
     service: new CatalogService({ provider, cache }),
     detailService: new DetailService({ provider: detailProvider, cache: detailCache }),
     searchService: new SearchService({ provider: searchProvider, cache: searchCache }),
+    availabilityService,
     logger,
   })
 

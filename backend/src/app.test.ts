@@ -74,3 +74,27 @@ describe('app composition', () => {
     expect(text).not.toContain('api.example.test')
   })
 })
+
+describe('availability release gating', () => {
+  it('returns ROUTE_NOT_FOUND for the title-availability path when disabled', async () => {
+    server = await startTestServer(buildApp())
+
+    const response = await fetch(
+      `${server.baseUrl}/api/catalog/movie/titles/d2wxOm1vdmllOjU1MA/availability?region=CO`
+    )
+    const body = (await response.json()) as { error: { code: string } }
+
+    expect(response.status).toBe(404)
+    expect(body.error.code).toBe('ROUTE_NOT_FOUND')
+  })
+
+  it('lets the regions path fall through to the existing section route when disabled', async () => {
+    server = await startTestServer(buildApp())
+
+    const response = await fetch(`${server.baseUrl}/api/catalog/availability/regions`)
+    const body = (await response.json()) as { error: { code: string } }
+
+    expect(response.status).toBe(400)
+    expect(body.error.code).toBe('VALIDATION_ERROR')
+  })
+})

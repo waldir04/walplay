@@ -32,6 +32,7 @@ export interface TitleDetailViewProps {
   readonly detail: TitleDetail
   readonly returnAction: ReactNode
   readonly attribution: ReactNode
+  readonly availability?: ReactNode | undefined
   readonly stale?: DetailStaleNote | undefined
   readonly season?: TitleDetailSeasonProps | undefined
   readonly credits?: CreditsSectionState | undefined
@@ -44,6 +45,7 @@ export const TitleDetailView = ({
   detail,
   returnAction,
   attribution,
+  availability,
   stale,
   season,
   credits,
@@ -75,6 +77,7 @@ export const TitleDetailView = ({
       <DetailFacts detail={detail} />
       <DetailOverview detail={detail} />
       <DetailActions detail={detail} capabilities={capabilities} />
+      {availability === undefined ? null : availability}
       {detail.mediaType === 'tv' && season !== undefined && season.seasons.length > 0 ? (
         <SeasonEpisodesSection
           seasons={season.seasons}

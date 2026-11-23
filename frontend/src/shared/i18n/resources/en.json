@@ -244,7 +244,8 @@
       "similar": "Similar titles",
       "collection": "Collection",
       "providerMetadata": "Provider data",
-      "actions": "Actions"
+      "actions": "Actions",
+      "availability": "Where to watch"
     },
     "facts": {
       "releaseDate": "Release date",
@@ -348,6 +349,47 @@
     },
     "a11y": {
       "seasonControl": "Season {{number}}"
+    },
+    "availability": {
+      "regionLabel": "Availability in {{region}}",
+      "regionSelectorLabel": "Availability region",
+      "regionSelectorPlaceholder": "Choose a supported region",
+      "regionAnnouncement": "Availability region changed to {{region}}",
+      "regionUnsupported": "Availability information is not available for {{region}} yet. Choose another region.",
+      "unsupportedRegion": {
+        "title": "Region not supported"
+      },
+      "categories": {
+        "subscription": "Included with a subscription",
+        "free": "Free",
+        "ads": "Free with ads",
+        "rent": "Rent",
+        "buy": "Buy"
+      },
+      "loading": "Loading availability information",
+      "freshness": {
+        "checked": "Checked by Walplay on {{date}}",
+        "sourceUpdated": "Updated by the source on {{date}}",
+        "lastKnown": "Last known availability",
+        "lastChecked": "Last checked on {{date}}",
+        "caution": "Availability may have changed since this information was checked."
+      },
+      "noInformation": {
+        "title": "Availability information not found",
+        "description": "We could not find availability information for {{region}}. This does not mean the title is unavailable; it may still be available. You can check the availability source or a provider directly."
+      },
+      "error": {
+        "title": "Availability could not be loaded",
+        "description": "Availability information is temporarily unavailable. Try again. The rest of the title page is still available."
+      },
+      "retry": "Try again",
+      "destination": "View availability details",
+      "destinationExternal": "Opens {{host}} in a new tab",
+      "disclaimer": "Availability is informational, region-specific, and may change. It is not a guarantee that the title can be watched. Walplay does not host or stream content.",
+      "attribution": {
+        "justWatch": "Availability data provided by JustWatch",
+        "sectionLabel": "Availability attribution"
+      }
     }
   }
 }

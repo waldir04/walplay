@@ -55,6 +55,8 @@ const createProvider = (request: TmdbClient['request']) => {
         path ? { url: `https://image.example.test/w185${path}` } : undefined,
       resolveStill: (path) =>
         path ? { url: `https://image.example.test/w300${path}` } : undefined,
+      resolveProviderLogo: (path) =>
+        path ? { url: `https://image.example.test/w92${path}` } : undefined,
     },
     genres: {
       getGenreNames: async () => new Map([[18, 'Drama']]),

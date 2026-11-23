@@ -44,6 +44,8 @@ const createProvider = (
       path ? { url: `https://image.example.test/w185${path}` } : undefined,
     resolveStill: (path: string | null | undefined) =>
       path ? { url: `https://image.example.test/w300${path}` } : undefined,
+    resolveProviderLogo: (path: string | null | undefined) =>
+      path ? { url: `https://image.example.test/w92${path}` } : undefined,
   }
 
   const genres = {

@@ -2,6 +2,7 @@ import express from 'express'
 import type { Express } from 'express'
 
 import type { BackendConfig } from './config/env.js'
+import { createAvailabilityController } from './controllers/availability.controller.js'
 import { createCatalogController } from './controllers/catalog.controller.js'
 import { createDetailController } from './controllers/detail.controller.js'
 import { createSearchController } from './controllers/search.controller.js'
@@ -10,9 +11,11 @@ import type { Logger } from './lib/logger.js'
 import { createCorsMiddleware } from './middleware/cors.js'
 import { createErrorMiddleware, createNotFoundHandler } from './middleware/error.js'
 import { requestIdMiddleware } from './middleware/requestId.js'
+import { createAvailabilityRouter } from './routes/availability.routes.js'
 import { createCatalogRouter } from './routes/catalog.routes.js'
 import { createDetailRouter } from './routes/detail.routes.js'
 import { createSearchRouter } from './routes/search.routes.js'
+import type { AvailabilityService } from './services/availability.service.js'
 import type { CatalogService } from './services/catalog.service.js'
 import type { DetailService } from './services/detail.service.js'
 import type { SearchService } from './services/search.service.js'
@@ -22,6 +25,7 @@ export interface CreateAppOptions {
   readonly service: CatalogService
   readonly detailService: DetailService
   readonly searchService: SearchService
+  readonly availabilityService?: AvailabilityService
   readonly logger?: Logger
 }
 
@@ -30,8 +34,13 @@ export const createApp = ({
   service,
   detailService,
   searchService,
+  availabilityService,
   logger,
 }: CreateAppOptions): Express => {
+  if (config.availabilityEnabled && availabilityService === undefined) {
+    throw new Error('Availability is enabled but no availability service was provided.')
+  }
+
   const app = express()
   const activeLogger =
     logger ?? (config.nodeEnv === 'test' ? silentLogger : createLogger(config.logLevel))
@@ -45,6 +54,12 @@ export const createApp = ({
     response.status(200).json({ status: 'ok' })
   })
 
+  if (config.availabilityEnabled && availabilityService !== undefined) {
+    app.use(
+      '/api/catalog',
+      createAvailabilityRouter(createAvailabilityController(availabilityService))
+    )
+  }
   app.use('/api/catalog', createDetailRouter(createDetailController(detailService)))
   app.use('/api/catalog', createCatalogRouter(createCatalogController(service)))
   app.use('/api/search', createSearchRouter(createSearchController(searchService)))

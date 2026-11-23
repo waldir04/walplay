@@ -166,3 +166,47 @@ describe('application config access', () => {
     clearExpectedWarnings()
   })
 })
+
+describe('availability capability flag', () => {
+  const base = {
+    VITE_APP_ENV: 'local',
+    VITE_APP_VERSION: '1.0.0',
+    VITE_API_BASE_URL: 'http://localhost:4000',
+  }
+
+  it('defaults availability to disabled when the flag is absent', () => {
+    const result = parseConfig(base)
+
+    expect(result.status).toBe('valid')
+    if (result.status !== 'valid') {
+      throw new Error('expected valid configuration')
+    }
+    expect(result.config.availabilityEnabled).toBe(false)
+    clearExpectedWarnings()
+  })
+
+  it('enables availability only for a true value', () => {
+    const enabled = parseConfig({ ...base, VITE_AVAILABILITY_ENABLED: 'true' })
+    const disabled = parseConfig({ ...base, VITE_AVAILABILITY_ENABLED: 'false' })
+
+    if (enabled.status !== 'valid' || disabled.status !== 'valid') {
+      throw new Error('expected valid configuration')
+    }
+    expect(enabled.config.availabilityEnabled).toBe(true)
+    expect(disabled.config.availabilityEnabled).toBe(false)
+    clearExpectedWarnings()
+  })
+
+  it('fails closed with a value-free warning for invalid input', () => {
+    const result = parseConfig({ ...base, VITE_AVAILABILITY_ENABLED: 'enabled-maybe' })
+
+    expect(result.status).toBe('valid')
+    if (result.status !== 'valid') {
+      throw new Error('expected valid configuration')
+    }
+    expect(result.config.availabilityEnabled).toBe(false)
+    expect(result.warnings.join(' ')).toContain('VITE_AVAILABILITY_ENABLED')
+    expect(result.warnings.join(' ')).not.toContain('enabled-maybe')
+    clearExpectedWarnings()
+  })
+})
