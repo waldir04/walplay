@@ -1,4 +1,4 @@
-import { act, fireEvent, screen } from '@testing-library/react'
+import { act, cleanup, fireEvent, screen } from '@testing-library/react'
 import { useLocation } from 'react-router'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
@@ -39,6 +39,10 @@ const renderHarness = (entry = '/search') =>
 const locationValue = (): string => screen.getByTestId('location').textContent ?? ''
 
 afterEach(() => {
+  cleanup()
+  if (vi.isFakeTimers()) {
+    expect(vi.getTimerCount()).toBe(0)
+  }
   vi.useRealTimers()
 })
 

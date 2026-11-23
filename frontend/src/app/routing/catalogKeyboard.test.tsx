@@ -68,7 +68,7 @@ describe('catalog keyboard journey', () => {
   it('reaches the media switch, See all, cards, and Load more in logical order', async () => {
     const user = userEvent.setup()
     renderApp(['/browse/movies'])
-    await screen.findByText('Fight Club')
+    await screen.findAllByText('Fight Club')
 
     const reached: string[] = []
     for (let index = 0; index < 40; index += 1) {
@@ -92,7 +92,7 @@ describe('catalog keyboard journey', () => {
   it('activates a card by keyboard and moves to a unique detail address', async () => {
     const user = userEvent.setup()
     const { router } = renderApp(['/browse/movies'])
-    await screen.findByText('Fight Club')
+    await screen.findAllByText('Fight Club')
 
     const card = screen.getAllByRole('link', { name: /Fight Club/ })[0] as HTMLElement
     card.focus()
@@ -102,12 +102,14 @@ describe('catalog keyboard journey', () => {
     await waitFor(() =>
       expect(router.state.location.pathname).toBe(`/browse/movies/title/${MOVIE_ID}`)
     )
-    expect(await screen.findByRole('heading', { name: 'Fight Club' })).toBeInTheDocument()
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { name: 'Fight Club' })).toBeInTheDocument()
+    )
   })
 
   it('keeps the focus indicator contract on catalog controls', async () => {
     renderApp(['/browse/movies'])
-    await screen.findByText('Fight Club')
+    await screen.findAllByText('Fight Club')
     const main = screen.getByRole('main')
     for (const link of main.querySelectorAll('a')) {
       expect(link.className).toContain('focus-visible:outline-2')

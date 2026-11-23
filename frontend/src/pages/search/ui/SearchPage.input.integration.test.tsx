@@ -1,7 +1,8 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { SEARCH_SETTLE_MS } from '@/shared/config/constants'
 import { firstSearchPage } from '@/test/fixtures/catalog/search'
 import { renderWithProviders } from '@/test/renderWithProviders'
 
@@ -20,6 +21,10 @@ const { fetchSearchPage } = await import('@/entities/catalog/api/catalogClient')
 
 beforeEach(() => {
   vi.mocked(fetchSearchPage).mockReset().mockResolvedValue(firstSearchPage())
+})
+
+afterEach(() => {
+  vi.useRealTimers()
 })
 
 const typeInSearch = (value: string) => {
@@ -42,42 +47,52 @@ describe('SearchPage input discipline', () => {
   })
 
   it('requests once on submit and never on an identical resubmit', async () => {
-    const user = userEvent.setup()
     await renderWithProviders(<SearchPage />, { initialEntries: ['/search'] })
+    vi.useFakeTimers()
 
-    await user.type(screen.getByRole('searchbox'), 'matrix')
-    await user.click(screen.getByRole('button', { name: 'Search' }))
+    typeInSearch('matrix')
+    fireEvent.click(screen.getByRole('button', { name: 'Search' }))
+    await act(async () => {
+      vi.advanceTimersByTime(SEARCH_SETTLE_MS * 2)
+    })
 
-    await waitFor(() => expect(fetchSearchPage).toHaveBeenCalledTimes(1))
-    await user.click(screen.getByRole('button', { name: 'Search' }))
-    await new Promise((resolve) => setTimeout(resolve, 100))
+    expect(fetchSearchPage).toHaveBeenCalledTimes(1)
+    fireEvent.click(screen.getByRole('button', { name: 'Search' }))
+    await act(async () => {
+      vi.advanceTimersByTime(SEARCH_SETTLE_MS * 2)
+    })
 
     expect(fetchSearchPage).toHaveBeenCalledTimes(1)
   })
 
   it('issues zero requests for empty, one-character, and over-long input', async () => {
+    vi.useFakeTimers()
     await renderWithProviders(<SearchPage />, { initialEntries: ['/search'] })
 
     typeInSearch('')
     typeInSearch('a')
     typeInSearch('😀'.repeat(201))
-    await new Promise((resolve) => setTimeout(resolve, 450))
+    await act(async () => {
+      vi.advanceTimersByTime(SEARCH_SETTLE_MS * 2)
+    })
 
     expect(fetchSearchPage).not.toHaveBeenCalled()
     expect(screen.getAllByText(/Enter no more than 200 characters/).length).toBeGreaterThan(0)
   })
 
   it('refocuses the input after clear and issues no extra request', async () => {
-    const user = userEvent.setup()
     await renderWithProviders(<SearchPage />, { initialEntries: ['/search?q=the+matrix'] })
     await waitFor(() => expect(fetchSearchPage).toHaveBeenCalledTimes(1))
+    vi.useFakeTimers()
 
     const input = screen.getByRole('searchbox')
-    await user.click(screen.getByRole('button', { name: 'Clear search' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Clear search' }))
 
     expect(document.activeElement).toBe(input)
     expect(input).toHaveValue('')
-    await new Promise((resolve) => setTimeout(resolve, 200))
+    await act(async () => {
+      vi.advanceTimersByTime(SEARCH_SETTLE_MS * 2)
+    })
     expect(fetchSearchPage).toHaveBeenCalledTimes(1)
   })
 })

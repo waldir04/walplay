@@ -1,9 +1,13 @@
-import { act, render, screen } from '@testing-library/react'
+import { act, cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { LiveRegion } from './LiveRegion'
 
 afterEach(() => {
+  cleanup()
+  if (vi.isFakeTimers()) {
+    expect(vi.getTimerCount()).toBe(0)
+  }
   vi.useRealTimers()
 })
 

@@ -15,6 +15,13 @@ on:
     branches:
       - develop
       - main
+  workflow_dispatch:
+    inputs:
+      frontend_reliability_runs:
+        description: Number of shuffled frontend reliability iterations (0 disables the step)
+        required: false
+        default: '0'
+        type: string
 
 permissions:
   contents: read
@@ -27,7 +34,7 @@ jobs:
   frontend:
     name: Frontend checks
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     defaults:
       run:
         working-directory: frontend
@@ -94,6 +101,10 @@ jobs:
       - name: Test
         if: steps.frontend.outputs.present == 'true'
         run: npm run test
+
+      - name: Reliability runs
+        if: steps.frontend.outputs.present == 'true' && github.event_name == 'workflow_dispatch' && (inputs.frontend_reliability_runs || '0') != '0'
+        run: npm run test:reliability -- --runs "${{ inputs.frontend_reliability_runs }}"
 
       - name: Build
         if: steps.frontend.outputs.present == 'true'

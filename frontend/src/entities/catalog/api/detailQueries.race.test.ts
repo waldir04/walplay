@@ -7,6 +7,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createTestQueryClient } from '@/test/catalogTestUtils'
 import { MOVIE_ID, detailEnvelope, tvDetail } from '@/test/fixtures/detail'
 
+import { catalogKeys } from './catalogKeys'
 import { useDetailQuery } from './detailQueries'
 
 vi.mock('./detailClient', () => ({
@@ -21,10 +22,14 @@ vi.mock('./detailClient', () => ({
 
 const { fetchDetail } = await import('./detailClient')
 
-const createWrapper = () => ({
-  wrapper: ({ children }: { children: ReactNode }) =>
-    createElement(QueryClientProvider, { client: createTestQueryClient() }, children),
-})
+const createWrapper = () => {
+  const client = createTestQueryClient()
+  return {
+    client,
+    wrapper: ({ children }: { children: ReactNode }) =>
+      createElement(QueryClientProvider, { client }, children),
+  }
+}
 
 beforeEach(() => {
   vi.mocked(fetchDetail).mockReset()
@@ -46,7 +51,7 @@ describe('detail query races', () => {
           })
     )
 
-    const { wrapper } = createWrapper()
+    const { client, wrapper } = createWrapper()
     const { result, rerender } = renderHook(
       ({ itemId }: { itemId: string }) => useDetailQuery('movie', itemId, 'en'),
       { wrapper, initialProps: { itemId: MOVIE_ID } }
@@ -57,7 +62,9 @@ describe('detail query races', () => {
     await waitFor(() => expect(result.current.data?.data.title).toBe('Newest'))
 
     resolveFirst?.(detailEnvelope())
-    await new Promise((resolve) => setTimeout(resolve, 0))
+    await waitFor(() =>
+      expect(client.getQueryData(catalogKeys.detail('movie', MOVIE_ID, 'en'))).toBeDefined()
+    )
     expect(result.current.data?.data.title).toBe('Newest')
   })
 })

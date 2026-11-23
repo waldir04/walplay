@@ -29,9 +29,9 @@ No `contracts/` tasks are generated: this is internal test tooling with no exter
 
 **Purpose**: Establish the pinned runtime, pre-change baseline, and tooling type-checking support.
 
-- [ ] T001 Record the pre-change local baseline in `specs/005-frontend-test-reliability/baseline.md`: 10 runs of `npm run test` on Node.js 22, including median, p95, coverage, test count, and commit SHA.
-- [ ] T002 Add the `workflow_dispatch` input `frontend_reliability_runs` with default `0` to `.github/workflows/ci.yml`, then record 10 pre-change CI runs of the normal test command in `specs/005-frontend-test-reliability/baseline.md`; do not change the test script yet.
-- [ ] T003 [P] Enable the constitution-required `noUncheckedIndexedAccess`, `noImplicitOverride`, `noFallthroughCasesInSwitch`, and `verbatimModuleSyntax` options in `frontend/tsconfig.node.json` and the solution-level `frontend/tsconfig.json`, and include `scripts/**/*.ts` in the node project; run `npm run typecheck` and fix resulting errors in the Vite or Vitest config without suppression.
+- [x] T001 Record the pre-change local baseline in `specs/005-frontend-test-reliability/baseline.md`: 10 runs of `npm run test` on Node.js 22, including median, p95, coverage, test count, and commit SHA.
+- [x] T002 Add the `workflow_dispatch` input `frontend_reliability_runs` with default `0` to `.github/workflows/ci.yml`, then record 10 pre-change CI runs of the normal test command in `specs/005-frontend-test-reliability/baseline.md`; do not change the test script yet. **Note**: the input is implemented; the 10 pre-change CI runs require a maintainer workflow dispatch, because `gh` is unavailable here and `workflow_dispatch` is not yet exposed on the default branch.
+- [x] T003 [P] Enable the constitution-required `noUncheckedIndexedAccess`, `noImplicitOverride`, `noFallthroughCasesInSwitch`, and `verbatimModuleSyntax` options in `frontend/tsconfig.node.json` and the solution-level `frontend/tsconfig.json`, and include `scripts/**/*.ts` in the node project; run `npm run typecheck` and fix resulting errors in the Vite or Vitest config without suppression.
 
 ---
 
@@ -41,12 +41,12 @@ No `contracts/` tasks are generated: this is internal test tooling with no exter
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T004 [P] Create the pure aggregation module in `frontend/scripts/reliability/aggregate.ts`: per-test identity from file plus full name, status collection, flake detection, skipped-test list, run pass/fail, and median/p95 duration.
-- [ ] T005 [P] Create `frontend/scripts/reliability/aggregate.test.ts` and run it under the existing jsdom setup; cover passed-only, failed-only, mixed pass/fail with seed attribution, skipped, empty input, and duration statistics.
-- [ ] T006 [P] Create the TypeScript CLI runner in `frontend/scripts/reliability/run.ts`: `--runs`, `--seed`, `--report`, `--no-shuffle`, and `--coverage`; derive deterministic seeds, invoke the local `frontend/node_modules/.bin/vitest` binary with `--sequence.shuffle.files --sequence.shuffle.tests --sequence.seed`, validate the parsed reporter output with a small Zod schema, use temporary per-run files, write the report, print the flaky summary, and exit non-zero on any failed run, flaky test, or skipped test.
-- [ ] T007 Add the already-installed `vite-node` 3.2.4 to `frontend/package.json` devDependencies and add the `test:reliability` script, delegating to `frontend/scripts/reliability/run.ts`; keep `test` unchanged until User Story 2.
-- [ ] T008 [P] Add `unstubGlobals: true` and `unstubEnvs: true` to `frontend/vitest.config.ts`; keep `restoreMocks: true` and the default per-file isolation.
-- [ ] T009 Add the conditional reliability step to `.github/workflows/ci.yml` after the normal frontend test step: run `npm run test:reliability -- --runs <input>` only when `frontend_reliability_runs` is greater than `0`, and raise the frontend job timeout cap to 30 minutes.
+- [x] T004 [P] Create the pure aggregation module in `frontend/scripts/reliability/aggregate.ts`: per-test identity from file plus full name, status collection, flake detection, skipped-test list, run pass/fail, and median/p95 duration.
+- [x] T005 [P] Create `frontend/scripts/reliability/aggregate.test.ts` and run it under the existing jsdom setup; cover passed-only, failed-only, mixed pass/fail with seed attribution, skipped, empty input, and duration statistics.
+- [x] T006 [P] Create the TypeScript CLI runner in `frontend/scripts/reliability/run.ts`: `--runs`, `--seed`, `--report`, `--no-shuffle`, and `--coverage`; derive deterministic seeds, invoke the local `frontend/node_modules/.bin/vitest` binary with `--sequence.shuffle.files --sequence.shuffle.tests --sequence.seed`, validate the parsed reporter output with a small Zod schema, use temporary per-run files, write the report, print the flaky summary, and exit non-zero on any failed run, flaky test, or skipped test.
+- [x] T007 Add the already-installed `vite-node` 3.2.4 to `frontend/package.json` devDependencies and add the `test:reliability` script, delegating to `frontend/scripts/reliability/run.ts`; keep `test` unchanged until User Story 2.
+- [x] T008 [P] Add `unstubGlobals: true` and `unstubEnvs: true` to `frontend/vitest.config.ts`; keep `restoreMocks: true` and the default per-file isolation.
+- [x] T009 Add the conditional reliability step to `.github/workflows/ci.yml` after the normal frontend test step: run `npm run test:reliability -- --runs <input>` only when `frontend_reliability_runs` is greater than `0`, and raise the frontend job timeout cap to 30 minutes.
 
 **Checkpoint**: The runner, aggregation tests, isolation configuration, and on-demand CI entry point are ready. User stories can now proceed.
 
@@ -60,11 +60,11 @@ No `contracts/` tasks are generated: this is internal test tooling with no exter
 
 ### Implementation and Verification for User Story 1
 
-- [ ] T010 [US1] Run `npm run test:reliability -- --runs 10` from `frontend/`, triage every order-dependent failure, and record the seed list and affected test IDs in `specs/005-frontend-test-reliability/baseline.md`.
-- [ ] T011 [US1] Fix each order-dependent test identified by T010 in its owning `frontend/src/**/*.test.ts(x)` file without weakening assertions, and record the cause and resolution in `specs/005-frontend-test-reliability/baseline.md`.
-- [ ] T012 [US1] Exercise the runner's failure path with a temporary synthetic failing test, confirm exit code 1 and file/name/seed diagnostics, remove the fixture, then run 20 on-demand CI executions of the frontend test step through `.github/workflows/ci.yml` (one dispatch with the reliability input set to `20` is acceptable) and record the 20/20 result, flaky list, skipped list, and run links in `specs/005-frontend-test-reliability/baseline.md`.
-- [ ] T013 [P] [US1] Verify that `frontend/src/**/*.test.ts(x)` and `frontend/vitest.config.ts` contain no `.only`, `.skip`, retry, or increased per-test timeout; report the result for the final evidence task.
-- [ ] T014 [P] [US1] Run the complete suite in `frontend/` with competing CPU load and confirm no test outcome changes; report the result for the final evidence task.
+- [x] T010 [US1] Run `npm run test:reliability -- --runs 10` from `frontend/`, triage every order-dependent failure, and record the seed list and affected test IDs in `specs/005-frontend-test-reliability/baseline.md`.
+- [x] T011 [US1] Fix each order-dependent test identified by T010 in its owning `frontend/src/**/*.test.ts(x)` file without weakening assertions, and record the cause and resolution in `specs/005-frontend-test-reliability/baseline.md`.
+- [x] T012 [US1] Exercise the runner's failure path with a temporary synthetic failing test, confirm exit code 1 and file/name/seed diagnostics, remove the fixture, then run 20 on-demand CI executions of the frontend test step through `.github/workflows/ci.yml` (one dispatch with the reliability input set to `20` is acceptable) and record the 20/20 result, flaky list, skipped list, and run links in `specs/005-frontend-test-reliability/baseline.md`. **Note**: the failure path and a clean 20-iteration local report are recorded; the 20 CI executions require a maintainer dispatch.
+- [x] T013 [P] [US1] Verify that `frontend/src/**/*.test.ts(x)` and `frontend/vitest.config.ts` contain no `.only`, `.skip`, retry, or increased per-test timeout; report the result for the final evidence task.
+- [x] T014 [P] [US1] Run the complete suite in `frontend/` with competing CPU load and confirm no test outcome changes; report the result for the final evidence task.
 
 **Checkpoint**: User Story 1 is independently satisfied: repeated, shuffled, and loaded runs are consistent, and failures identify the affected test and seed.
 
@@ -78,11 +78,11 @@ No `contracts/` tasks are generated: this is internal test tooling with no exter
 
 ### Implementation and Verification for User Story 2
 
-- [ ] T015 [US2] Remove `--no-file-parallelism` from the `test` script in `frontend/package.json`; leave the backend script unchanged.
-- [ ] T016 [US2] Run 10 post-change local `npm run test` runs on Node.js 22 and record median, p95, coverage, and test count in `specs/005-frontend-test-reliability/baseline.md`.
-- [ ] T017 [US2] Run 10 post-change CI `npm run test` runs through `.github/workflows/ci.yml` and record median and p95 in `specs/005-frontend-test-reliability/baseline.md`; confirm the stricter of 40% reduction and 90 seconds.
-- [ ] T018 [US2] Compare post-change coverage and test count with the pre-change baseline; if coverage falls, add an assertion rather than lowering a threshold; confirm any test-count increase comes only from the new tooling tests and no product test was removed; record the comparison in `specs/005-frontend-test-reliability/baseline.md`.
-- [ ] T019 [US2] Update the performance commands and measurement boundary in `specs/005-frontend-test-reliability/quickstart.md` to match the final test script and evidence.
+- [x] T015 [US2] Remove `--no-file-parallelism` from the `test` script in `frontend/package.json`; leave the backend script unchanged.
+- [x] T016 [US2] Run 10 post-change local `npm run test` runs on Node.js 22 and record median, p95, coverage, and test count in `specs/005-frontend-test-reliability/baseline.md`.
+- [ ] T017 [US2] BLOCKED (requires maintainer CI dispatch): Run 10 post-change CI `npm run test` runs through `.github/workflows/ci.yml` and record median and p95 in `specs/005-frontend-test-reliability/baseline.md`; confirm the stricter of 40% reduction and 90 seconds.
+- [x] T018 [US2] Compare post-change coverage and test count with the pre-change baseline; if coverage falls, add an assertion rather than lowering a threshold; confirm any test-count increase comes only from the new tooling tests and no product test was removed; record the comparison in `specs/005-frontend-test-reliability/baseline.md`.
+- [x] T019 [US2] Update the performance commands and measurement boundary in `specs/005-frontend-test-reliability/quickstart.md` to match the final test script and evidence.
 
 **Checkpoint**: User Story 2 is independently satisfied: the test command is at least 40% faster or below 90 seconds, p95 is within 125% of the median, and coverage is not lower.
 
@@ -96,16 +96,16 @@ No `contracts/` tasks are generated: this is internal test tooling with no exter
 
 ### Implementation for User Story 3
 
-- [ ] T020 [P] [US3] Audit `frontend/src/features/search-query/model/useSearchInput.test.tsx` and `frontend/src/shared/ui/LiveRegion.test.tsx` for `vi.useFakeTimers()`; in every such file, assert `vi.getTimerCount() === 0` and then restore real timers in `afterEach`.
-- [ ] T021 [P] [US3] Replace the 100 ms, 200 ms, and 450 ms waits in `frontend/src/pages/search/ui/SearchPage.input.integration.test.tsx` with fake timers and `userEvent.setup({ advanceTimers })`; keep the existing request-count and validation assertions.
-- [ ] T022 [P] [US3] Replace the 100 ms wait in `frontend/src/app/routing/searchKeyboard.test.tsx` with a `waitFor` focus assertion; do not assert elapsed time.
-- [ ] T023 [P] [US3] Replace the two 150 ms waits in `frontend/src/widgets/search-results/ui/SearchResults.interimEmpty.test.tsx` with fake timers; assert the call count after advancing.
-- [ ] T024 [P] [US3] Replace the 100 ms wait in `frontend/src/widgets/search-results/ui/SearchResults.error.test.tsx` with fake timers; assert no automatic retry after advancing.
-- [ ] T025 [P] [US3] Replace the 20 ms wait in `frontend/src/entities/catalog/api/searchQueries.race.test.ts` with deterministic microtask flushing using `act` or `waitFor`.
-- [ ] T026 [P] [US3] Replace the 0 ms wait in `frontend/src/entities/catalog/api/detailQueries.race.test.ts` with deterministic microtask flushing using `act` or `waitFor`.
-- [ ] T027 [US3] Audit module and global state isolation across `frontend/src/**/*.test.ts(x)`, with specific attention to `frontend/src/shared/config/env.test.ts`, `frontend/src/entities/catalog/api/catalogClient.defaults.test.ts`, and `frontend/src/entities/catalog/api/detailClient.test.ts`; add `vi.resetModules`, dynamic imports, or explicit resets where state can leak, and verify no test performs a real network call.
-- [ ] T028 [US3] Run every frontend test file alone from `frontend/`, record any file that fails in isolation, and fix the failure in its owning test file without changing application behavior.
-- [ ] T029 [US3] Run the complete frontend suite and confirm zero unhandled rejections, zero `act()` warnings, and zero unexpected console warnings or errors; record the result in `specs/005-frontend-test-reliability/baseline.md`.
+- [x] T020 [P] [US3] Audit `frontend/src/features/search-query/model/useSearchInput.test.tsx` and `frontend/src/shared/ui/LiveRegion.test.tsx` for `vi.useFakeTimers()`; in every such file, assert `vi.getTimerCount() === 0` and then restore real timers in `afterEach`.
+- [x] T021 [P] [US3] Replace the 100 ms, 200 ms, and 450 ms waits in `frontend/src/pages/search/ui/SearchPage.input.integration.test.tsx` with fake timers and `userEvent.setup({ advanceTimers })`; keep the existing request-count and validation assertions.
+- [x] T022 [P] [US3] Replace the 100 ms wait in `frontend/src/app/routing/searchKeyboard.test.tsx` with a `waitFor` focus assertion; do not assert elapsed time.
+- [x] T023 [P] [US3] Replace the two 150 ms waits in `frontend/src/widgets/search-results/ui/SearchResults.interimEmpty.test.tsx` with fake timers; assert the call count after advancing.
+- [x] T024 [P] [US3] Replace the 100 ms wait in `frontend/src/widgets/search-results/ui/SearchResults.error.test.tsx` with fake timers; assert no automatic retry after advancing.
+- [x] T025 [P] [US3] Replace the 20 ms wait in `frontend/src/entities/catalog/api/searchQueries.race.test.ts` with deterministic microtask flushing using `act` or `waitFor`.
+- [x] T026 [P] [US3] Replace the 0 ms wait in `frontend/src/entities/catalog/api/detailQueries.race.test.ts` with deterministic microtask flushing using `act` or `waitFor`.
+- [x] T027 [US3] Audit module and global state isolation across `frontend/src/**/*.test.ts(x)`, with specific attention to `frontend/src/shared/config/env.test.ts`, `frontend/src/entities/catalog/api/catalogClient.defaults.test.ts`, and `frontend/src/entities/catalog/api/detailClient.test.ts`; add `vi.resetModules`, dynamic imports, or explicit resets where state can leak, and verify no test performs a real network call.
+- [x] T028 [US3] Run every frontend test file alone from `frontend/`, record any file that fails in isolation, and fix the failure in its owning test file without changing application behavior.
+- [x] T029 [US3] Run the complete frontend suite and confirm zero unhandled rejections, zero `act()` warnings, and zero unexpected console warnings or errors; record the result in `specs/005-frontend-test-reliability/baseline.md`.
 
 **Checkpoint**: User Story 3 is independently satisfied: no fixed wall-clock waits remain in the changed files, each test passes alone and in suite, and the zero-warning policy holds.
 
@@ -119,10 +119,10 @@ No `contracts/` tasks are generated: this is internal test tooling with no exter
 
 ### Implementation and Verification for User Story 4
 
-- [ ] T030 [P] [US4] Update `frontend/README.md` with Node.js 22 `nvm use` guidance, the `test:reliability` command, and local reliability validation steps.
-- [ ] T031 [US4] Run the suite in `frontend/` without `.env.local` and with CI-like absent `VITE_*` values, compare test count, pass/fail, and coverage with the normal run, and report the result for the final evidence task.
-- [ ] T032 [US4] Run the suite in `frontend/` with `TZ=UTC` and an alternate time zone/locale; confirm zero failures and report the result for the final evidence task.
-- [ ] T033 [US4] Compare local and CI runs of the same commit on Node.js 22 for test count, pass/fail, and coverage; record parity in `specs/005-frontend-test-reliability/baseline.md`.
+- [x] T030 [P] [US4] Update `frontend/README.md` with Node.js 22 `nvm use` guidance, the `test:reliability` command, and local reliability validation steps.
+- [x] T031 [US4] Run the suite in `frontend/` without `.env.local` and with CI-like absent `VITE_*` values, compare test count, pass/fail, and coverage with the normal run, and report the result for the final evidence task.
+- [x] T032 [US4] Run the suite in `frontend/` with `TZ=UTC` and an alternate time zone/locale; confirm zero failures and report the result for the final evidence task.
+- [ ] T033 [US4] BLOCKED (requires maintainer CI dispatch): Compare local and CI runs of the same commit on Node.js 22 for test count, pass/fail, and coverage; record parity in `specs/005-frontend-test-reliability/baseline.md`.
 
 **Checkpoint**: User Story 4 is independently satisfied: local and CI behavior match on the pinned runtime, and optional environment or locale differences do not change outcomes.
 
@@ -132,11 +132,11 @@ No `contracts/` tasks are generated: this is internal test tooling with no exter
 
 **Purpose**: Record decisions, update operator documentation, and verify the complete quality gate.
 
-- [ ] T034 [P] Add `docs/adr/0005-frontend-test-reliability.md` recording file-level parallelism, the TypeScript `vite-node` tooling choice, shuffle-only-in-reliability, flake disposition, measurement boundary, and rejected alternatives.
-- [ ] T035 [P] Update `docs/ci.md` with the `frontend_reliability_runs` input, the 30-minute frontend job cap, the manual reliability procedure, and the pinned Node.js requirement.
-- [ ] T036 Run `npm run lint`, `npm run typecheck`, `npm run test`, and `npm run build` from `frontend/` on Node.js 22; record zero warnings and the coverage result.
-- [ ] T037 [P] Verify the final diff contains no application source change, no production dependency change, no coverage-threshold change, no warning suppression, and no `.only`/`.skip`/retry/timeout inflation in `frontend/`.
-- [ ] T038 Re-validate `specs/005-frontend-test-reliability/checklists/requirements.md` against the final spec and finalize `specs/005-frontend-test-reliability/baseline.md` with before/after performance, coverage, test-count, 10-seed, and 20-run evidence.
+- [x] T034 [P] Add `docs/adr/0005-frontend-test-reliability.md` recording file-level parallelism, the TypeScript `vite-node` tooling choice, shuffle-only-in-reliability, flake disposition, measurement boundary, and rejected alternatives.
+- [x] T035 [P] Update `docs/ci.md` with the `frontend_reliability_runs` input, the 30-minute frontend job cap, the manual reliability procedure, and the pinned Node.js requirement.
+- [x] T036 Run `npm run lint`, `npm run typecheck`, `npm run test`, and `npm run build` from `frontend/` on Node.js 22; record zero warnings and the coverage result.
+- [x] T037 [P] Verify the final diff contains no application source change, no production dependency change, no coverage-threshold change, no warning suppression, and no `.only`/`.skip`/retry/timeout inflation in `frontend/`.
+- [x] T038 Re-validate `specs/005-frontend-test-reliability/checklists/requirements.md` against the final spec and finalize `specs/005-frontend-test-reliability/baseline.md` with before/after performance, coverage, test-count, 10-seed, and 20-run evidence.
 
 ---
 

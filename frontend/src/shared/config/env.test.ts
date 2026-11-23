@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { getApiBaseUrl, getAppConfig, parseConfig } from './env'
+import { parseConfig } from './env'
 
 const clearExpectedWarnings = (): void => {
   vi.mocked(console.warn).mockClear()
@@ -147,13 +147,21 @@ describe('parseConfig', () => {
 })
 
 describe('application config access', () => {
-  it('exposes the validated configuration and API base URL', () => {
+  it('exposes the validated configuration and API base URL', async () => {
     vi.stubEnv('VITE_APP_ENV', 'local')
     vi.stubEnv('VITE_APP_VERSION', '1.0.0')
     vi.stubEnv('VITE_API_BASE_URL', 'http://localhost:4000')
 
-    expect(getAppConfig()).toMatchObject({ environmentName: 'local', applicationVersion: '1.0.0' })
-    expect(getApiBaseUrl()).toBe('http://localhost:4000')
+    // The module caches the parsed configuration. Import a fresh instance so the
+    // assertion cannot depend on a cache populated by an earlier test in this file.
+    vi.resetModules()
+    const { getApiBaseUrl: readApiBaseUrl, getAppConfig: readAppConfig } = await import('./env')
+
+    expect(readAppConfig()).toMatchObject({
+      environmentName: 'local',
+      applicationVersion: '1.0.0',
+    })
+    expect(readApiBaseUrl()).toBe('http://localhost:4000')
     vi.unstubAllEnvs()
     clearExpectedWarnings()
   })
