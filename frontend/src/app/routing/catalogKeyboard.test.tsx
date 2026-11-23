@@ -3,6 +3,13 @@ import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { CAPABILITIES, MOVIE_ID, movieItem, pageEnvelope } from '@/test/fixtures/catalog'
+import {
+  collectionEnvelope,
+  detailEnvelope,
+  emptyCreditsEnvelope,
+  seasonEnvelope,
+  similarEnvelope,
+} from '@/test/fixtures/detail'
 import { installMatchMediaMock } from '@/test/matchMedia'
 import { renderApp } from '@/test/renderApp'
 
@@ -14,8 +21,20 @@ vi.mock('@/entities/catalog/api/catalogClient', () => ({
   fetchItem: vi.fn(),
 }))
 
+vi.mock('@/entities/catalog/api/detailClient', () => ({
+  createDetailClient: vi.fn(),
+  getDetailClient: vi.fn(),
+  fetchDetail: vi.fn(),
+  fetchCredits: vi.fn(),
+  fetchSimilar: vi.fn(),
+  fetchCollection: vi.fn(),
+  fetchSeason: vi.fn(),
+}))
+
 const { fetchCapabilities, fetchSectionPage, fetchItem } =
   await import('@/entities/catalog/api/catalogClient')
+const { fetchCollection, fetchCredits, fetchDetail, fetchSeason, fetchSimilar } =
+  await import('@/entities/catalog/api/detailClient')
 
 beforeEach(() => {
   installMatchMediaMock(true)
@@ -38,6 +57,11 @@ beforeEach(() => {
         source: 'provider',
       },
     })
+  vi.mocked(fetchDetail).mockReset().mockResolvedValue(detailEnvelope())
+  vi.mocked(fetchCredits).mockReset().mockResolvedValue(emptyCreditsEnvelope())
+  vi.mocked(fetchSeason).mockReset().mockResolvedValue(seasonEnvelope(1))
+  vi.mocked(fetchSimilar).mockReset().mockResolvedValue(similarEnvelope([]))
+  vi.mocked(fetchCollection).mockReset().mockResolvedValue(collectionEnvelope([]))
 })
 
 describe('catalog keyboard journey', () => {

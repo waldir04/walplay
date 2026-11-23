@@ -31,6 +31,7 @@ export const SEARCH_ERROR_CODE_TO_STATE: Readonly<Record<CatalogErrorCode, Searc
   Object.freeze({
     VALIDATION_ERROR: 'query-invalid',
     CATALOG_NOT_FOUND: 'unavailable',
+    DETAIL_SEASON_NOT_FOUND: 'unavailable',
     CATALOG_RATE_LIMITED: 'rate-limited',
     CATALOG_TIMEOUT: 'timed-out',
     CATALOG_UNAVAILABLE: 'unavailable',

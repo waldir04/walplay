@@ -9,3 +9,14 @@ export const MAIN_CONTENT_ID = 'main-content'
 export const SEARCH_MIN_QUERY_LENGTH = 2
 export const SEARCH_MAX_QUERY_LENGTH = 200
 export const SEARCH_SETTLE_MS = 350
+
+export const CAST_PREVIEW_LIMIT = 10
+export const CREW_PREVIEW_LIMIT = 6
+export const SIMILAR_PREVIEW_LIMIT = 12
+export const COLLECTION_PREVIEW_LIMIT = 12
+export const OVERVIEW_PREVIEW_CODE_POINTS = 600
+export const EPISODE_OVERVIEW_PREVIEW_CODE_POINTS = 320
+export const MIN_PLAUSIBLE_YEAR = 1888
+export const MAX_PLAUSIBLE_YEAR = 2100
+export const MIN_SEASON_NUMBER = 0
+export const MAX_SEASON_NUMBER = 999

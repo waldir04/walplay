@@ -24,7 +24,8 @@
       "titleDetail": "Title · Walplay",
       "catalogNotFound": "Catalog not found · Walplay",
       "search": "Search · Walplay"
-    }
+    },
+    "detailTitle": "{{title}} · {{mediaType}}"
   },
   "a11y": {
     "skipToContent": "Skip to main content",
@@ -218,7 +219,6 @@
       "endOfList": "You have reached the end of the list.",
       "appended_one": "{{count}} more title added",
       "appended_other": "{{count}} more titles added",
-      "detailsUnavailable": "Complete details are not yet available for this title.",
       "notFound": {
         "title": "Title not found",
         "description": "This title is not available in the catalog. It may have been removed, or the address may be mistyped."
@@ -232,6 +232,122 @@
       "sectionLabel": "Provider attribution",
       "statement": "This product uses the TMDB API but is not endorsed or certified by TMDB.",
       "logoAlt": "TMDB"
+    }
+  },
+  "detail": {
+    "sections": {
+      "overview": "Overview",
+      "seasons": "Seasons",
+      "episodes": "Episodes",
+      "cast": "Cast",
+      "crew": "Crew",
+      "similar": "Similar titles",
+      "collection": "Collection",
+      "providerMetadata": "Provider data",
+      "actions": "Actions"
+    },
+    "facts": {
+      "releaseDate": "Release date",
+      "firstAirDate": "First aired",
+      "latestAirDate": "Latest air date",
+      "runtime": "Runtime",
+      "episodeRuntime": "Episode length",
+      "genres": "Genres",
+      "originalTitle": "Original title",
+      "status": "Status",
+      "seasonsReported": "Seasons reported by TMDB",
+      "episodesReported": "Episodes reported by TMDB",
+      "networks": "Networks"
+    },
+    "status": {
+      "released": "Released",
+      "inProduction": "In production",
+      "postProduction": "Post-production",
+      "planned": "Planned",
+      "rumored": "Rumored",
+      "returning": "Returning series",
+      "ended": "Ended",
+      "canceled": "Canceled",
+      "pilot": "Pilot"
+    },
+    "crewRole": {
+      "director": "Director",
+      "creator": "Creator",
+      "writer": "Writer"
+    },
+    "duration": {
+      "hoursMinutes": "{{hours}} h {{minutes}} min",
+      "minutes": "{{minutes}} min",
+      "range": "{{min}}–{{max}}",
+      "typicalEpisode": "About {{duration}} per episode"
+    },
+    "rating": {
+      "label": "TMDB user rating",
+      "a11y_one": "{{value}} out of {{scale}}, from {{count, number}} vote",
+      "a11y_other": "{{value}} out of {{scale}}, from {{count, number}} votes",
+      "votes_one": "{{count, number}} vote",
+      "votes_other": "{{count, number}} votes"
+    },
+    "popularity": {
+      "label": "TMDB popularity"
+    },
+    "providerValuesNote": "Ratings and popularity are provided by TMDB and may change.",
+    "overview": {
+      "showMore": "Show more",
+      "showLess": "Show less"
+    },
+    "seasons": {
+      "selectLabel": "Select season",
+      "option": "Season {{number}}",
+      "optionWithYear": "Season {{number}} · {{year}}",
+      "optionWithCount_one": "Season {{number}} · {{count}} episode",
+      "optionWithCount_other": "Season {{number}} · {{count}} episodes",
+      "specials": "Specials",
+      "selected": "Selected",
+      "announcement": "Season {{number}} selected",
+      "specialsAnnouncement": "Specials selected"
+    },
+    "episodes": {
+      "episodeLabel": "Episode {{number}}",
+      "empty": {
+        "title": "No episodes available",
+        "description": "TMDB does not list episodes for this season."
+      },
+      "loading": "Episodes are loading"
+    },
+    "credits": {
+      "character": "as {{character}}",
+      "profileFallback": "{{name}}"
+    },
+    "states": {
+      "loading": "Loading title details",
+      "loaded": "Details loaded for {{title}}",
+      "error": {
+        "title": "Title details are unavailable",
+        "description": "This title could not be loaded right now. Try again, or return to the catalog."
+      },
+      "retry": "Try again",
+      "sectionError": {
+        "title": "This section could not be loaded",
+        "description": "Try again to load this section. The rest of the page is still available."
+      },
+      "notFound": {
+        "title": "Title not found",
+        "description": "This title is not available. It may have been removed, or the address may be mistyped."
+      },
+      "stale": {
+        "label": "Showing cached details",
+        "lastUpdated": "Cached data from {{date}}"
+      },
+      "sectionLoading": "Loading this section",
+      "sectionStale": "Showing cached section data"
+    },
+    "actions": {
+      "trailer": "Watch trailer",
+      "trailerExternal": "Opens YouTube in a new tab"
+    },
+    "a11y": {
+      "seasonControl": "Season {{number}}"
     }
   }
 }

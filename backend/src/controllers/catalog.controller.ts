@@ -47,7 +47,7 @@ const respondWithValidationError = (error: z.ZodError): never => {
   throw validationError(details)
 }
 
-const parse = <T>(schema: z.ZodType<T>, value: unknown): T => {
+export const parse = <T>(schema: z.ZodType<T>, value: unknown): T => {
   const result = schema.safeParse(value)
   if (!result.success) {
     return respondWithValidationError(result.error)

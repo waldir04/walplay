@@ -83,3 +83,58 @@ describe('image resolver', () => {
     expect(resolver.resolvePoster('/x.jpg')?.url).toContain('/w342/x.jpg')
   })
 })
+
+describe('detail artwork resolvers', () => {
+  it('resolves backdrop, profile, and still sizes from the shared configuration', async () => {
+    const request = vi.fn(async () => ({
+      images: {
+        secure_base_url: 'https://image.example.test/t/p/',
+        poster_sizes: ['w342', 'w185', 'w300', 'w780', 'w1280'],
+      },
+    }))
+    const resolver = createImageResolver(fakeClient(request as unknown as TmdbClient['request']), {
+      ttlMs: 1000,
+    })
+    await resolver.ensureReady()
+
+    expect(resolver.resolveBackdrop('/backdrop.jpg')).toEqual({
+      url: 'https://image.example.test/t/p/w780/backdrop.jpg',
+      urlLarge: 'https://image.example.test/t/p/w1280/backdrop.jpg',
+    })
+    expect(resolver.resolveBackdrop('backdrop.jpg')?.url).toContain('/w780/backdrop.jpg')
+    expect(resolver.resolveProfile('/person.jpg')).toEqual({
+      url: 'https://image.example.test/t/p/w185/person.jpg',
+    })
+    expect(resolver.resolveStill('/still.jpg')).toEqual({
+      url: 'https://image.example.test/t/p/w300/still.jpg',
+    })
+  })
+
+  it('returns no image when the path or configuration is unusable', async () => {
+    const failing = createImageResolver(
+      fakeClient(
+        vi.fn(async () => {
+          throw new Error('no configuration')
+        }) as unknown as TmdbClient['request']
+      ),
+      { ttlMs: 1000 }
+    )
+    await failing.ensureReady()
+    expect(failing.resolveBackdrop('/x.jpg')).toBeUndefined()
+    expect(failing.resolveProfile('/x.jpg')).toBeUndefined()
+    expect(failing.resolveStill('/x.jpg')).toBeUndefined()
+
+    const resolver = createImageResolver(
+      fakeClient(
+        vi.fn(async () => ({
+          images: { secure_base_url: 'https://image.example.test/t/p/', poster_sizes: [] },
+        })) as unknown as TmdbClient['request']
+      ),
+      { ttlMs: 1000 }
+    )
+    await resolver.ensureReady()
+    expect(resolver.resolveBackdrop(null)).toBeUndefined()
+    expect(resolver.resolveProfile('   ')).toBeUndefined()
+    expect(resolver.resolveStill('')).toBeUndefined()
+  })
+})

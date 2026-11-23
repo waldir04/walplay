@@ -41,27 +41,37 @@ export const useRouteAnnouncement = (): RouteAnnouncementResult => {
 
     let cancelled = false
     let frame = 0
-    let attempts = 0
+    let frames = 0
+    let announced = false
 
-    const focusAndAnnounce = (): void => {
+    const settle = (): void => {
       if (cancelled) {
         return
       }
 
       const heading = document.getElementById(PAGE_HEADING_ID)
-      if (!heading) {
-        attempts += 1
-        if (attempts <= MAX_FOCUS_FRAMES) {
-          frame = requestAnimationFrame(focusAndAnnounce)
+      const active = document.activeElement
+      const focusNeedsRestoring =
+        active === null ||
+        active === document.body ||
+        !(active instanceof HTMLElement) ||
+        !active.isConnected
+
+      if (heading !== null && (!announced || focusNeedsRestoring)) {
+        heading.focus()
+        if (!announced) {
+          announced = true
+          setAnnouncement(messageRef.current)
         }
-        return
       }
 
-      heading.focus()
-      setAnnouncement(messageRef.current)
+      frames += 1
+      if (frames <= MAX_FOCUS_FRAMES) {
+        frame = requestAnimationFrame(settle)
+      }
     }
 
-    frame = requestAnimationFrame(focusAndAnnounce)
+    frame = requestAnimationFrame(settle)
 
     return () => {
       cancelled = true

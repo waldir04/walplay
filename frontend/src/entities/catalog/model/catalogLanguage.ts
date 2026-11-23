@@ -20,3 +20,6 @@ export const toProviderLanguage = (language: InterfaceLanguage): 'en-US' | 'es-E
   LANGUAGE_TO_PROVIDER[language]
 
 export const toLocaleCode = (language: InterfaceLanguage): string => LANGUAGE_TO_LOCALE[language]
+
+export const resolveInterfaceLanguage = (language: string): InterfaceLanguage =>
+  isInterfaceLanguage(language) ? language : 'en'

@@ -67,13 +67,14 @@ export interface AccessibleNameLabels {
 export const buildCatalogItemAccessibleName = (
   item: CatalogItem,
   locale: string,
-  labels: AccessibleNameLabels
+  labels: AccessibleNameLabels,
+  options: { readonly includeRating?: boolean } = {}
 ): string => {
   const parts = [item.title, labels.mediaTypeLabel]
   if (item.releaseYear !== undefined) {
     parts.push(formatReleaseYear(item.releaseYear))
   }
-  if (item.rating !== undefined) {
+  if (item.rating !== undefined && (options.includeRating ?? true)) {
     parts.push(labels.ratingTemplate(formatRatingValue(item.rating.value, locale)))
   }
   return parts.join(', ')
