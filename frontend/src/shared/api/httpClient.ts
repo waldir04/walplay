@@ -3,6 +3,7 @@ import { z } from 'zod'
 export type CatalogErrorCode =
   | 'VALIDATION_ERROR'
   | 'CATALOG_NOT_FOUND'
+  | 'DETAIL_SEASON_NOT_FOUND'
   | 'CATALOG_RATE_LIMITED'
   | 'CATALOG_TIMEOUT'
   | 'CATALOG_UNAVAILABLE'
@@ -13,6 +14,7 @@ export type CatalogErrorCode =
 const CATALOG_ERROR_CODES: readonly CatalogErrorCode[] = [
   'VALIDATION_ERROR',
   'CATALOG_NOT_FOUND',
+  'DETAIL_SEASON_NOT_FOUND',
   'CATALOG_RATE_LIMITED',
   'CATALOG_TIMEOUT',
   'CATALOG_UNAVAILABLE',

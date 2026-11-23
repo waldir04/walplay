@@ -3,6 +3,7 @@ import type { Express } from 'express'
 
 import type { BackendConfig } from './config/env.js'
 import { createCatalogController } from './controllers/catalog.controller.js'
+import { createDetailController } from './controllers/detail.controller.js'
 import { createSearchController } from './controllers/search.controller.js'
 import { createLogger, silentLogger } from './lib/logger.js'
 import type { Logger } from './lib/logger.js'
@@ -10,13 +11,16 @@ import { createCorsMiddleware } from './middleware/cors.js'
 import { createErrorMiddleware, createNotFoundHandler } from './middleware/error.js'
 import { requestIdMiddleware } from './middleware/requestId.js'
 import { createCatalogRouter } from './routes/catalog.routes.js'
+import { createDetailRouter } from './routes/detail.routes.js'
 import { createSearchRouter } from './routes/search.routes.js'
 import type { CatalogService } from './services/catalog.service.js'
+import type { DetailService } from './services/detail.service.js'
 import type { SearchService } from './services/search.service.js'
 
 export interface CreateAppOptions {
   readonly config: BackendConfig
   readonly service: CatalogService
+  readonly detailService: DetailService
   readonly searchService: SearchService
   readonly logger?: Logger
 }
@@ -24,6 +28,7 @@ export interface CreateAppOptions {
 export const createApp = ({
   config,
   service,
+  detailService,
   searchService,
   logger,
 }: CreateAppOptions): Express => {
@@ -40,6 +45,7 @@ export const createApp = ({
     response.status(200).json({ status: 'ok' })
   })
 
+  app.use('/api/catalog', createDetailRouter(createDetailController(detailService)))
   app.use('/api/catalog', createCatalogRouter(createCatalogController(service)))
   app.use('/api/search', createSearchRouter(createSearchController(searchService)))
 

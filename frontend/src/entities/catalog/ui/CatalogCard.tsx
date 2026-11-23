@@ -12,9 +12,10 @@ import { PosterFallback } from './PosterFallback'
 export interface CatalogCardProps {
   readonly item: CatalogItem
   readonly from?: string
+  readonly showRating?: boolean
 }
 
-export const CatalogCard = ({ item, from }: CatalogCardProps) => {
+export const CatalogCard = ({ item, from, showRating = true }: CatalogCardProps) => {
   const { t, i18n } = useTranslation()
   const [imageFailed, setImageFailed] = useState(false)
   const language = isInterfaceLanguage(i18n.language) ? i18n.language : 'en'
@@ -26,7 +27,8 @@ export const CatalogCard = ({ item, from }: CatalogCardProps) => {
     {
       mediaTypeLabel,
       ratingTemplate: (value) => t('catalog.card.ratingA11y', { value, scale: 10 }),
-    }
+    },
+    { includeRating: showRating }
   )
 
   const showPoster = item.poster !== undefined && !imageFailed
@@ -68,7 +70,7 @@ export const CatalogCard = ({ item, from }: CatalogCardProps) => {
           {item.releaseYear !== undefined ? (
             <span className="text-caption text-text-muted tabular-nums">{item.releaseYear}</span>
           ) : null}
-          {item.rating !== undefined ? (
+          {showRating && item.rating !== undefined ? (
             <span className="text-caption text-text-muted tabular-nums">
               {t('catalog.card.ratingLabel', {
                 value: formatRatingValue(item.rating.value, language === 'es' ? 'es-ES' : 'en-US'),

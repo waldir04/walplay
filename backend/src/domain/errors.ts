@@ -1,6 +1,7 @@
 export type CatalogErrorCode =
   | 'VALIDATION_ERROR'
   | 'CATALOG_NOT_FOUND'
+  | 'DETAIL_SEASON_NOT_FOUND'
   | 'CATALOG_RATE_LIMITED'
   | 'CATALOG_TIMEOUT'
   | 'CATALOG_UNAVAILABLE'
@@ -11,6 +12,7 @@ export type CatalogErrorCode =
 export const CATALOG_ERROR_STATUS: Readonly<Record<CatalogErrorCode, number>> = Object.freeze({
   VALIDATION_ERROR: 400,
   CATALOG_NOT_FOUND: 404,
+  DETAIL_SEASON_NOT_FOUND: 404,
   CATALOG_RATE_LIMITED: 429,
   CATALOG_TIMEOUT: 504,
   CATALOG_UNAVAILABLE: 502,
@@ -22,6 +24,7 @@ export const CATALOG_ERROR_STATUS: Readonly<Record<CatalogErrorCode, number>> = 
 const DEFAULT_MESSAGES: Readonly<Record<CatalogErrorCode, string>> = Object.freeze({
   VALIDATION_ERROR: 'The request could not be validated.',
   CATALOG_NOT_FOUND: 'The requested catalog item was not found.',
+  DETAIL_SEASON_NOT_FOUND: 'The requested season was not found.',
   CATALOG_RATE_LIMITED: 'Catalog data is temporarily rate limited.',
   CATALOG_TIMEOUT: 'Catalog data took too long to load.',
   CATALOG_UNAVAILABLE: 'Catalog data is temporarily unavailable.',
@@ -52,6 +55,9 @@ export const validationError = (details?: readonly unknown[]): CatalogError =>
   new CatalogError('VALIDATION_ERROR', DEFAULT_MESSAGES.VALIDATION_ERROR, details)
 
 export const notFoundError = (): CatalogError => new CatalogError('CATALOG_NOT_FOUND')
+
+export const detailSeasonNotFoundError = (): CatalogError =>
+  new CatalogError('DETAIL_SEASON_NOT_FOUND')
 
 export const isCatalogError = (value: unknown): value is CatalogError =>
   value instanceof CatalogError

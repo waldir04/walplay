@@ -39,6 +39,7 @@ export const ERROR_CODE_TO_STATE: Readonly<Record<CatalogErrorCode, CatalogUiSta
   Object.freeze({
     VALIDATION_ERROR: 'unavailable',
     CATALOG_NOT_FOUND: 'not-found',
+    DETAIL_SEASON_NOT_FOUND: 'unavailable',
     CATALOG_RATE_LIMITED: 'rate-limited',
     CATALOG_TIMEOUT: 'timed-out',
     CATALOG_UNAVAILABLE: 'unavailable',

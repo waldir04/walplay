@@ -43,6 +43,7 @@ export {
   LANGUAGE_TO_LOCALE,
   LANGUAGE_TO_PROVIDER,
   isInterfaceLanguage,
+  resolveInterfaceLanguage,
   toLocaleCode,
   toProviderLanguage,
 } from './model/catalogLanguage'
@@ -111,6 +112,116 @@ export type {
   SearchPageRequest,
   SectionPageRequest,
 } from './api/catalogClient'
+export {
+  CREW_ROLE_LABEL_KEYS,
+  TITLE_STATUS_LABEL_KEYS,
+  collectionEnvelopeSchema,
+  creditsEnvelopeSchema,
+  creditsSchema,
+  crewRoleLabelKey,
+  crewRoleSchema,
+  detailEnvelopeSchema,
+  detailResponseMetaSchema,
+  episodeDurationSchema,
+  episodeSchema,
+  genreSchema,
+  relatedCollectionSchema,
+  relatedItemsEnvelopeSchema,
+  seasonEnvelopeSchema,
+  seasonEpisodesSchema,
+  seasonSchema,
+  titleDetailSchema,
+  titleRatingSchema,
+  titleStatusLabelKey,
+  titleStatusSchema,
+  tvSummarySchema,
+} from './model/titleDetail'
+export type {
+  CastCredit,
+  CollectionEnvelope,
+  Credits,
+  CreditsEnvelope,
+  CrewCredit,
+  CrewRole,
+  DetailEnvelope,
+  DetailResponseMeta,
+  Duration,
+  Episode,
+  EpisodeDuration,
+  Genre,
+  RelatedCollection,
+  RelatedItemsData,
+  RelatedItemsEnvelope,
+  Season,
+  SeasonEnvelope,
+  SeasonEpisodes,
+  TitleDetail,
+  TitleRating,
+  TitleStatus,
+  TvSummary,
+} from './model/titleDetail'
+export {
+  formatDetailDate,
+  formatDetailDateOrYear,
+  formatEpisodeAirDate,
+  formatEpisodeRuntime,
+  formatLastUpdated,
+  formatLocalizedNumber,
+  formatMinutes,
+  formatMovieDuration,
+  formatPopularity,
+  formatRatingAccessibleText,
+  formatVoteCount,
+  formatVoteCountText,
+} from './model/detailFormatting'
+export type { TranslateFn } from './model/detailFormatting'
+export {
+  DETAIL_PAGE_COPY_KEYS,
+  DETAIL_SECTION_COPY_KEYS,
+  detailPageCopyKeys,
+  detailStateForError,
+  detailStateForErrorCode,
+} from './model/detailErrors'
+export type { DetailCopyKeys, DetailUiState } from './model/detailErrors'
+export {
+  createDetailClient,
+  fetchCollection,
+  fetchCredits,
+  fetchDetail,
+  fetchSeason,
+  fetchSimilar,
+  getDetailClient,
+} from './api/detailClient'
+export type { DetailClient, DetailRequest, SeasonRequest } from './api/detailClient'
+export {
+  DETAIL_GC_TIME_MS,
+  DETAIL_SECTION_STALE_TIME_MS,
+  DETAIL_STALE_TIME_MS,
+  useCollectionQuery,
+  useCreditsQuery,
+  useDetailQuery,
+  useSeasonQuery,
+  useSimilarQuery,
+} from './api/detailQueries'
+export { DetailHero } from './ui/detail/DetailHero'
+export type { DetailHeroProps } from './ui/detail/DetailHero'
+export { DetailFacts } from './ui/detail/DetailFacts'
+export type { DetailFactsProps } from './ui/detail/DetailFacts'
+export { DetailOverview } from './ui/detail/DetailOverview'
+export type { DetailOverviewProps } from './ui/detail/DetailOverview'
+export { DetailSkeleton } from './ui/detail/DetailSkeleton'
+export { DetailFailure } from './ui/detail/DetailFailure'
+export type { DetailFailureProps } from './ui/detail/DetailFailure'
+export { DetailNotFound } from './ui/detail/DetailNotFound'
+export type { DetailNotFoundProps } from './ui/detail/DetailNotFound'
+export { EpisodeList } from './ui/detail/EpisodeList'
+export type { EpisodeListProps } from './ui/detail/EpisodeList'
+export { CastList } from './ui/detail/CastList'
+export type { CastListProps } from './ui/detail/CastList'
+export { CrewList } from './ui/detail/CrewList'
+export type { CrewListProps } from './ui/detail/CrewList'
+export { RelatedTitles } from './ui/detail/RelatedTitles'
+export type { RelatedTitlesProps } from './ui/detail/RelatedTitles'
 export { PosterFallback } from './ui/PosterFallback'
 export { CatalogCard } from './ui/CatalogCard'
 export { CatalogGrid } from './ui/CatalogGrid'

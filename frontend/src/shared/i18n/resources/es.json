@@ -24,7 +24,8 @@
       "titleDetail": "Título · Walplay",
       "catalogNotFound": "Catálogo no encontrado · Walplay",
       "search": "Buscar · Walplay"
-    }
+    },
+    "detailTitle": "{{title}} · {{mediaType}}"
   },
   "a11y": {
     "skipToContent": "Ir al contenido principal",
@@ -218,7 +219,6 @@
       "endOfList": "Has llegado al final de la lista.",
       "appended_one": "Se añadió {{count}} título más",
       "appended_other": "Se añadieron {{count}} títulos más",
-      "detailsUnavailable": "Los detalles completos todavía no están disponibles para este título.",
       "notFound": {
         "title": "Título no encontrado",
         "description": "Este título no está disponible en el catálogo. Puede que se haya eliminado o que la dirección esté mal escrita."
@@ -232,6 +232,122 @@
       "sectionLabel": "Atribución del proveedor",
       "statement": "Este producto usa la API de TMDB pero no está respaldado ni certificado por TMDB.",
       "logoAlt": "TMDB"
+    }
+  },
+  "detail": {
+    "sections": {
+      "overview": "Sinopsis",
+      "seasons": "Temporadas",
+      "episodes": "Episodios",
+      "cast": "Reparto",
+      "crew": "Equipo",
+      "similar": "Títulos similares",
+      "collection": "Colección",
+      "providerMetadata": "Datos del proveedor",
+      "actions": "Acciones"
+    },
+    "facts": {
+      "releaseDate": "Fecha de estreno",
+      "firstAirDate": "Primera emisión",
+      "latestAirDate": "Última emisión",
+      "runtime": "Duración",
+      "episodeRuntime": "Duración por episodio",
+      "genres": "Géneros",
+      "originalTitle": "Título original",
+      "status": "Estado",
+      "seasonsReported": "Temporadas según TMDB",
+      "episodesReported": "Episodios según TMDB",
+      "networks": "Cadenas"
+    },
+    "status": {
+      "released": "Estrenada",
+      "inProduction": "En producción",
+      "postProduction": "Posproducción",
+      "planned": "Planeada",
+      "rumored": "Rumoreada",
+      "returning": "Serie en emisión",
+      "ended": "Finalizada",
+      "canceled": "Cancelada",
+      "pilot": "Piloto"
+    },
+    "crewRole": {
+      "director": "Dirección",
+      "creator": "Creación",
+      "writer": "Guion"
+    },
+    "duration": {
+      "hoursMinutes": "{{hours}} h {{minutes}} min",
+      "minutes": "{{minutes}} min",
+      "range": "{{min}}–{{max}}",
+      "typicalEpisode": "Aproximadamente {{duration}} por episodio"
+    },
+    "rating": {
+      "label": "Valoración de usuarios de TMDB",
+      "a11y_one": "{{value}} de {{scale}}, con {{count, number}} voto",
+      "a11y_other": "{{value}} de {{scale}}, con {{count, number}} votos",
+      "votes_one": "{{count, number}} voto",
+      "votes_other": "{{count, number}} votos"
+    },
+    "popularity": {
+      "label": "Popularidad en TMDB"
+    },
+    "providerValuesNote": "Las valoraciones y la popularidad las proporciona TMDB y pueden cambiar.",
+    "overview": {
+      "showMore": "Mostrar más",
+      "showLess": "Mostrar menos"
+    },
+    "seasons": {
+      "selectLabel": "Seleccionar temporada",
+      "option": "Temporada {{number}}",
+      "optionWithYear": "Temporada {{number}} · {{year}}",
+      "optionWithCount_one": "Temporada {{number}} · {{count}} episodio",
+      "optionWithCount_other": "Temporada {{number}} · {{count}} episodios",
+      "specials": "Especiales",
+      "selected": "Seleccionada",
+      "announcement": "Temporada {{number}} seleccionada",
+      "specialsAnnouncement": "Especiales seleccionados"
+    },
+    "episodes": {
+      "episodeLabel": "Episodio {{number}}",
+      "empty": {
+        "title": "No hay episodios disponibles",
+        "description": "TMDB no muestra episodios para esta temporada."
+      },
+      "loading": "Los episodios se están cargando"
+    },
+    "credits": {
+      "character": "como {{character}}",
+      "profileFallback": "{{name}}"
+    },
+    "states": {
+      "loading": "Cargando los detalles del título",
+      "loaded": "Detalles cargados de {{title}}",
+      "error": {
+        "title": "Los detalles del título no están disponibles",
+        "description": "Este título no se pudo cargar ahora. Inténtalo de nuevo o vuelve al catálogo."
+      },
+      "retry": "Reintentar",
+      "sectionError": {
+        "title": "Esta sección no se pudo cargar",
+        "description": "Reintenta cargar esta sección. El resto de la página sigue disponible."
+      },
+      "notFound": {
+        "title": "Título no encontrado",
+        "description": "Este título no está disponible. Puede que se haya eliminado o que la dirección esté mal escrita."
+      },
+      "stale": {
+        "label": "Mostrando detalles en caché",
+        "lastUpdated": "Datos en caché del {{date}}"
+      },
+      "sectionLoading": "Cargando esta sección",
+      "sectionStale": "Mostrando datos en caché de esta sección"
+    },
+    "actions": {
+      "trailer": "Ver tráiler",
+      "trailerExternal": "Abre YouTube en una pestaña nueva"
+    },
+    "a11y": {
+      "seasonControl": "Temporada {{number}}"
     }
   }
 }

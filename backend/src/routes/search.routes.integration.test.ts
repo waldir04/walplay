@@ -7,6 +7,7 @@ import { TEST_CONFIG, createFakeProvider } from '../test/fixtures/fakeProvider.j
 import { CatalogCache } from '../services/catalog-cache.js'
 import { CatalogService } from '../services/catalog.service.js'
 import { SearchService } from '../services/search.service.js'
+import { createTestDetailService } from '../test/fixtures/fakeDetailProvider.js'
 import { startTestServer } from '../test/fixtures/testServer.js'
 import type { TestServer } from '../test/fixtures/testServer.js'
 
@@ -24,6 +25,7 @@ const buildServer = async (fake: FakeSearchProvider): Promise<TestServer> => {
       provider: fake,
       cache: new CatalogCache({ freshTtlMs: 1000, staleTtlMs: 10_000, maxEntries: 10 }),
     }),
+    detailService: createTestDetailService(),
   })
   return startTestServer(app)
 }

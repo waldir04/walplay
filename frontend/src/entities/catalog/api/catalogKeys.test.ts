@@ -63,3 +63,53 @@ describe('catalog key factory', () => {
     expect(keys.size).toBe(3)
   })
 })
+
+describe('detail key factory', () => {
+  it('includes media type, item id, and language for every core and secondary surface', () => {
+    expect(catalogKeys.detail('movie', 'abc12345', 'en')).toEqual([
+      'catalog',
+      'detail',
+      'movie',
+      'abc12345',
+      'en',
+    ])
+    expect(catalogKeys.credits('tv', 'abc12345', 'es')).toEqual([
+      'catalog',
+      'credits',
+      'tv',
+      'abc12345',
+      'es',
+    ])
+    expect(catalogKeys.similar('movie', 'abc12345', 'en')).toEqual([
+      'catalog',
+      'similar',
+      'movie',
+      'abc12345',
+      'en',
+    ])
+    expect(catalogKeys.collection('movie', 'abc12345', 'en')).toEqual([
+      'catalog',
+      'collection',
+      'movie',
+      'abc12345',
+      'en',
+    ])
+    expect(catalogKeys.season('tv', 'abc12345', 2, 'en')).toEqual([
+      'catalog',
+      'season',
+      'tv',
+      'abc12345',
+      2,
+      'en',
+    ])
+  })
+
+  it('isolates the selected season and language', () => {
+    const keys = new Set([
+      JSON.stringify(catalogKeys.season('tv', 'abc12345', 1, 'en')),
+      JSON.stringify(catalogKeys.season('tv', 'abc12345', 2, 'en')),
+      JSON.stringify(catalogKeys.season('tv', 'abc12345', 2, 'es')),
+    ])
+    expect(keys.size).toBe(3)
+  })
+})

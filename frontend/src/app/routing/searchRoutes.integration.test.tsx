@@ -2,7 +2,15 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { MOVIE_ID, movieItem, providerMeta } from '@/test/fixtures/catalog'
+import { MOVIE_ID } from '@/test/fixtures/catalog'
+import {
+  collectionEnvelope,
+  detailEnvelope,
+  emptyCreditsEnvelope,
+  movieDetail,
+  seasonEnvelope,
+  similarEnvelope,
+} from '@/test/fixtures/detail'
 import { firstSearchPage } from '@/test/fixtures/catalog/search'
 import { installMatchMediaMock } from '@/test/matchMedia'
 import { renderApp } from '@/test/renderApp'
@@ -16,15 +24,30 @@ vi.mock('@/entities/catalog/api/catalogClient', () => ({
   fetchSearchPage: vi.fn(),
 }))
 
-const { fetchSearchPage, fetchItem } = await import('@/entities/catalog/api/catalogClient')
+vi.mock('@/entities/catalog/api/detailClient', () => ({
+  createDetailClient: vi.fn(),
+  getDetailClient: vi.fn(),
+  fetchDetail: vi.fn(),
+  fetchCredits: vi.fn(),
+  fetchSimilar: vi.fn(),
+  fetchCollection: vi.fn(),
+  fetchSeason: vi.fn(),
+}))
+
+const { fetchSearchPage } = await import('@/entities/catalog/api/catalogClient')
+const { fetchCollection, fetchCredits, fetchDetail, fetchSeason, fetchSimilar } =
+  await import('@/entities/catalog/api/detailClient')
 
 beforeEach(() => {
   installMatchMediaMock(true)
   vi.mocked(fetchSearchPage).mockReset().mockResolvedValue(firstSearchPage())
-  vi.mocked(fetchItem).mockReset().mockResolvedValue({
-    data: movieItem(),
-    meta: providerMeta(),
-  })
+  vi.mocked(fetchDetail)
+    .mockReset()
+    .mockResolvedValue(detailEnvelope(movieDetail({ id: MOVIE_ID, title: 'The Matrix' })))
+  vi.mocked(fetchCredits).mockReset().mockResolvedValue(emptyCreditsEnvelope())
+  vi.mocked(fetchSeason).mockReset().mockResolvedValue(seasonEnvelope(1))
+  vi.mocked(fetchSimilar).mockReset().mockResolvedValue(similarEnvelope([]))
+  vi.mocked(fetchCollection).mockReset().mockResolvedValue(collectionEnvelope([]))
 })
 
 describe('search routes integration', () => {
@@ -67,7 +90,7 @@ describe('search routes integration', () => {
     })
     expect(await screen.findByRole('heading', { level: 1, name: 'The Matrix' })).toBeInTheDocument()
     expect(fetchSearchPage).toHaveBeenCalledTimes(1)
-    expect(fetchItem).not.toHaveBeenCalled()
+    expect(fetchDetail).toHaveBeenCalled()
   })
 
   it('returns from detail with the return action and restores cached results', async () => {
@@ -77,8 +100,9 @@ describe('search routes integration', () => {
       name: 'Search results for the matrix',
     })
     await user.click(within(collection).getAllByRole('link')[0] as HTMLElement)
+    await screen.findByRole('heading', { level: 1, name: 'The Matrix' })
 
-    await user.click(await screen.findByRole('link', { name: 'Return to search' }))
+    await user.click(screen.getByRole('link', { name: 'Return to search' }))
 
     expect(
       await screen.findByRole('heading', { name: 'Results for “the matrix”' })

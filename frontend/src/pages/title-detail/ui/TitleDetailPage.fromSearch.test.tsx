@@ -1,10 +1,38 @@
 import { screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { MOVIE_ID, movieItem } from '@/test/fixtures/catalog'
+import {
+  detailEnvelope,
+  emptyCreditsEnvelope,
+  seasonEnvelope,
+  similarEnvelope,
+  collectionEnvelope,
+} from '@/test/fixtures/detail'
 import { renderWithProviders } from '@/test/renderWithProviders'
 
 import { TitleDetailPage } from './TitleDetailPage'
+
+vi.mock('@/entities/catalog/api/detailClient', () => ({
+  createDetailClient: vi.fn(),
+  getDetailClient: vi.fn(),
+  fetchDetail: vi.fn(),
+  fetchCredits: vi.fn(),
+  fetchSimilar: vi.fn(),
+  fetchCollection: vi.fn(),
+  fetchSeason: vi.fn(),
+}))
+
+const { fetchCredits, fetchDetail, fetchSeason, fetchSimilar, fetchCollection } =
+  await import('@/entities/catalog/api/detailClient')
+
+beforeEach(() => {
+  vi.mocked(fetchDetail).mockReset().mockResolvedValue(detailEnvelope())
+  vi.mocked(fetchCredits).mockReset().mockResolvedValue(emptyCreditsEnvelope())
+  vi.mocked(fetchSeason).mockReset().mockResolvedValue(seasonEnvelope(1))
+  vi.mocked(fetchSimilar).mockReset().mockResolvedValue(similarEnvelope([]))
+  vi.mocked(fetchCollection).mockReset().mockResolvedValue(collectionEnvelope([]))
+})
 
 const detailEntry = (from?: string) => ({
   pathname: `/browse/movies/title/${MOVIE_ID}`,
@@ -17,7 +45,7 @@ describe('TitleDetailPage search origin', () => {
       initialEntries: [detailEntry('/search?q=the%20matrix')],
     })
 
-    expect(screen.getByRole('link', { name: 'Return to search' })).toHaveAttribute(
+    expect(await screen.findByRole('link', { name: 'Return to search' })).toHaveAttribute(
       'href',
       '/search?q=the%20matrix'
     )
@@ -29,7 +57,7 @@ describe('TitleDetailPage search origin', () => {
       initialEntries: [detailEntry('/browse/movies/popular')],
     })
 
-    expect(screen.getByRole('link', { name: 'Return to the catalog' })).toHaveAttribute(
+    expect(await screen.findByRole('link', { name: 'Return to the catalog' })).toHaveAttribute(
       'href',
       '/browse/movies/popular'
     )
@@ -42,7 +70,7 @@ describe('TitleDetailPage search origin', () => {
         initialEntries: [detailEntry(from)],
       })
 
-      expect(screen.getByRole('link', { name: 'Return to the catalog' })).toHaveAttribute(
+      expect(await screen.findByRole('link', { name: 'Return to the catalog' })).toHaveAttribute(
         'href',
         '/browse/movies'
       )

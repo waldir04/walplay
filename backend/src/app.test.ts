@@ -4,6 +4,7 @@ import { createApp } from './app.js'
 import { CatalogCache } from './services/catalog-cache.js'
 import { CatalogService } from './services/catalog.service.js'
 import { TEST_CONFIG, createFakeProvider } from './test/fixtures/fakeProvider.js'
+import { createTestDetailService } from './test/fixtures/fakeDetailProvider.js'
 import { createTestSearchService } from './test/fixtures/fakeSearchProvider.js'
 import { startTestServer } from './test/fixtures/testServer.js'
 import type { TestServer } from './test/fixtures/testServer.js'
@@ -22,6 +23,7 @@ const buildApp = () => {
     config: TEST_CONFIG,
     service: new CatalogService({ provider, cache }),
     searchService: createTestSearchService(),
+    detailService: createTestDetailService(),
   })
 }
 
@@ -33,6 +35,7 @@ describe('app composition', () => {
       config: TEST_CONFIG,
       service: new CatalogService({ provider, cache }),
       searchService: createTestSearchService(),
+      detailService: createTestDetailService(),
     })
     server = await startTestServer(app)
 

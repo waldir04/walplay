@@ -11,6 +11,20 @@ export const catalogKeys = {
     [...catalogKeys.all, 'category', mediaType, section, language] as const,
   item: (mediaType: MediaType, itemId: string, language: InterfaceLanguage) =>
     [...catalogKeys.all, 'item', mediaType, itemId, language] as const,
+  detail: (mediaType: MediaType, itemId: string, language: InterfaceLanguage) =>
+    [...catalogKeys.all, 'detail', mediaType, itemId, language] as const,
+  credits: (mediaType: MediaType, itemId: string, language: InterfaceLanguage) =>
+    [...catalogKeys.all, 'credits', mediaType, itemId, language] as const,
+  similar: (mediaType: MediaType, itemId: string, language: InterfaceLanguage) =>
+    [...catalogKeys.all, 'similar', mediaType, itemId, language] as const,
+  collection: (mediaType: MediaType, itemId: string, language: InterfaceLanguage) =>
+    [...catalogKeys.all, 'collection', mediaType, itemId, language] as const,
+  season: (
+    mediaType: MediaType,
+    itemId: string,
+    seasonNumber: number,
+    language: InterfaceLanguage
+  ) => [...catalogKeys.all, 'season', mediaType, itemId, seasonNumber, language] as const,
   search: (identity: string, language: InterfaceLanguage) =>
     [...catalogKeys.all, 'search', identity, language] as const,
 } as const

@@ -4,10 +4,17 @@ import { imageConfigurationSchema } from './tmdb.schemas.js'
 
 const GRID_SIZE = 'w342'
 const LARGE_SIZE = 'w780'
+const BACKDROP_SIZE = 'w780'
+const BACKDROP_LARGE_SIZE = 'w1280'
+const PROFILE_SIZE = 'w185'
+const STILL_SIZE = 'w300'
 
 export interface ImageResolver {
   readonly ensureReady: () => Promise<void>
   readonly resolvePoster: (path: string | null | undefined) => CatalogPoster | undefined
+  readonly resolveBackdrop: (path: string | null | undefined) => CatalogPoster | undefined
+  readonly resolveProfile: (path: string | null | undefined) => CatalogPoster | undefined
+  readonly resolveStill: (path: string | null | undefined) => CatalogPoster | undefined
 }
 
 export interface ImageResolverOptions {
@@ -20,13 +27,21 @@ interface CachedConfiguration {
   readonly expiresAt: number
 }
 
-const buildPoster = (baseUrl: string, path: string): CatalogPoster => {
-  const normalizedPath = path.startsWith('/') ? path : `/${path}`
-  return {
-    url: `${baseUrl}/${GRID_SIZE}${normalizedPath}`,
-    urlLarge: `${baseUrl}/${LARGE_SIZE}${normalizedPath}`,
+const normalizePath = (path: string | null | undefined): string | undefined => {
+  if (typeof path !== 'string') {
+    return undefined
   }
+  const trimmed = path.trim()
+  if (trimmed.length === 0) {
+    return undefined
+  }
+  return trimmed.startsWith('/') ? trimmed : `/${trimmed}`
 }
+
+const buildPoster = (baseUrl: string, normalizedPath: string): CatalogPoster => ({
+  url: `${baseUrl}/${GRID_SIZE}${normalizedPath}`,
+  urlLarge: `${baseUrl}/${LARGE_SIZE}${normalizedPath}`,
+})
 
 export const createImageResolver = (
   client: TmdbClient,
@@ -68,12 +83,44 @@ export const createImageResolver = (
     await getConfiguration()
   }
 
-  const resolvePoster = (path: string | null | undefined): CatalogPoster | undefined => {
-    if (configuration === null || typeof path !== 'string' || path.trim().length === 0) {
+  const resolveWith = (
+    path: string | null | undefined,
+    build: (baseUrl: string, normalizedPath: string) => CatalogPoster
+  ): CatalogPoster | undefined => {
+    if (configuration === null) {
       return undefined
     }
-    return buildPoster(configuration.baseUrl, path)
+    const normalizedPath = normalizePath(path)
+    if (normalizedPath === undefined) {
+      return undefined
+    }
+    return build(configuration.baseUrl, normalizedPath)
   }
 
-  return Object.freeze({ ensureReady, resolvePoster })
+  const resolvePoster = (path: string | null | undefined): CatalogPoster | undefined =>
+    resolveWith(path, buildPoster)
+
+  const resolveBackdrop = (path: string | null | undefined): CatalogPoster | undefined =>
+    resolveWith(path, (baseUrl, normalizedPath) => ({
+      url: `${baseUrl}/${BACKDROP_SIZE}${normalizedPath}`,
+      urlLarge: `${baseUrl}/${BACKDROP_LARGE_SIZE}${normalizedPath}`,
+    }))
+
+  const resolveProfile = (path: string | null | undefined): CatalogPoster | undefined =>
+    resolveWith(path, (baseUrl, normalizedPath) => ({
+      url: `${baseUrl}/${PROFILE_SIZE}${normalizedPath}`,
+    }))
+
+  const resolveStill = (path: string | null | undefined): CatalogPoster | undefined =>
+    resolveWith(path, (baseUrl, normalizedPath) => ({
+      url: `${baseUrl}/${STILL_SIZE}${normalizedPath}`,
+    }))
+
+  return Object.freeze({
+    ensureReady,
+    resolvePoster,
+    resolveBackdrop,
+    resolveProfile,
+    resolveStill,
+  })
 }
