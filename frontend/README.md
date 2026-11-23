@@ -46,15 +46,49 @@ value. Warnings never contain values.
 
 ## Scripts
 
-| Script              | Purpose                                       |
-| ------------------- | --------------------------------------------- |
-| `npm run dev`       | Vite development server                       |
-| `npm run lint`      | ESLint flat config, zero warnings tolerated   |
-| `npm run typecheck` | `tsc --noEmit` for the app and node projects  |
-| `npm run test`      | Vitest single run with V8 coverage thresholds |
-| `npm run build`     | Type-check plus production Vite build         |
-| `npm run preview`   | Serve the production build                    |
-| `npm run format`    | Prettier write                                |
+| Script                     | Purpose                                                     |
+| -------------------------- | ----------------------------------------------------------- |
+| `npm run dev`              | Vite development server                                     |
+| `npm run lint`             | ESLint flat config, zero warnings tolerated                 |
+| `npm run typecheck`        | `tsc --noEmit` for the app and node projects                |
+| `npm run test`             | Vitest single run with V8 coverage thresholds               |
+| `npm run test:reliability` | Repeated shuffled Vitest runs with flake and skip detection |
+| `npm run build`            | Type-check plus production Vite build                       |
+| `npm run preview`          | Serve the production build                                  |
+| `npm run format`           | Prettier write                                              |
+
+## Reliability validation
+
+The frontend suite runs with Vitest's default file-level concurrency and per-file isolation.
+Use Node.js 22 so local results match CI:
+
+```bash
+cd frontend
+nvm use            # reads .nvmrc (Node 22)
+npm ci
+npm run test
+```
+
+`npm run test:reliability` repeats the complete suite with shuffled files, shuffled tests, and
+a deterministic seed per iteration, then reports any flaky or skipped test and exits non-zero
+when it finds one:
+
+```bash
+npm run test:reliability -- --runs 10
+npm run test:reliability -- --runs 20 --report reliability-report.json
+```
+
+| Option            | Effect                                            |
+| ----------------- | ------------------------------------------------- |
+| `--runs <n>`      | Iterations, default `10`                          |
+| `--seed <n>`      | Base seed; each iteration derives a distinct seed |
+| `--report <path>` | Report path, default `reliability-report.json`    |
+| `--no-shuffle`    | Fixed-order baseline mode                         |
+| `--coverage`      | Enable coverage for every iteration               |
+
+The report records the commit, Node.js version, command, per-run seeds, per-test outcomes, and
+the median and p95 duration. A fixed wall-clock wait is not used in the suite: timer-driven
+behavior uses fake timers and promise races use `act`/`waitFor`.
 
 ## Architecture
 

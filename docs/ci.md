@@ -1,10 +1,10 @@
 # Continuous Integration
 
 The quality gate is defined in `.github/workflows/ci.yml`. It runs on pull requests
-targeting `develop` and `main`, and on pushes to those branches after merge. It defines three
-independent jobs, `Frontend checks`, `Backend checks`, and `Branch name validation`, with
-read-only repository permissions. There are no path filters and no manual trigger, so every
-push or pull request to those branches runs the workflow, including documentation-only
+targeting `develop` and `main`, on pushes to those branches after merge, and on manual
+`workflow_dispatch`. It defines three independent jobs, `Frontend checks`, `Backend checks`, and
+`Branch name validation`, with read-only repository permissions. There are no path filters, so
+every push or pull request to those branches runs the workflow, including documentation-only
 changes.
 
 ## Application detection
@@ -47,8 +47,9 @@ Both jobs use the application script contract required by the constitution:
 5. `npm run build`
 
 The Node.js version comes from the application's `.nvmrc`, and the npm cache is keyed to
-the application lockfile. Any failing step fails its job. Each job has a 15-minute timeout,
-and checkout uses `fetch-depth: 0` and `persist-credentials: false`.
+the application lockfile. Any failing step fails its job. The frontend job has a 30-minute
+timeout so a manual reliability request can complete; the backend job keeps 15 minutes.
+Checkout uses `fetch-depth: 0` and `persist-credentials: false`.
 
 `Frontend checks` and `Backend checks` each run their validation steps only when their
 detection step reports `present=true`; otherwise they log that the application has not been
@@ -84,15 +85,46 @@ pull-request runs.
 
 ## Local reproduction
 
+## Manual frontend reliability runs
+
+`workflow_dispatch` exposes one input, `frontend_reliability_runs` (default `0`). It has no
+effect on push or pull-request runs.
+
+1. Open **Actions → CI → Run workflow** and select the branch to test.
+2. Set `frontend_reliability_runs` to the number of shuffled iterations, for example `20`.
+3. Run the workflow.
+
+The normal frontend steps (`npm ci`, lint, typecheck, test, build) run first. The
+`Reliability runs` step then executes `npm run test:reliability -- --runs <n>` only when the
+input is greater than `0`. Each iteration runs the complete suite with shuffled files and tests
+and a deterministic seed; the step prints the per-run summary, the flaky-test list with the
+seeds that failed, and the skipped-test list. The job fails if any iteration fails, any test has
+mixed outcomes across iterations, or any test is skipped. The JSON report is written inside the
+job workspace and is not uploaded as an artifact.
+
+Keep the input at `0` for normal validation. The reliability runner requires Node.js 22 from
+`frontend/.nvmrc`; do not pin a different major version in either local or CI validation.
+
+## Local reproduction
+
 Frontend, once introduced:
 
 ```bash
 cd frontend
+nvm use            # Node.js 22 from .nvmrc
 npm ci
 npm run lint
 npm run typecheck
 npm run test
 npm run build
+```
+
+Reliability evidence for the same commit:
+
+```bash
+cd frontend
+npm run test:reliability -- --runs 10
+npm run test:reliability -- --runs 20 --report reliability-report.json
 ```
 
 Backend, once introduced:

@@ -9,3 +9,4 @@ coverage/
 .vscode/
 .idea/
 frontend/node_modules
+reliability-report.json

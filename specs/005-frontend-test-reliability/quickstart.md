@@ -21,9 +21,12 @@ npm ci
 
 If `nvm` is unavailable, use any Node.js 22.x installation and confirm `node -v` before recording evidence.
 
-## Scenario 1: Record the pre-change performance baseline
+## Scenario 1: Record a performance baseline
 
-Run this **before** removing `--no-file-parallelism` from the frontend test script.
+The pre-change baseline was recorded before removing `--no-file-parallelism`, when the command was
+`vitest run --coverage --no-file-parallelism`. The finalized command is `vitest run --coverage`;
+the recorded before/after numbers are in [baseline.md](./baseline.md). To record a baseline for a
+future comparison, use the same 10-run shape on the same runner class.
 
 ```bash
 cd frontend
@@ -41,9 +44,9 @@ Record:
 - Global statement, branch, function, and line coverage.
 - The runtime version and runner class.
 
-The performance target applies to the test command only. Do not include `npm ci`, lint, typecheck, or build in these durations.
+The performance target applies to the test command only. Do not include `npm ci`, lint, typecheck, or build in these durations. Record the commit SHA and the Node.js version with every measurement.
 
-Repeat the same 10-run sequence through the on-demand CI entry point before changing the test script, so the CI baseline uses the same runner class as the post-change measurement. Dispatch the workflow 10 times with the frontend reliability runs input set to `0`; each dispatch runs the normal test command once.
+For CI numbers, dispatch the workflow 10 times with the frontend reliability runs input set to `0`; each dispatch runs the normal test command once on the same runner class.
 
 ## Scenario 2: Run the normal suite after the change
 

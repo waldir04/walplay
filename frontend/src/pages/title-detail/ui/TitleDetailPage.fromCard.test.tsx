@@ -61,7 +61,9 @@ describe('TitleDetailPage from a card', () => {
       })
     })
 
-    expect(await screen.findByRole('heading', { level: 1, name: 'Fight Club' })).toBeInTheDocument()
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { level: 1, name: 'Fight Club' })).toBeInTheDocument()
+    )
     expect(fetchDetail).toHaveBeenCalledWith({
       mediaType: 'movie',
       itemId: MOVIE_ID,

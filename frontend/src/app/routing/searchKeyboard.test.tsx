@@ -67,8 +67,7 @@ describe('search keyboard journey', () => {
     expect(document.activeElement).toBe(input)
 
     await user.keyboard('{Enter}')
-    await new Promise((resolve) => setTimeout(resolve, 100))
-    expect(document.activeElement).toBe(input)
+    await waitFor(() => expect(document.activeElement).toBe(input))
   })
 
   it('keeps focus on load more when results are appended and exposes 44px targets', async () => {

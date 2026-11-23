@@ -68,7 +68,7 @@ describe('SearchResults multi-page integration', () => {
       'The Matrix Reloaded',
       'The Matrix Revolutions',
     ])
-    expect(screen.getByText('End of results for the matrix')).toBeInTheDocument()
+    expect(screen.getByText('End of results for the matrix', { selector: 'p' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument()
     expect(fetchSearchPage).toHaveBeenCalledTimes(3)
   })

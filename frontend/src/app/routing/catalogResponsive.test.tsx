@@ -28,7 +28,7 @@ beforeEach(() => {
 describe('catalog responsive contract', () => {
   it('uses the 2/3/4/5 column grid at the supported breakpoints', async () => {
     const { container } = renderApp(['/browse/movies'])
-    await screen.findByText('Fight Club')
+    await screen.findAllByText('Fight Club')
     const grids = container.querySelectorAll('ul')
     const catalogGrid = Array.from(grids).find((grid) => grid.className.includes('grid-cols-2'))
     expect(catalogGrid).toBeDefined()
@@ -39,14 +39,14 @@ describe('catalog responsive contract', () => {
 
   it('introduces no horizontal overflow utilities or fixed pixel widths', async () => {
     const { container } = renderApp(['/browse/movies'])
-    await screen.findByText('Fight Club')
+    await screen.findAllByText('Fight Club')
     expect(container.innerHTML).not.toContain('overflow-x-scroll')
     expect(container.innerHTML).not.toContain('w-[1200px]')
   })
 
   it('keeps primary controls at least 44px', async () => {
     const { container } = renderApp(['/browse/movies'])
-    await screen.findByText('Fight Club')
+    await screen.findAllByText('Fight Club')
     const group = screen.getByRole('group', { name: 'Media type' })
     const mediaLinks = group.querySelectorAll('a')
     expect(mediaLinks.length).toBe(2)
@@ -57,7 +57,7 @@ describe('catalog responsive contract', () => {
 
   it('keeps long artwork responsive with a reserved aspect ratio', async () => {
     const { container } = renderApp(['/browse/movies'])
-    await screen.findByText('Fight Club')
+    await screen.findAllByText('Fight Club')
     const image = container.querySelector('img')
     expect(image?.className).toContain('aspect-[2/3]')
     expect(image?.className).toContain('w-full')

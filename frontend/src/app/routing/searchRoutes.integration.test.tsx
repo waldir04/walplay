@@ -2,6 +2,7 @@ import { act, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { catalogKeys } from '@/entities/catalog'
 import { MOVIE_ID } from '@/test/fixtures/catalog'
 import {
   collectionEnvelope,
@@ -69,7 +70,9 @@ describe('search routes integration', () => {
     const [movieLink] = within(collection).getAllByRole('link')
     await user.click(movieLink as HTMLElement)
 
-    expect(await screen.findByRole('heading', { level: 1, name: 'The Matrix' })).toBeInTheDocument()
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { level: 1, name: 'The Matrix' })).toBeInTheDocument()
+    )
     expect(router.state.location.pathname).toBe(`/browse/movies/title/${MOVIE_ID}`)
     expect(screen.getByRole('link', { name: /Browse/ })).toHaveAttribute('aria-current', 'page')
     expect(screen.getByRole('link', { name: 'Return to search' })).toHaveAttribute(
@@ -88,19 +91,29 @@ describe('search routes integration', () => {
     await act(async () => {
       await router.navigate(1)
     })
-    expect(await screen.findByRole('heading', { level: 1, name: 'The Matrix' })).toBeInTheDocument()
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { level: 1, name: 'The Matrix' })).toBeInTheDocument()
+    )
     expect(fetchSearchPage).toHaveBeenCalledTimes(1)
     expect(fetchDetail).toHaveBeenCalled()
   })
 
   it('returns from detail with the return action and restores cached results', async () => {
     const user = userEvent.setup()
-    const { router } = renderApp(['/search?q=the+matrix'])
+    const { router, queryClient } = renderApp(['/search?q=the+matrix'])
     const collection = await screen.findByRole('list', {
       name: 'Search results for the matrix',
     })
     await user.click(within(collection).getAllByRole('link')[0] as HTMLElement)
     await screen.findByRole('heading', { level: 1, name: 'The Matrix' })
+
+    // Click only after the detail query has settled: the heading also renders
+    // optimistically from router state, and that intermediate tree is replaced.
+    await waitFor(() =>
+      expect(queryClient.getQueryState(catalogKeys.detail('movie', MOVIE_ID, 'en'))?.status).toBe(
+        'success'
+      )
+    )
 
     await user.click(screen.getByRole('link', { name: 'Return to search' }))
 

@@ -10,7 +10,8 @@
     "dev": "vite",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",
-    "test": "vitest run --coverage --no-file-parallelism",
+    "test": "vitest run --coverage",
+    "test:reliability": "vite-node scripts/reliability/run.ts",
     "build": "tsc --noEmit -p tsconfig.app.json && vite build",
     "preview": "vite preview",
     "format": "prettier --write ."
@@ -45,6 +46,7 @@
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.36.0",
     "vite": "^7.0.4",
+    "vite-node": "3.2.4",
     "vitest": "^3.2.4",
     "vitest-axe": "^0.1.0"
   }

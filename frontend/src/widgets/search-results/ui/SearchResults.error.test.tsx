@@ -2,10 +2,11 @@ import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import type { QueryClient } from '@tanstack/react-query'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { buildSearchQuery, catalogKeys } from '@/entities/catalog'
 import { CatalogApiError } from '@/shared/api/httpClient'
+import { SEARCH_SETTLE_MS } from '@/shared/config/constants'
 import { firstSearchPage, searchPageEnvelope } from '@/test/fixtures/catalog/search'
 import { renderWithProviders } from '@/test/renderWithProviders'
 
@@ -49,6 +50,10 @@ beforeEach(() => {
   vi.mocked(fetchSearchPage).mockReset()
 })
 
+afterEach(() => {
+  vi.useRealTimers()
+})
+
 describe('SearchResults failure states', () => {
   it.each([
     ['CATALOG_UNAVAILABLE', 'Search is temporarily unavailable'],
@@ -75,7 +80,11 @@ describe('SearchResults failure states', () => {
     ).toBeInTheDocument()
     expect(screen.getByText('Check the title and try a different search.')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Try again' })).not.toBeInTheDocument()
-    await new Promise((resolve) => setTimeout(resolve, 100))
+
+    vi.useFakeTimers()
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(SEARCH_SETTLE_MS * 2)
+    })
     expect(fetchSearchPage).toHaveBeenCalledTimes(1)
   })
 

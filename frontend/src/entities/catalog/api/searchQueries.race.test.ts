@@ -84,9 +84,10 @@ describe('search query race isolation', () => {
     rerender({ query: 'arrival' })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     resolveMatrix?.(firstSearchPage())
-    await new Promise((resolve) => setTimeout(resolve, 20))
+    await waitFor(() =>
+      expect(client.getQueryData(catalogKeys.search('the matrix', 'en'))).toBeDefined()
+    )
 
-    expect(client.getQueryData(catalogKeys.search('the matrix', 'en'))).toBeDefined()
     expect(result.current.data?.pages).toHaveLength(1)
     expect(result.current.isSuccess).toBe(true)
   })
