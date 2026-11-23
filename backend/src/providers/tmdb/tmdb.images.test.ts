@@ -138,3 +138,50 @@ describe('detail artwork resolvers', () => {
     expect(resolver.resolveStill('')).toBeUndefined()
   })
 })
+
+describe('provider logo resolution', () => {
+  it('composes small and large provider logo URLs', async () => {
+    const request = vi.fn(async () => ({
+      images: { secure_base_url: 'https://image.example.test/t/p/', poster_sizes: [] },
+    }))
+    const resolver = createImageResolver(fakeClient(request as unknown as TmdbClient['request']), {
+      ttlMs: 1000,
+    })
+    await resolver.ensureReady()
+
+    expect(resolver.resolveProviderLogo('/provider.png')).toEqual({
+      url: 'https://image.example.test/t/p/w92/provider.png',
+      urlLarge: 'https://image.example.test/t/p/w154/provider.png',
+    })
+    expect(resolver.resolveProviderLogo('provider.png')).toEqual({
+      url: 'https://image.example.test/t/p/w92/provider.png',
+      urlLarge: 'https://image.example.test/t/p/w154/provider.png',
+    })
+  })
+
+  it('omits provider logos for empty or malformed paths', async () => {
+    const request = vi.fn(async () => ({
+      images: { secure_base_url: 'https://image.example.test/t/p/', poster_sizes: [] },
+    }))
+    const resolver = createImageResolver(fakeClient(request as unknown as TmdbClient['request']), {
+      ttlMs: 1000,
+    })
+    await resolver.ensureReady()
+
+    expect(resolver.resolveProviderLogo(null)).toBeUndefined()
+    expect(resolver.resolveProviderLogo(undefined)).toBeUndefined()
+    expect(resolver.resolveProviderLogo('   ')).toBeUndefined()
+  })
+
+  it('omits provider logos when the image configuration is unavailable', async () => {
+    const request = vi.fn(async () => {
+      throw new Error('configuration unavailable')
+    })
+    const resolver = createImageResolver(fakeClient(request as unknown as TmdbClient['request']), {
+      ttlMs: 1000,
+    })
+
+    await expect(resolver.ensureReady()).resolves.toBeUndefined()
+    expect(resolver.resolveProviderLogo('/provider.png')).toBeUndefined()
+  })
+})

@@ -17,7 +17,10 @@ describe('DetailActions', () => {
 
   it('renders nothing when the capability is disabled', async () => {
     const { container } = await renderWithProviders(
-      <DetailActions detail={movieDetail({ trailer })} capabilities={{ trailer: false }} />
+      <DetailActions
+        detail={movieDetail({ trailer })}
+        capabilities={{ trailer: false, availability: false }}
+      />
     )
     expect(container).toBeEmptyDOMElement()
   })
@@ -26,7 +29,7 @@ describe('DetailActions', () => {
     const { container } = await renderWithProviders(
       <DetailActions
         detail={movieDetail({ trailer: undefined })}
-        capabilities={{ trailer: true }}
+        capabilities={{ trailer: true, availability: false }}
       />
     )
     expect(container).toBeEmptyDOMElement()
@@ -34,7 +37,10 @@ describe('DetailActions', () => {
 
   it('renders a keyboard-operable external link when enabled with a trailer', async () => {
     await renderWithProviders(
-      <DetailActions detail={movieDetail({ trailer })} capabilities={{ trailer: true }} />
+      <DetailActions
+        detail={movieDetail({ trailer })}
+        capabilities={{ trailer: true, availability: false }}
+      />
     )
     const link = screen.getByRole('link', { name: /Watch trailer/ })
     expect(link).toHaveAttribute('href', trailer.url)
@@ -48,7 +54,10 @@ describe('DetailActions', () => {
 
   it('never renders availability, personal-list, disabled, or coming-soon controls', async () => {
     await renderWithProviders(
-      <DetailActions detail={movieDetail({ trailer })} capabilities={{ trailer: true }} />
+      <DetailActions
+        detail={movieDetail({ trailer })}
+        capabilities={{ trailer: true, availability: false }}
+      />
     )
     expect(screen.queryByRole('button')).toBeNull()
     expect(document.body.textContent).not.toMatch(/coming soon|availability|watchlist|favorite/i)

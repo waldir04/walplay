@@ -226,3 +226,55 @@ export { PosterFallback } from './ui/PosterFallback'
 export { CatalogCard } from './ui/CatalogCard'
 export { CatalogGrid } from './ui/CatalogGrid'
 export { CatalogCardSkeleton } from './ui/CatalogCardSkeleton'
+export {
+  AVAILABILITY_CATEGORY_LABEL_KEYS,
+  AVAILABILITY_CATEGORY_ORDER,
+  AVAILABILITY_UNSUPPORTED_REGION_DESCRIPTION_ID,
+  availabilityCategorySchema,
+  availabilityDataSchema,
+  availabilityDestinationSchema,
+  availabilityEnvelopeSchema,
+  availabilityGroupSchema,
+  availabilityMetaSchema,
+  availabilityProviderSchema,
+  availabilityRegionSchema,
+  availabilityRegionsEnvelopeSchema,
+  availableDataSchema,
+  noInformationDataSchema,
+  unsupportedRegionDataSchema,
+} from './model/availability'
+export type {
+  AvailabilityCategory,
+  AvailabilityData,
+  AvailabilityDestination,
+  AvailabilityEnvelope,
+  AvailabilityGroup,
+  AvailabilityMeta,
+  AvailabilityProvider,
+  AvailabilityRegion,
+  AvailabilityRegionsEnvelope,
+  AvailabilityState,
+  AvailableData,
+  NoInformationData,
+  UnsupportedRegionData,
+} from './model/availability'
+export {
+  formatAvailabilityTimestamp,
+  formatRegionLabel,
+  formatRegionName,
+} from './model/availabilityFormatting'
+export {
+  createAvailabilityClient,
+  fetchAvailability,
+  fetchAvailabilityRegions,
+  getAvailabilityClient,
+} from './api/availabilityClient'
+export type { AvailabilityClient, AvailabilityRequest } from './api/availabilityClient'
+export {
+  AVAILABILITY_GC_TIME_MS,
+  AVAILABILITY_REGIONS_GC_TIME_MS,
+  AVAILABILITY_REGIONS_STALE_TIME_MS,
+  AVAILABILITY_STALE_TIME_MS,
+  useAvailabilityQuery,
+  useAvailabilityRegionsQuery,
+} from './api/availabilityQueries'

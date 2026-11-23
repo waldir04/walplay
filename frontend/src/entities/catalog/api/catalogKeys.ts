@@ -25,6 +25,9 @@ export const catalogKeys = {
     seasonNumber: number,
     language: InterfaceLanguage
   ) => [...catalogKeys.all, 'season', mediaType, itemId, seasonNumber, language] as const,
+  availability: (mediaType: MediaType, itemId: string, region: string) =>
+    [...catalogKeys.all, 'availability', mediaType, itemId, region] as const,
+  availabilityRegions: () => [...catalogKeys.all, 'availabilityRegions'] as const,
   search: (identity: string, language: InterfaceLanguage) =>
     [...catalogKeys.all, 'search', identity, language] as const,
 } as const

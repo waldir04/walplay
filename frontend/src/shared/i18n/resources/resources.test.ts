@@ -89,3 +89,36 @@ describe('translation resources', () => {
     expect(relativeFiles).toContain(join('src', 'app', 'App.tsx'))
   })
 })
+
+describe('availability resources', () => {
+  it('includes the availability section label in both locales', () => {
+    expect(en.detail.sections.availability).toBe('Where to watch')
+    expect(es.detail.sections.availability).toBe('Dónde ver')
+  })
+
+  it('exposes the localized availability copy families in both locales', () => {
+    const keys = flattenKeys(en.detail.availability as ResourceNode)
+    const spanishKeys = flattenKeys(es.detail.availability as ResourceNode)
+
+    expect(spanishKeys.sort()).toEqual(keys.sort())
+    for (const key of [
+      'categories.subscription',
+      'categories.ads',
+      'freshness.checked',
+      'freshness.caution',
+      'noInformation.description',
+      'error.description',
+      'destinationExternal',
+      'disclaimer',
+      'attribution.justWatch',
+    ]) {
+      expect(typeof getValue(en.detail.availability as ResourceNode, key)).toBe('string')
+      expect(typeof getValue(es.detail.availability as ResourceNode, key)).toBe('string')
+    }
+  })
+
+  it('keeps detail section labels unique', () => {
+    const labels = Object.values(en.detail.sections)
+    expect(new Set(labels).size).toBe(labels.length)
+  })
+})

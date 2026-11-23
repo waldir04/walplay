@@ -345,6 +345,14 @@ The following decisions remain open and require research, validation, or explici
 
 - **OD-02 — Content metadata provider (resolved 2026-11-22)**: TMDB is approved as the initial content metadata provider for the entertainment catalog feature. Commercial and legal terms review, artwork licensing, caching, and attribution requirements remain release dependencies. Streaming availability provider selection (OD-03) remains open.
 
+- **OD-03 — Streaming availability provider (resolved 2026-11-23 for planning)**: TMDB's documented movie and TV watch-provider operations are the initial availability source, subject to the release gates recorded in ADR-0006. The capability remains behind disabled backend and frontend flags until attribution, commercial terms, and Colombian coverage are approved. A provider-neutral backend boundary allows a different source to replace TMDB without a client rewrite.
+
+- **OD-04 — Authorized external destinations (resolved 2026-11-23 for planning)**: Walplay may link only to one aggregate, source-supplied availability page per result, opened in a new tab with `noopener noreferrer` and a visible leaving notice. Provider entries are never links, and Walplay never constructs provider URLs, offers playback, or performs rental, purchase, or subscription actions. Exact per-provider linking remains out of scope for the initial release.
+
+- **OD-12 — Region selection (resolved 2026-11-23)**: The initial supported region is Colombia (`CO`), selected explicitly by the visitor and remembered on the device through a versioned local preference. The backend owns the allowlist; a valid stored region outside it is preserved and shown as unsupported rather than silently replaced. There is no geolocation, travel inference, or region-bypass affordance.
+
+- **Availability release gates**: Production enablement requires the resolved decisions in ADR-0006: attribution and logo permission (OD-SA4), commercial and licensing terms (OD-SA5), representative Colombian coverage validation (OD-SA7), and the ad-supported category decision (OD-SA8). Episode-level availability (OD-SA9) remains future scope.
+
 ## Consistency With the Constitution
 
 - This document defines product behavior; the constitution defines engineering standards. Neither overrides the other in its own domain.

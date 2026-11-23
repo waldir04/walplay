@@ -1,4 +1,5 @@
 import type { CatalogPoster } from '../../domain/catalog.js'
+import type { AvailabilityProviderLogo } from '../../domain/availability.js'
 import type { TmdbClient } from './tmdb.client.js'
 import { imageConfigurationSchema } from './tmdb.schemas.js'
 
@@ -8,6 +9,8 @@ const BACKDROP_SIZE = 'w780'
 const BACKDROP_LARGE_SIZE = 'w1280'
 const PROFILE_SIZE = 'w185'
 const STILL_SIZE = 'w300'
+const PROVIDER_LOGO_SIZE = 'w92'
+const PROVIDER_LOGO_LARGE_SIZE = 'w154'
 
 export interface ImageResolver {
   readonly ensureReady: () => Promise<void>
@@ -15,6 +18,9 @@ export interface ImageResolver {
   readonly resolveBackdrop: (path: string | null | undefined) => CatalogPoster | undefined
   readonly resolveProfile: (path: string | null | undefined) => CatalogPoster | undefined
   readonly resolveStill: (path: string | null | undefined) => CatalogPoster | undefined
+  readonly resolveProviderLogo: (
+    path: string | null | undefined
+  ) => AvailabilityProviderLogo | undefined
 }
 
 export interface ImageResolverOptions {
@@ -116,11 +122,28 @@ export const createImageResolver = (
       url: `${baseUrl}/${STILL_SIZE}${normalizedPath}`,
     }))
 
+  const resolveProviderLogo = (
+    path: string | null | undefined
+  ): AvailabilityProviderLogo | undefined => {
+    if (configuration === null) {
+      return undefined
+    }
+    const normalizedPath = normalizePath(path)
+    if (normalizedPath === undefined) {
+      return undefined
+    }
+    return {
+      url: `${configuration.baseUrl}/${PROVIDER_LOGO_SIZE}${normalizedPath}`,
+      urlLarge: `${configuration.baseUrl}/${PROVIDER_LOGO_LARGE_SIZE}${normalizedPath}`,
+    }
+  }
+
   return Object.freeze({
     ensureReady,
     resolvePoster,
     resolveBackdrop,
     resolveProfile,
     resolveStill,
+    resolveProviderLogo,
   })
 }

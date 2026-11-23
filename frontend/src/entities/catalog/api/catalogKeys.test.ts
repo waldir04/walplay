@@ -113,3 +113,32 @@ describe('detail key factory', () => {
     expect(keys.size).toBe(3)
   })
 })
+
+describe('availability key factory', () => {
+  it('includes media type, item id, and region and excludes language', () => {
+    expect(catalogKeys.availability('movie', 'abc12345', 'CO')).toEqual([
+      'catalog',
+      'availability',
+      'movie',
+      'abc12345',
+      'CO',
+    ])
+    expect(catalogKeys.availability('tv', 'abc12345', 'CO')).not.toContain('en')
+    expect(catalogKeys.availability('tv', 'abc12345', 'CO')).not.toContain('language')
+  })
+
+  it('isolates media type, item id, and region', () => {
+    const keys = new Set([
+      JSON.stringify(catalogKeys.availability('movie', 'abc12345', 'CO')),
+      JSON.stringify(catalogKeys.availability('movie', 'abc12345', 'US')),
+      JSON.stringify(catalogKeys.availability('movie', 'xyz12345', 'CO')),
+      JSON.stringify(catalogKeys.availability('tv', 'abc12345', 'CO')),
+    ])
+    expect(keys.size).toBe(4)
+  })
+
+  it('produces a static region-list key', () => {
+    expect(catalogKeys.availabilityRegions()).toEqual(['catalog', 'availabilityRegions'])
+    expect(catalogKeys.availabilityRegions()).toEqual(catalogKeys.availabilityRegions())
+  })
+})

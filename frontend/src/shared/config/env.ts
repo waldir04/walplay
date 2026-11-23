@@ -27,6 +27,7 @@ export interface AppConfig {
   readonly environmentName: EnvironmentName
   readonly applicationVersion: string
   readonly apiBaseUrl: string
+  readonly availabilityEnabled: boolean
 }
 
 export type ConfigResult =
@@ -46,6 +47,8 @@ const API_BASE_URL_MISSING_WARNING =
 const API_BASE_URL_REQUIRED_WARNING =
   'VITE_API_BASE_URL is required in production and must be a valid http(s) URL.'
 const API_BASE_URL_INVALID_WARNING = 'VITE_API_BASE_URL is invalid and must be a valid http(s) URL.'
+const AVAILABILITY_ENABLED_INVALID_WARNING =
+  'VITE_AVAILABILITY_ENABLED is invalid and must be true or false; availability is disabled.'
 
 const emitWarnings = (warnings: readonly string[]): void => {
   warnings.forEach((warning) => {
@@ -100,12 +103,28 @@ export const parseConfig = (source: EnvSource = import.meta.env): ConfigResult =
     apiBaseUrl = apiResult.data.replace(/\/+$/, '')
   }
 
+  const rawAvailabilityEnabled = source.VITE_AVAILABILITY_ENABLED
+  let availabilityEnabled = false
+  if (
+    rawAvailabilityEnabled !== undefined &&
+    rawAvailabilityEnabled !== null &&
+    rawAvailabilityEnabled !== ''
+  ) {
+    const normalizedAvailability = String(rawAvailabilityEnabled).trim().toLowerCase()
+    if (normalizedAvailability === 'true') {
+      availabilityEnabled = true
+    } else if (normalizedAvailability !== 'false') {
+      warnings.push(AVAILABILITY_ENABLED_INVALID_WARNING)
+    }
+  }
+
   const frozenWarnings = Object.freeze([...warnings])
   emitWarnings(frozenWarnings)
   const config: AppConfig = Object.freeze({
     environmentName: environmentResult.data,
     applicationVersion,
     apiBaseUrl,
+    availabilityEnabled,
   })
 
   return Object.freeze({ status: 'valid', config, warnings: frozenWarnings })

@@ -126,7 +126,7 @@ describe('TitleDetailPage keyboard and announcements', () => {
   })
 
   it('renders an enabled trailer as a keyboard-reachable external link', async () => {
-    renderWithProviders(<TitleDetailPage capabilities={{ trailer: true }} />, {
+    renderWithProviders(<TitleDetailPage capabilities={{ trailer: true, availability: false }} />, {
       initialEntries: [moviePath],
     })
     await screen.findByRole('heading', { level: 1, name: 'Fight Club' })

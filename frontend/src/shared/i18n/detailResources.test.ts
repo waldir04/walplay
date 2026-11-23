@@ -69,6 +69,7 @@ describe('detail localization resources', () => {
     expect(Object.keys(en.detail.sections).sort()).toEqual(
       [
         'actions',
+        'availability',
         'cast',
         'collection',
         'crew',

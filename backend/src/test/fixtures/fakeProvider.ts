@@ -26,6 +26,14 @@ export const TEST_CONFIG: BackendConfig = Object.freeze({
   tmdbCacheMaxEntries: 100,
   tmdbImageConfigTtlMs: 86_400_000,
   logLevel: 'error',
+  availabilityEnabled: false,
+  availabilityLogosEnabled: false,
+  availabilitySupportedRegions: Object.freeze(['CO']),
+  availabilityCacheTtlMs: 21_600_000,
+  availabilityCacheStaleMs: 604_800_000,
+  availabilityCacheMaxEntries: 100,
+  availabilityFreshnessWindowMs: 86_400_000,
+  availabilityDestinationHosts: Object.freeze(['www.themoviedb.org', 'themoviedb.org']),
 })
 
 export const sampleItem = (mediaType: MediaType = 'movie', providerId = 550): CatalogItem => ({

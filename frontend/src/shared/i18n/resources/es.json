@@ -244,7 +244,8 @@
       "similar": "Títulos similares",
       "collection": "Colección",
       "providerMetadata": "Datos del proveedor",
-      "actions": "Acciones"
+      "actions": "Acciones",
+      "availability": "Dónde ver"
     },
     "facts": {
       "releaseDate": "Fecha de estreno",
@@ -348,6 +349,47 @@
     },
     "a11y": {
       "seasonControl": "Temporada {{number}}"
+    },
+    "availability": {
+      "regionLabel": "Disponibilidad en {{region}}",
+      "regionSelectorLabel": "Región de disponibilidad",
+      "regionSelectorPlaceholder": "Elige una región compatible",
+      "regionAnnouncement": "Región de disponibilidad cambiada a {{region}}",
+      "regionUnsupported": "La información de disponibilidad aún no está disponible para {{region}}. Elige otra región.",
+      "unsupportedRegion": {
+        "title": "Región no compatible"
+      },
+      "categories": {
+        "subscription": "Incluido con una suscripción",
+        "free": "Gratis",
+        "ads": "Gratis con anuncios",
+        "rent": "Alquilar",
+        "buy": "Comprar"
+      },
+      "loading": "Cargando información de disponibilidad",
+      "freshness": {
+        "checked": "Verificado por Walplay el {{date}}",
+        "sourceUpdated": "Actualizado por la fuente el {{date}}",
+        "lastKnown": "Última disponibilidad conocida",
+        "lastChecked": "Última verificación el {{date}}",
+        "caution": "La disponibilidad puede haber cambiado desde que se verificó esta información."
+      },
+      "noInformation": {
+        "title": "No se encontró información de disponibilidad",
+        "description": "No encontramos información de disponibilidad para {{region}}. Esto no significa que el título no esté disponible; puede seguir estándolo. Puedes consultar la fuente de disponibilidad o a un proveedor directamente."
+      },
+      "error": {
+        "title": "No se pudo cargar la disponibilidad",
+        "description": "La información de disponibilidad no está disponible temporalmente. Inténtalo de nuevo. El resto de la página del título sigue disponible."
+      },
+      "retry": "Reintentar",
+      "destination": "Ver detalles de disponibilidad",
+      "destinationExternal": "Abre {{host}} en una pestaña nueva",
+      "disclaimer": "La disponibilidad es informativa, depende de la región y puede cambiar. No garantiza que el título se pueda ver. Walplay no aloja ni transmite contenido.",
+      "attribution": {
+        "justWatch": "Datos de disponibilidad proporcionados por JustWatch",
+        "sectionLabel": "Atribución de disponibilidad"
+      }
     }
   }
 }

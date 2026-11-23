@@ -26,3 +26,9 @@ export type {
   SeasonSectionState,
   SeasonSurfaceStatus,
 } from './ui/SeasonEpisodesSection'
+export { AvailabilitySection } from './ui/AvailabilitySection'
+export type {
+  AvailabilitySectionProps,
+  AvailabilitySectionState,
+  AvailabilitySectionStatus,
+} from './ui/AvailabilitySection'

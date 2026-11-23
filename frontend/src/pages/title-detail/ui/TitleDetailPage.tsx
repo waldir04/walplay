@@ -9,9 +9,12 @@ import {
   catalogItemSchema,
   detailStateForError,
   formatLastUpdated,
+  formatRegionLabel,
   parseCatalogPath,
   resolveInterfaceLanguage,
   toLocaleCode,
+  useAvailabilityQuery,
+  useAvailabilityRegionsQuery,
   useCollectionQuery,
   useCreditsQuery,
   useDetailQuery,
@@ -20,13 +23,21 @@ import {
 } from '@/entities/catalog'
 import type { CatalogItem, DetailResponseMeta, MediaType } from '@/entities/catalog'
 import { initialSeasonNumber, useSeasonSelection } from '@/features/select-season'
+import {
+  AvailabilityRegionSelector,
+  useAvailabilityRegion,
+} from '@/features/select-availability-region'
+import { DETAIL_CAPABILITIES, resolveDetailCapabilities } from '@/shared/config/detailCapabilities'
 import type { DetailCapabilities } from '@/shared/config/detailCapabilities'
+import { getAppConfig } from '@/shared/config/env'
 import { PAGE_HEADING_ID } from '@/shared/lib/domIds'
 import { useDocumentTitleOverride } from '@/shared/lib/documentTitle'
 import { Link, LiveRegion } from '@/shared/ui'
-import { ProviderAttribution } from '@/widgets/provider-attribution'
-import { TitleDetailView } from '@/widgets/title-detail'
+import { AvailabilityAttribution, ProviderAttribution } from '@/widgets/provider-attribution'
+import { AvailabilitySection, TitleDetailView } from '@/widgets/title-detail'
 import type {
+  AvailabilitySectionState,
+  AvailabilitySectionStatus,
   CreditsSectionState,
   RelatedSectionState,
   SeasonSectionState,
@@ -65,6 +76,14 @@ const mediaTypeFromPath = (pathname: string): MediaType => {
 const isStaleMeta = (meta: DetailResponseMeta | undefined): boolean =>
   meta !== undefined && (meta.stale || meta.source === 'stale-cache')
 
+const resolveConfiguredCapabilities = (): DetailCapabilities => {
+  try {
+    return resolveDetailCapabilities(getAppConfig())
+  } catch {
+    return DETAIL_CAPABILITIES
+  }
+}
+
 export interface TitleDetailPageProps {
   readonly capabilities?: DetailCapabilities
 }
@@ -72,6 +91,7 @@ export interface TitleDetailPageProps {
 export const TitleDetailPage = ({ capabilities }: TitleDetailPageProps = {}) => {
   const { t, i18n } = useTranslation()
   const location = useLocation()
+  const effectiveCapabilities = capabilities ?? resolveConfiguredCapabilities()
   const parsed = parseCatalogPath(location.pathname)
   const isDetail = parsed.kind === 'detail'
   const mediaType: MediaType = isDetail ? parsed.mediaType : mediaTypeFromPath(location.pathname)
@@ -79,6 +99,12 @@ export const TitleDetailPage = ({ capabilities }: TitleDetailPageProps = {}) => 
   const language = resolveInterfaceLanguage(i18n.language)
   const locale = toLocaleCode(language)
   const routedItem = isDetail ? readRoutedItem(location.state, mediaType, itemId) : null
+
+  const availabilityEnabled = effectiveCapabilities.availability
+  const regionState = useAvailabilityRegion()
+  const region = regionState.region
+  const [availabilityAnnouncement, setAvailabilityAnnouncement] = useState('')
+  const previousRegion = useRef<string | null>(null)
 
   const query = useDetailQuery(mediaType, itemId, language, { enabled: isDetail })
   const detail = query.data?.data
@@ -97,6 +123,11 @@ export const TitleDetailPage = ({ capabilities }: TitleDetailPageProps = {}) => 
   })
   const collectionQuery = useCollectionQuery(mediaType, itemId, language, {
     enabled: isDetail && detail !== undefined && detail?.mediaType === 'movie',
+  })
+  const availabilityGate = isDetail && detail !== undefined && availabilityEnabled
+  const regionsQuery = useAvailabilityRegionsQuery({ enabled: availabilityGate })
+  const availabilityQuery = useAvailabilityQuery(mediaType, itemId, region, {
+    enabled: availabilityGate,
   })
   const returnTarget = resolveDetailReturn(mediaType, location.state)
   const { setOverride } = useDocumentTitleOverride()
@@ -152,6 +183,26 @@ export const TitleDetailPage = ({ capabilities }: TitleDetailPageProps = {}) => 
     announcedKey.current = key
     setAnnouncement(t('detail.states.loaded', { title: detail.title }))
   }, [detail, language, t])
+
+  useEffect(() => {
+    if (!availabilityEnabled || detail === undefined) {
+      previousRegion.current = region
+      return
+    }
+    if (previousRegion.current === null) {
+      previousRegion.current = region
+      return
+    }
+    if (previousRegion.current === region) {
+      return
+    }
+    previousRegion.current = region
+    setAvailabilityAnnouncement(
+      t('detail.availability.regionAnnouncement', {
+        region: formatRegionLabel(region, locale),
+      })
+    )
+  }, [availabilityEnabled, detail, locale, region, t])
 
   const returnAction = (
     <Link to={returnTarget.path} className="min-h-11 w-fit px-1 text-caption">
@@ -338,6 +389,52 @@ export const TitleDetailPage = ({ capabilities }: TitleDetailPageProps = {}) => 
         }
       : undefined
 
+  const availabilityData = availabilityEnabled ? availabilityQuery.data?.data : undefined
+  const availabilityMeta =
+    availabilityQuery.data !== undefined && 'meta' in availabilityQuery.data
+      ? availabilityQuery.data.meta
+      : undefined
+  const availabilityStatus: AvailabilitySectionStatus =
+    regionsQuery.isPending || availabilityQuery.isPending
+      ? 'loading'
+      : regionsQuery.isError || availabilityQuery.isError
+        ? 'error'
+        : 'ready'
+
+  const retryAvailability = () => {
+    if (availabilityQuery.isFetching || regionsQuery.isFetching) {
+      return
+    }
+    void availabilityQuery.refetch()
+    void regionsQuery.refetch()
+  }
+
+  const availabilitySectionState: AvailabilitySectionState = {
+    status: availabilityStatus,
+    ...(availabilityData === undefined ? {} : { data: availabilityData }),
+    ...(availabilityMeta === undefined ? {} : { meta: availabilityMeta }),
+    onRetry: retryAvailability,
+    retrying: availabilityQuery.isFetching || regionsQuery.isFetching,
+  }
+
+  const availabilitySection =
+    availabilityEnabled && detail !== undefined ? (
+      <AvailabilitySection
+        region={region}
+        state={availabilitySectionState}
+        regionSelector={
+          regionsQuery.data === undefined ? undefined : (
+            <AvailabilityRegionSelector
+              value={region}
+              regions={regionsQuery.data.data.regions}
+              onChange={regionState.setRegion}
+            />
+          )
+        }
+        attribution={<AvailabilityAttribution />}
+      />
+    ) : undefined
+
   return (
     <div className="flex flex-col gap-section">
       <TitleDetailView
@@ -353,13 +450,15 @@ export const TitleDetailPage = ({ capabilities }: TitleDetailPageProps = {}) => 
               }
             : undefined
         }
-        capabilities={capabilities}
+        capabilities={effectiveCapabilities}
+        availability={availabilitySection}
         season={seasonSection}
         credits={creditsSection}
         similar={similarSection}
         collection={detail.mediaType === 'movie' ? collectionSection : undefined}
       />
       <LiveRegion message={announcement} />
+      {availabilityEnabled ? <LiveRegion message={availabilityAnnouncement} /> : null}
     </div>
   )
 }

@@ -12,6 +12,14 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    env: {
+      // Tests must not inherit developer-local env files or flags. These values
+      // keep the validated configuration hermetic in clean checkouts and CI.
+      VITE_APP_ENV: 'local',
+      VITE_APP_VERSION: '0.0.0',
+      VITE_API_BASE_URL: 'http://localhost:4000',
+      VITE_AVAILABILITY_ENABLED: 'false',
+    },
     setupFiles: ['./src/test/setup.ts'],
     css: false,
     restoreMocks: true,
@@ -91,6 +99,12 @@ export default defineConfig({
           lines: 90,
         },
         'src/entities/catalog/api/catalogKeys.ts': {
+          statements: 90,
+          branches: 90,
+          functions: 90,
+          lines: 90,
+        },
+        'src/features/select-availability-region/model/*': {
           statements: 90,
           branches: 90,
           functions: 90,
