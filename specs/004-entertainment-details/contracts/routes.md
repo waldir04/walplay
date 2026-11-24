@@ -174,13 +174,10 @@ Rules:
 
 ## Entry-point contract
 
-`DETAIL_CAPABILITIES` is typed as `{ trailer: boolean }` and defaults to `false` everywhere.
+`DETAIL_CAPABILITIES` no longer includes a trailer flag. Trailer presentation, activation, player, and external fallback are owned by `specs/008-trailers-video-content/spec.md` and are gated by that feature's capability flags.
 
 | Capability | Data condition | Rendered state |
 |---|---|---|
-| Trailer enabled + validated trailer reference | Both true | External link with visible text, external-navigation indication, `rel="noopener noreferrer"`; no in-page playback |
-| Trailer enabled + no reference | Reference absent | Omitted |
-| Trailer disabled | Any | Omitted |
 | Availability | No approved provider or destination | Omitted; no placeholder, teaser, or "coming soon" |
 | Personal list | No implemented capability or persistence | Omitted; no favorites variant |
 
@@ -199,7 +196,7 @@ Rules:
 | Zoom | 200 % browser zoom; no clipped text or controls, no overlap, no lost content |
 | Reading order | Title and type before artwork in the accessibility tree |
 | Artwork | Reserved aspect ratio; alternative text or decorative treatment; fallback on failure |
-| Controls | Season controls, expand/collapse, retries, and trailer link reachable in logical keyboard order |
+| Controls | Season controls, expand/collapse, and retries reachable in logical keyboard order; trailer controls are owned by feature 008 |
 | State communication | Selected season, rating source, availability labels, and entry-point states are text, not color alone |
 | Motion | Reduced-motion preference honored; no information depends on animation |
 | Language | All Walplay copy in English and Spanish; provider metadata follows the selected provider language |

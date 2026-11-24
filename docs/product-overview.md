@@ -54,7 +54,7 @@ In its intended form, Walplay is:
 
 ### Confirmed Foundation
 
-The constitution confirms that Walplay is an entertainment-focused product expected to work with external content metadata, streaming availability information, and potentially authorized video playback sources. TMDB is approved as the initial content metadata provider for the entertainment catalog feature; no streaming availability provider is approved. Live TV and playback are deferred capabilities. Product claims in this document that are grounded in the constitution are marked **Confirmed**; all other specifics are **Proposed** or **Open** until validated.
+The constitution confirms that Walplay is an entertainment-focused product expected to work with external content metadata, streaming availability information, and potentially authorized video playback sources. TMDB is approved as the initial content metadata provider for the entertainment catalog feature; no streaming availability provider is approved. Live TV and in-app playback of the title itself are deferred capabilities. Authorized promotional trailers are a separate conditional capability defined by feature 008; they do not make title playback available. Product claims in this document that are grounded in the constitution are marked **Confirmed**; all other specifics are **Proposed** or **Open** until validated.
 
 ## 2. Product Vision
 
@@ -133,11 +133,12 @@ The following capabilities define the product direction. Their MVP status is a p
 | Personal ratings or notes | Let users record their own opinion or context about a title. | Post-MVP candidate | Open |
 | Recommendations and personalization | Suggest titles based on the user's activity or preferences. | Post-MVP candidate | Open |
 | Notifications and reminders | Prompt users about saved titles or viewing intentions. | Post-MVP candidate | Open |
-| In-app video playback | Play authorized content inside Walplay. | Deferred capability | Not MVP; requires separate validation |
+| In-app video playback | Play the movie or TV title itself inside Walplay. | Deferred capability | Not MVP; requires separate validation |
+| Authorized promotional trailers | Show a title's official trailers and other authorized promotional videos through a documented third-party player on the detail page. | Conditional capability | Approved 2026-11-24 (feature 008); distinct from title playback; release gated on legal, terms, and platform decisions |
 | Live TV | Provide access to linear television channels. | Optional deferred capability | Not MVP; requires separate validation |
 | Sharing and social features | Let users share lists or opinions with other people. | Out of scope for the initial product | Proposed exclusion |
 
-A feature marked post-MVP or deferred is not an implied commitment. It may be rejected after research.
+A feature marked post-MVP or deferred is not an implied commitment. It may be rejected after research. The conditional trailer capability does not promise that any title has a trailer, that a video plays, or that a destination is available; those outcomes are governed by feature 008 and remain subject to the decisions recorded there.
 
 ## 6. MVP Scope
 
@@ -152,6 +153,7 @@ A feature marked post-MVP or deferred is not an implied commitment. It may be re
 5. **Personal favorites** — a user can mark titles as favorites, review them, and remove them, independently of the watchlist.
 6. **Watched status** — a user can mark a title as watched and undo that status.
 7. **Personal home view** — a user can see a concise summary of their saved titles and recent watched activity.
+8. **Authorized promotional trailers (conditional)** — when feature 008's release gates are satisfied, a user can view a title's official trailers and other authorized promotional videos through a documented third-party player, with an authorized external fallback.
 
 ### Cross-Cutting MVP Requirements
 
@@ -181,7 +183,7 @@ These dependencies do not widen the MVP scope. They determine whether the propos
 
 ### Explicit MVP Exclusions
 
-Episode-level progress, personal ratings or notes, recommendations, notifications, sharing, in-app playback, Live TV, and offline/PWA behavior are not part of the MVP. Section 11 records the full boundary.
+Episode-level progress, personal ratings or notes, recommendations, notifications, sharing, in-app playback of the title itself, Live TV, and offline/PWA behavior are not part of the MVP. Authorized promotional trailers are not an exclusion: they are the conditional capability defined by feature 008. Section 11 records the full boundary.
 
 ## 7. Key User Journeys
 
@@ -195,7 +197,8 @@ These journeys describe product-level interactions. They do not prescribe screen
 | J4 | **Manage the watchlist.** The user reviews saved titles, removes titles they no longer want, and marks titles as watched. | The personal list remains relevant and easy to maintain. | Yes |
 | J5 | **Recover from provider degradation.** Availability or metadata is unavailable or stale while the user is managing their list. | The user sees a clear localized explanation, and personal list actions still work. | Yes |
 | J6 | **Start for the first time.** A new user encounters an empty state, understands the product's purpose, and saves a first title. | The user can begin without confusion or unnecessary setup. | Yes |
-| J7 | **Watch inside Walplay or use Live TV.** The user selects playback or a live channel. | Not an MVP journey. It may only exist after a separate feasibility, authorization, and legal decision. | No |
+| J7 | **Watch the title itself inside Walplay or use Live TV.** The user selects playback of the movie or TV title, or a live channel. | Not an MVP journey. It may only exist after a separate feasibility, authorization, and legal decision. Promotional trailers are excluded from this journey. | No |
+| J8 | **Preview an authorized promotional trailer.** The user plays an official trailer or another authorized promotional video for a title from its detail page through a documented third-party player. | The user sees title-related promotional material without leaving the detail page and can recover through an authorized external destination. | Conditional: only when feature 008's release gates are satisfied |
 
 ## 8. Business Rules
 
@@ -213,7 +216,7 @@ These rules constrain every feature specification. A feature that cannot satisfy
 | BR-08 | Personal data belongs to the individual user. The initial product MUST NOT expose one user's list or viewing record to another user, and MUST NOT offer shared or collaborative lists. | Proposed |
 | BR-09 | Walplay MUST NOT automatically start playback, create a subscription, rent, purchase, or change an external provider account. Any such action requires an explicit user action on an authorized service. | Proposed |
 | BR-10 | If a local-only persistence mode is approved, the interface MUST clearly warn that locally stored information can be lost if browser storage is cleared or the device changes. Whether such a mode exists is an open decision. | Confirmed conditional |
-| BR-11 | Live TV and in-app video playback are not guaranteed product capabilities. They MUST NOT be treated as MVP requirements or promised in product communication before separate validation. | Confirmed |
+| BR-11 | Live TV, in-app playback of the title itself, and general in-app video playback are not guaranteed product capabilities. They MUST NOT be treated as MVP requirements or promised in product communication before separate validation. Authorized promotional trailers are a separate conditional capability governed by feature 008 and are not an MVP promise. | Confirmed |
 | BR-12 | External metadata is attributed to its source. Walplay MUST NOT claim editorial ownership, completeness, or permanent accuracy for provider-supplied titles, descriptions, artwork, or availability. | Proposed |
 | BR-13 | The product MUST NOT use artificial urgency, false scarcity, autoplay, or other dark patterns to influence viewing decisions. | Proposed |
 
@@ -228,7 +231,8 @@ Walplay depends on external content information and may later depend on authoriz
 | Content metadata and artwork | Titles, descriptions, artwork, and basic descriptive information for discovery and title details. | Provider terms, attribution, artwork licensing, localized metadata, and regional catalogs must be validated. | Needed; TMDB approved as initial provider |
 | Streaming availability | Information about where a title can be watched in a region. | Regional coverage, freshness, accuracy, attribution, and rate limits must be validated. | Needed; provider deferred |
 | Authorized outbound links | Optionally direct a user to an authorized provider after a decision. | Link-out rights, deep-link behavior, and provider terms must be confirmed. | Proposed; not approved |
-| In-app video playback | Play content inside Walplay through an authorized mechanism. | Legal permissions, licensing, DRM, regional rights, and technical feasibility must all be validated. | Deferred; not MVP |
+| Authorized promotional trailers | Show a title's official trailers and other authorized promotional videos through a documented third-party player. | Player terms, embedding and link-out rights, privacy and consent, attribution, and regional restrictions must be validated. | Conditional; feature 008; not approved for release until its gates resolve |
+| In-app video playback | Play the title itself inside Walplay through an authorized mechanism. | Legal permissions, licensing, DRM, regional rights, and technical feasibility must all be validated. | Deferred; not MVP |
 | Live television | Provide linear channel access. | Separate legal, licensing, regional, and technical feasibility is required. | Optional; not MVP |
 
 ### Integration Constraints
@@ -306,7 +310,7 @@ Walplay's voice is calm, concise, and informative. It helps the user decide with
 
 | Capability | Reason |
 |---|---|
-| In-app video playback | Requires separate legal, licensing, DRM, and technical validation; not an MVP promise. |
+| In-app video playback of the title itself | Requires separate legal, licensing, DRM, and technical validation; not an MVP promise. |
 | Live TV | Optional capability with unresolved legal and technical feasibility; not an MVP requirement. |
 | Episode-level progress | Valuable for series tracking but adds scope beyond simple watched status. |
 | Personal ratings and notes | Not required for the core decide-save-watch journey. |
@@ -319,7 +323,7 @@ Walplay's voice is calm, concise, and informative. It helps the user decide with
 | Advertising and sponsored placement | Monetization is undecided and must not distort availability or recommendations. |
 | Content creation, upload, or publishing | Walplay is not a content platform for creators or distributors. |
 
-Items in the second table are excluded from the initial scope, not necessarily rejected forever. Moving any of them into scope requires an explicit product decision, an update to this document, and a separate specification.
+Items in the second table are excluded from the initial scope, not necessarily rejected forever. Moving any of them into scope requires an explicit product decision, an update to this document, and a separate specification. Authorized promotional trailers are not excluded: they are the conditional capability defined by feature 008.
 
 ## 12. Open Decisions
 
@@ -330,7 +334,7 @@ The following decisions remain open and require research, validation, or explici
 | OD-01 | Exact content scope: films, series, episodes, and which regions and content languages are supported first. | Determines catalog shape, metadata needs, and the usefulness of the MVP. | User research and provider capability review |
 | OD-03 | Streaming availability provider or providers. | Determines whether regional availability can be shown credibly. | Coverage, freshness, and terms evaluation |
 | OD-04 | Whether Walplay may link users out to authorized providers, and under what conditions. | Affects the end of the decision journey and provider compliance. | Provider terms review |
-| OD-05 | Feasibility of authorized in-app playback. | Could change the product's role, cost structure, and legal exposure. | Legal, licensing, DRM, and technical feasibility study |
+| OD-05 | Feasibility of authorized in-app playback of the title itself. | Could change the product's role, cost structure, and legal exposure. Promotional trailer authorization is tracked separately as feature 008's OD-T2 through OD-T11. | Legal, licensing, DRM, and technical feasibility study |
 | OD-06 | Feasibility of Live TV. | A separate capability with unresolved rights and regional constraints. | Dedicated feasibility and legal review |
 | OD-07 | Account model and authentication provider. | Determines persistence, cross-device use, privacy obligations, and onboarding. | Product and technical specification |
 | OD-08 | Whether a guest or local-only mode is offered, and how migration to an account would work. | Affects accessibility of first use and data-loss risk. | Product decision and technical design |

@@ -5,6 +5,12 @@
 Each decision below resolves a planning unknown for the approved specification. Rejected
 alternatives are recorded so later work does not re-litigate them without new evidence.
 
+> **Superseded for trailers (2026-11-24)**: decisions in this document that describe a single
+> external-only trailer reference, `DETAIL_CAPABILITIES.trailer`, or appending `videos` to the detail
+> response are historical. Feature 008 (`specs/008-trailers-video-content/spec.md`) now owns trailer
+> inventory, presentation, playback, and external fallback, and the legacy detail trailer field is
+> removed. All non-trailer decisions remain in force.
+
 ---
 
 ## D1. Frontend slice placement

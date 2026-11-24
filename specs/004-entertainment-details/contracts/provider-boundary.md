@@ -175,15 +175,13 @@ or unusable path yields no image. Original-size images are not requested.
 
 Similar and collection sections are never merged and never share a prepared list.
 
-### Trailer reference
+### Trailer reference — superseded by feature 008
 
-- Select from `videos.results` where `site` is `YouTube`, `type` is `Trailer`, and `key` matches
-  `^[A-Za-z0-9_-]{6,20}$`.
-- Prefer `official === true`; otherwise use the first eligible trailer in provider order.
-- Build `https://www.youtube.com/watch?v=<key>`; never embed or play in-page.
-- The interface renders this reference only when `DETAIL_CAPABILITIES.trailer` is enabled. Link-out
-  authorization (OD-D3/OD-D6) is a release dependency.
-- No third-party player, unauthorized source, or fallback video is introduced.
+- This boundary no longer selects or returns a single trailer reference. Trailer inventory, ranking,
+  player authorization, and external fallback are owned by
+  `specs/008-trailers-video-content/spec.md` and its `TrailerProvider` boundary.
+- Link-out and embedding authorization are tracked as feature 008 OD-T2 and OD-T6.
+- No third-party player, unauthorized source, or fallback video is introduced by this feature.
 
 ## Language and fallback
 

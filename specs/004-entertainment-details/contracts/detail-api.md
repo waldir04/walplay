@@ -29,7 +29,7 @@ retry, and cache independently:
 
 | # | Endpoint | Surface | Content types |
 |---|---|---|---|
-| 1 | `GET /api/catalog/:mediaType/titles/:itemId/detail` | Core identity, facts, overview, seasons list, collection membership, rating, popularity, trailer reference | movie, tv |
+| 1 | `GET /api/catalog/:mediaType/titles/:itemId/detail` | Core identity, facts, overview, seasons list, collection membership, rating, popularity | movie, tv |
 | 2 | `GET /api/catalog/:mediaType/titles/:itemId/credits` | Cast and key-crew previews | movie, tv |
 | 3 | `GET /api/catalog/:mediaType/titles/:itemId/similar` | Similar titles | movie, tv |
 | 4 | `GET /api/catalog/:mediaType/titles/:itemId/collection` | Collection membership parts | movie only |
@@ -75,8 +75,7 @@ Response `200` (movie):
       "url": "https://image.tmdb.org/t/p/w780/backdrop.jpg",
       "urlLarge": "https://image.tmdb.org/t/p/w1280/backdrop.jpg"
     },
-    "collection": { "name": "Fight Club Collection" },
-    "trailer": { "url": "https://www.youtube.com/watch?v=example", "site": "youtube" }
+    "collection": { "name": "Fight Club Collection" }
   },
   "meta": {
     "language": "en-US",
@@ -139,8 +138,8 @@ Rules:
 - `seasons` appears only for TV and only when at least one usable season exists; regular seasons
   ascend by number and specials (`0`) come last.
 - `collection` is a membership signal for movies and contains only a display name.
-- `trailer` is present only when a validated authorized trailer reference exists. The interface
-  renders it only when its capability flag is enabled.
+- This endpoint returns no trailer field. Trailer inventory, player, and external fallback are owned
+  by `specs/008-trailers-video-content/spec.md` and are not part of the detail response.
 - Adult-flagged, removed, unknown, and unusable-identity titles return `CATALOG_NOT_FOUND`, never a
   partial object.
 

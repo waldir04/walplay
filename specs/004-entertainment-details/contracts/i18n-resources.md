@@ -95,8 +95,7 @@ Add a `detail` namespace to both `frontend/src/shared/i18n/resources/en.json` an
 | `detail.states.stale.lastUpdated` | `Cached data from {{date}}` | `Datos en caché del {{date}}` | Localized date/time; core or section |
 | `detail.states.sectionLoading` | `Loading this section` | `Cargando esta sección` | Secondary surface busy label |
 | `detail.states.sectionStale` | `Showing cached section data` | `Mostrando datos en caché de esta sección` | Secondary surface stale label |
-| `detail.actions.trailer` | `Watch trailer` | `Ver tráiler` | Visible label |
-| `detail.actions.trailerExternal` | `Opens YouTube in a new tab` | `Abre YouTube en una pestaña nueva` | External indication |
+| Removed | — | — | The legacy `detail.actions.trailer` and `detail.actions.trailerExternal` keys were removed by feature 008; trailer copy now lives under `detail.trailers`. |
 | `detail.a11y.seasonControl` | `Season {{number}}` | `Temporada {{number}}` | Accessible name |
 
 ## Rules
