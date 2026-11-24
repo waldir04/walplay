@@ -21,6 +21,7 @@ export const pageImporters: Record<PageKind, () => Promise<PageModule>> = {
   'title-detail': () => import('@/pages/title-detail'),
   'catalog-not-found': () => import('@/pages/catalog-not-found'),
   search: () => import('@/pages/search'),
+  saved: () => import('@/pages/saved'),
 }
 
 const routeByKind = (kind: PageKind): AppRoute => {
@@ -81,6 +82,12 @@ export const appRouteObjects: RouteObject[] = [
           ...categoryRoutes,
           ...detailRoutes,
           contentRoute('search', 'search'),
+          {
+            path: 'saved',
+            element: <Navigate to="/saved/watchlist" replace />,
+          },
+          contentRoute('saved', 'saved/watchlist'),
+          contentRoute('saved', 'saved/favorites'),
           catalogRoute('catalog-not-found', 'browse/*', CATALOG_ROUTE_TITLES.notFound),
           contentRoute('not-found', '*'),
         ],

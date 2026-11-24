@@ -11,7 +11,8 @@
     "closeMenu": "Close navigation menu",
     "menuTitle": "Navigation",
     "browse": "Browse",
-    "search": "Search"
+    "search": "Search",
+    "saved": "Saved"
   },
   "meta": {
     "title": {
@@ -23,7 +24,8 @@
       "catalogCategory": "Category · Walplay",
       "titleDetail": "Title · Walplay",
       "catalogNotFound": "Catalog not found · Walplay",
-      "search": "Search · Walplay"
+      "search": "Search · Walplay",
+      "saved": "Saved · Walplay"
     },
     "detailTitle": "{{title}} · {{mediaType}}"
   },
@@ -390,6 +392,114 @@
         "justWatch": "Availability data provided by JustWatch",
         "sectionLabel": "Availability attribution"
       }
+    }
+  },
+  "saved": {
+    "title": {
+      "watchlist": "Watchlist",
+      "favorites": "Favorites"
+    },
+    "description": {
+      "watchlist": "Titles you plan to watch.",
+      "favorites": "Titles you love."
+    },
+    "nav": {
+      "label": "Saved collections"
+    },
+    "count_one": "{{count}} title",
+    "count_other": "{{count}} titles",
+    "a11y": {
+      "list": {
+        "watchlist": "Watchlist titles",
+        "favorites": "Favorite titles"
+      }
+    },
+    "loading": {
+      "label": "Saved titles are loading"
+    },
+    "empty": {
+      "watchlist": {
+        "title": "Your watchlist is empty",
+        "description": "Save a movie or TV show from its details to plan what to watch next."
+      },
+      "favorites": {
+        "title": "No favorites yet",
+        "description": "Mark a movie or TV show as a favorite from its details to find it here."
+      },
+      "action": "Browse titles"
+    },
+    "showMore": "Show more",
+    "showMoreAnnouncement": "Showing {{from}}–{{to}} of {{total}}",
+    "error": {
+      "title": "Saved titles are unavailable",
+      "description": "Saved titles could not be loaded right now. Try again.",
+      "retry": "Try again"
+    },
+    "entry": {
+      "savedOn": "Saved {{date}}",
+      "inOther": {
+        "watchlist": "Also in your watchlist",
+        "favorites": "Also in favorites"
+      },
+      "refreshing": "Refreshing details",
+      "temporarilyUnavailable": "Details are temporarily unavailable.",
+      "retryDetails": "Retry details",
+      "notInCatalog": "No longer available in the catalog.",
+      "unreadable": "This saved title can't be read."
+    },
+    "actions": {
+      "addToWatchlist": "Add to watchlist",
+      "removeFromWatchlist": "Remove from watchlist",
+      "addToFavorites": "Add to favorites",
+      "removeFromFavorites": "Remove from favorites",
+      "remove": "Remove",
+      "a11y": {
+        "addToWatchlist": "Add {{title}} to watchlist",
+        "removeFromWatchlist": "Remove {{title}} from watchlist",
+        "addToFavorites": "Add {{title}} to favorites",
+        "removeFromFavorites": "Remove {{title}} from favorites",
+        "remove": "Remove {{title}}"
+      }
+    },
+    "feedback": {
+      "addedToWatchlist": "{{title}} added to your watchlist.",
+      "removedFromWatchlist": "{{title}} removed from your watchlist.",
+      "addedToFavorites": "{{title}} added to favorites.",
+      "removedFromFavorites": "{{title}} removed from favorites.",
+      "alreadyInWatchlist": "{{title}} is already in your watchlist.",
+      "alreadyInFavorites": "{{title}} is already in favorites.",
+      "notInWatchlist": "{{title}} is not in your watchlist.",
+      "notInFavorites": "{{title}} is not in favorites.",
+      "saveFailed": "{{title}} could not be saved on this device. Try again.",
+      "removeFailed": "{{title}} could not be removed. Try again.",
+      "sessionOnly": "This change applies only to this session because this browser cannot store saved titles.",
+      "watchlistCleared": "Your watchlist was deleted from this device.",
+      "favoritesCleared": "Your favorites were deleted from this device.",
+      "allCleared": "All saved titles were deleted from this device.",
+      "dataReset": "Saved titles were reset on this device."
+    },
+    "storageNotice": {
+      "title": "Saved on this device only",
+      "description": "Saved titles stay in this browser on this device. They can be lost if you clear browsing data, use private browsing, or change browser or device. They are not synchronized across devices.",
+      "hint": "Saved titles stay on this device only."
+    },
+    "manage": {
+      "title": "Manage saved titles on this device",
+      "description": "Deleting removes these titles from this browser. This cannot be undone.",
+      "deleteWatchlist": "Delete watchlist",
+      "deleteFavorites": "Delete favorites",
+      "deleteAll": "Delete all saved titles",
+      "confirmDeleteWatchlist": "Confirm delete watchlist",
+      "confirmDeleteFavorites": "Confirm delete favorites",
+      "confirmDeleteAll": "Confirm delete all saved titles",
+      "cancel": "Cancel"
+    },
+    "recovery": {
+      "title": "Saved titles could not be read",
+      "description": "The saved data on this device is damaged or comes from a newer version of Walplay. Reload the page, or reset the saved data to start again.",
+      "reload": "Reload page",
+      "reset": "Reset saved titles",
+      "confirmReset": "Confirm reset saved titles"
     }
   }
 }

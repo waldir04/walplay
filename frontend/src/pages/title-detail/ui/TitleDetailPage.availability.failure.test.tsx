@@ -56,9 +56,12 @@ beforeEach(() => {
 })
 
 const renderPage = () =>
-  renderWithProviders(<TitleDetailPage capabilities={{ trailer: false, availability: true }} />, {
-    initialEntries: [`/browse/movies/title/${MOVIE_ID}`],
-  })
+  renderWithProviders(
+    <TitleDetailPage capabilities={{ trailer: false, availability: true, personalLists: false }} />,
+    {
+      initialEntries: [`/browse/movies/title/${MOVIE_ID}`],
+    }
+  )
 
 describe('TitleDetailPage availability failure isolation', () => {
   it('keeps the core title content usable when availability fails', async () => {

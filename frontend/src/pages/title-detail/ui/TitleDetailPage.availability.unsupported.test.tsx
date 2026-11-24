@@ -69,7 +69,9 @@ describe('TitleDetailPage unsupported stored region', () => {
     const user = userEvent.setup()
 
     await renderWithProviders(
-      <TitleDetailPage capabilities={{ trailer: false, availability: true }} />,
+      <TitleDetailPage
+        capabilities={{ trailer: false, availability: true, personalLists: false }}
+      />,
       { initialEntries: [`/browse/movies/title/${MOVIE_ID}`] }
     )
 

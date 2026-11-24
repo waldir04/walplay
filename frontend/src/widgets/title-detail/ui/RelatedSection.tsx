@@ -40,12 +40,10 @@ export const RelatedSection = ({ label, related }: RelatedSectionProps) => {
 
   if (related.status === 'loading' || related.items === undefined) {
     return (
-      <section
-        aria-busy="true"
-        aria-label={t('detail.states.sectionLoading')}
-        className="flex flex-col gap-3"
-      >
-        <h2 className="text-title text-text">{label}</h2>
+      <section aria-busy="true" aria-labelledby={headingId} className="flex flex-col gap-3">
+        <h2 id={headingId} className="text-title text-text">
+          {label}
+        </h2>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           <Skeleton className="aspect-[2/3] w-full" />
           <Skeleton className="aspect-[2/3] w-full" />

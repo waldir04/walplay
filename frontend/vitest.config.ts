@@ -104,6 +104,24 @@ export default defineConfig({
           functions: 90,
           lines: 90,
         },
+        'src/entities/saved-library/model/*': {
+          statements: 90,
+          branches: 90,
+          functions: 90,
+          lines: 90,
+        },
+        'src/entities/saved-library/api/*': {
+          statements: 90,
+          branches: 90,
+          functions: 90,
+          lines: 90,
+        },
+        'src/features/toggle-saved-title/model/*': {
+          statements: 90,
+          branches: 90,
+          functions: 90,
+          lines: 90,
+        },
         'src/features/select-availability-region/model/*': {
           statements: 90,
           branches: 90,

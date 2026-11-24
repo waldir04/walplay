@@ -77,7 +77,7 @@ describe('TitleDetailPage keyboard and announcements', () => {
     expect(screen.getByRole('button', { name: 'Show more' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Season 1' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Season 2' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /Arrival/ })).toBeInTheDocument()
+    expect(await screen.findByRole('link', { name: /Arrival/ })).toBeInTheDocument()
 
     const interactive = Array.from(
       document.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')
@@ -126,9 +126,14 @@ describe('TitleDetailPage keyboard and announcements', () => {
   })
 
   it('renders an enabled trailer as a keyboard-reachable external link', async () => {
-    renderWithProviders(<TitleDetailPage capabilities={{ trailer: true, availability: false }} />, {
-      initialEntries: [moviePath],
-    })
+    renderWithProviders(
+      <TitleDetailPage
+        capabilities={{ trailer: true, availability: false, personalLists: false }}
+      />,
+      {
+        initialEntries: [moviePath],
+      }
+    )
     await screen.findByRole('heading', { level: 1, name: 'Fight Club' })
     const trailer = screen.getByRole('link', { name: /Watch trailer/ })
     trailer.focus()

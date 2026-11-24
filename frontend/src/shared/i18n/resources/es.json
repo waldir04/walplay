@@ -11,7 +11,8 @@
     "closeMenu": "Cerrar el menú de navegación",
     "menuTitle": "Navegación",
     "browse": "Explorar",
-    "search": "Buscar"
+    "search": "Buscar",
+    "saved": "Guardados"
   },
   "meta": {
     "title": {
@@ -23,7 +24,8 @@
       "catalogCategory": "Categoría · Walplay",
       "titleDetail": "Título · Walplay",
       "catalogNotFound": "Catálogo no encontrado · Walplay",
-      "search": "Buscar · Walplay"
+      "search": "Buscar · Walplay",
+      "saved": "Guardados · Walplay"
     },
     "detailTitle": "{{title}} · {{mediaType}}"
   },
@@ -390,6 +392,114 @@
         "justWatch": "Datos de disponibilidad proporcionados por JustWatch",
         "sectionLabel": "Atribución de disponibilidad"
       }
+    }
+  },
+  "saved": {
+    "title": {
+      "watchlist": "Lista para ver",
+      "favorites": "Favoritos"
+    },
+    "description": {
+      "watchlist": "Títulos que planeas ver.",
+      "favorites": "Títulos que te encantan."
+    },
+    "nav": {
+      "label": "Colecciones guardadas"
+    },
+    "count_one": "{{count}} título",
+    "count_other": "{{count}} títulos",
+    "a11y": {
+      "list": {
+        "watchlist": "Títulos de la lista para ver",
+        "favorites": "Títulos favoritos"
+      }
+    },
+    "loading": {
+      "label": "Los títulos guardados se están cargando"
+    },
+    "empty": {
+      "watchlist": {
+        "title": "Tu lista para ver está vacía",
+        "description": "Guarda una película o serie desde sus detalles para planear qué ver después."
+      },
+      "favorites": {
+        "title": "Aún no tienes favoritos",
+        "description": "Marca una película o serie como favorita desde sus detalles para encontrarla aquí."
+      },
+      "action": "Explorar títulos"
+    },
+    "showMore": "Mostrar más",
+    "showMoreAnnouncement": "Mostrando {{from}}–{{to}} de {{total}}",
+    "error": {
+      "title": "Los títulos guardados no están disponibles",
+      "description": "No se pudieron cargar los títulos guardados en este momento. Inténtalo de nuevo.",
+      "retry": "Inténtalo de nuevo"
+    },
+    "entry": {
+      "savedOn": "Guardado el {{date}}",
+      "inOther": {
+        "watchlist": "También está en tu lista para ver",
+        "favorites": "También está en favoritos"
+      },
+      "refreshing": "Actualizando detalles",
+      "temporarilyUnavailable": "Los detalles no están disponibles temporalmente.",
+      "retryDetails": "Reintentar detalles",
+      "notInCatalog": "Ya no está disponible en el catálogo.",
+      "unreadable": "Este título guardado no se puede leer."
+    },
+    "actions": {
+      "addToWatchlist": "Añadir a la lista para ver",
+      "removeFromWatchlist": "Quitar de la lista para ver",
+      "addToFavorites": "Añadir a favoritos",
+      "removeFromFavorites": "Quitar de favoritos",
+      "remove": "Quitar",
+      "a11y": {
+        "addToWatchlist": "Añadir {{title}} a la lista para ver",
+        "removeFromWatchlist": "Quitar {{title}} de la lista para ver",
+        "addToFavorites": "Añadir {{title}} a favoritos",
+        "removeFromFavorites": "Quitar {{title}} de favoritos",
+        "remove": "Quitar {{title}}"
+      }
+    },
+    "feedback": {
+      "addedToWatchlist": "{{title}} se añadió a tu lista para ver.",
+      "removedFromWatchlist": "{{title}} se quitó de tu lista para ver.",
+      "addedToFavorites": "{{title}} se añadió a favoritos.",
+      "removedFromFavorites": "{{title}} se quitó de favoritos.",
+      "alreadyInWatchlist": "{{title}} ya está en tu lista para ver.",
+      "alreadyInFavorites": "{{title}} ya está en favoritos.",
+      "notInWatchlist": "{{title}} no está en tu lista para ver.",
+      "notInFavorites": "{{title}} no está en favoritos.",
+      "saveFailed": "No se pudo guardar {{title}} en este dispositivo. Inténtalo de nuevo.",
+      "removeFailed": "No se pudo quitar {{title}}. Inténtalo de nuevo.",
+      "sessionOnly": "Este cambio solo se aplica a esta sesión porque este navegador no puede guardar títulos.",
+      "watchlistCleared": "Tu lista para ver se eliminó de este dispositivo.",
+      "favoritesCleared": "Tus favoritos se eliminaron de este dispositivo.",
+      "allCleared": "Todos los títulos guardados se eliminaron de este dispositivo.",
+      "dataReset": "Los títulos guardados se restablecieron en este dispositivo."
+    },
+    "storageNotice": {
+      "title": "Guardado solo en este dispositivo",
+      "description": "Los títulos guardados permanecen en este navegador y en este dispositivo. Pueden perderse si borras los datos de navegación, usas navegación privada o cambias de navegador o dispositivo. No se sincronizan entre dispositivos.",
+      "hint": "Los títulos guardados permanecen solo en este dispositivo."
+    },
+    "manage": {
+      "title": "Gestionar títulos guardados en este dispositivo",
+      "description": "Eliminar quita estos títulos de este navegador. Esta acción no se puede deshacer.",
+      "deleteWatchlist": "Eliminar lista para ver",
+      "deleteFavorites": "Eliminar favoritos",
+      "deleteAll": "Eliminar todos los títulos guardados",
+      "confirmDeleteWatchlist": "Confirmar eliminar lista para ver",
+      "confirmDeleteFavorites": "Confirmar eliminar favoritos",
+      "confirmDeleteAll": "Confirmar eliminar todos los títulos guardados",
+      "cancel": "Cancelar"
+    },
+    "recovery": {
+      "title": "No se pudieron leer los títulos guardados",
+      "description": "Los datos guardados en este dispositivo están dañados o provienen de una versión más reciente de Walplay. Recarga la página o restablece los datos guardados para empezar de nuevo.",
+      "reload": "Recargar página",
+      "reset": "Restablecer títulos guardados",
+      "confirmReset": "Confirmar restablecer títulos guardados"
     }
   }
 }
