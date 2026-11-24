@@ -126,6 +126,7 @@ The following capabilities define the product direction. Their MVP status is a p
 | Title details | Present the descriptive information a user needs to decide whether to watch. | In MVP | Proposed |
 | Availability information | Show where a title can be watched, for the relevant region, with clear limitations. | In MVP | Confirmed need; proposed user experience |
 | Personal watchlist | Let users save titles, review them later, and remove them. | In MVP | Proposed |
+| Personal favorites | Let users mark titles they love as favorites, review them, and remove them, separately from the watchlist. | In MVP | Proposed; basis is feature 007 |
 | Watched status | Let users record that they have watched a title and correct that record. | In MVP | Proposed |
 | Personal home view | Give users a quick, calm summary of saved titles and recent viewing activity. | In MVP | Proposed |
 | Episode-level progress | Track progress through a series at episode granularity. | Post-MVP candidate | Proposed |
@@ -148,8 +149,9 @@ A feature marked post-MVP or deferred is not an implied commitment. It may be re
 2. **Title details** — a user can read the descriptive information needed to make a viewing decision.
 3. **Availability** — a user can see whether and where a title is available in the relevant region, with provider attribution and clear limitations.
 4. **Personal watchlist** — a user can save and remove titles and review the saved list.
-5. **Watched status** — a user can mark a title as watched and undo that status.
-6. **Personal home view** — a user can see a concise summary of their saved titles and recent watched activity.
+5. **Personal favorites** — a user can mark titles as favorites, review them, and remove them, independently of the watchlist.
+6. **Watched status** — a user can mark a title as watched and undo that status.
+7. **Personal home view** — a user can see a concise summary of their saved titles and recent watched activity.
 
 ### Cross-Cutting MVP Requirements
 
@@ -164,7 +166,7 @@ A feature marked post-MVP or deferred is not an implied commitment. It may be re
 
 A new user should be able to complete this end-to-end outcome:
 
-> Find a title, understand enough about it to decide, see where it is available in their region, save it to a personal watchlist, and later record that they watched it — without losing access to their personal list when an external provider is unavailable.
+> Find a title, understand enough about it to decide, see where it is available in their region, save it to a personal watchlist or mark it as a favorite, and later record that they watched it — without losing access to their personal list when an external provider is unavailable.
 
 ### MVP Dependencies and Gates
 
@@ -350,6 +352,10 @@ The following decisions remain open and require research, validation, or explici
 - **OD-04 — Authorized external destinations (resolved 2026-11-23 for planning)**: Walplay may link only to one aggregate, source-supplied availability page per result, opened in a new tab with `noopener noreferrer` and a visible leaving notice. Provider entries are never links, and Walplay never constructs provider URLs, offers playback, or performs rental, purchase, or subscription actions. Exact per-provider linking remains out of scope for the initial release.
 
 - **OD-12 — Region selection (resolved 2026-11-23)**: The initial supported region is Colombia (`CO`), selected explicitly by the visitor and remembered on the device through a versioned local preference. The backend owns the allowlist; a valid stored region outside it is preserved and shown as unsupported rather than silently replaced. There is no geolocation, travel inference, or region-bypass affordance.
+
+- **OD-08 — Guest or local-only mode (resolved 2026-11-24 for planning)**: Guests can use the personal watchlist and favorites without an account. Saved titles are stored only on the visitor's device and browser profile, are never transmitted in guest mode, and are subject to the mandatory local-data-loss disclosure in BR-10. Adoption of guest data into an account is deferred until an account model is approved; when introduced it must be explicit, merge without loss or duplication, and be failure-safe. The provider remains undecided.
+
+- **OD-09 — Personal list persistence and synchronization (partially resolved 2026-11-24 for planning)**: The guest persistence contract is defined as versioned, validated device-local storage with documented loss conditions. Cross-device synchronization and concurrent-edit conflict resolution remain open and depend on the account model (OD-07).
 
 - **Availability release gates**: Production enablement requires the resolved decisions in ADR-0006: attribution and logo permission (OD-SA4), commercial and licensing terms (OD-SA5), representative Colombian coverage validation (OD-SA7), and the ad-supported category decision (OD-SA8). Episode-level availability (OD-SA9) remains future scope.
 
