@@ -38,12 +38,13 @@ Technical approach, in short:
   technical error; never issue a request for an identity that fails the item-id pattern.
 - The routed catalog item may seed a provisional title/type for the first paint, but the core detail
   query always runs because card state does not contain the overview or any secondary data.
-- Omit every unsupported capability instead of rendering disabled or placeholder controls. The only
-  implemented entry-point capability in this feature is a trailer link-out, and it is gated by
-  `DETAIL_CAPABILITIES.trailer`, which is `false` until the link-out rights decisions (OD-D3, OD-D6)
-  are resolved. Availability and personal-list capabilities are absent because their destinations
-  and provider decisions do not exist yet. No speculative integration is introduced.
-- No database, no persistence, no new provider, no in-page playback, no recommendation algorithm.
+- Omit every unsupported capability instead of rendering disabled or placeholder controls. This
+  feature no longer implements a trailer entry point: trailer presentation, activation, player, and
+  external fallback are owned by feature 008. Availability and personal-list capabilities are absent
+  because their destinations and provider decisions do not exist yet. No speculative integration is
+  introduced.
+- No database, no persistence, no new provider, no recommendation algorithm. This feature introduces
+  no in-page playback; trailer playback belongs to feature 008.
 
 ## Technical Context
 
@@ -330,8 +331,8 @@ mapping, and season selection. No snapshot-only tests.
 
 ## Release Dependencies
 
-- OD-D3/OD-D6: trailer link-out authorization. Until resolved, `DETAIL_CAPABILITIES.trailer` stays
-  `false` and no trailer control renders.
+- OD-D3/OD-D6: superseded for trailers by feature 008 OD-T2/OD-T5/OD-T6. This feature no longer
+  defines a trailer capability or renders a trailer control.
 - OD-D4: exact TMDB attribution wording, logo treatment, placement, and link behavior. Reuse the
   existing attribution widget and its keys; add the required link treatment only in the form official
   guidance specifies, and do not improvise wording.

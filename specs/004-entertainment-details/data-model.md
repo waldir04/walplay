@@ -79,7 +79,8 @@ The provider-neutral primary surface. One successful response represents one loa
 | `tvSummary` | `TvSummary` | no | TV only |
 | `seasons` | `Season[]` | no | TV only; may be empty |
 | `collection` | `{ name: string }` | no | Movie only; membership signal, display name only |
-| `trailer` | `{ url: string; site: 'youtube' }` | no | Validated authorized reference; gated at render |
+
+Trailer inventory is not part of this model. It is owned by `specs/008-trailers-video-content/spec.md`.
 
 **Title resolution order**: usable localized title → usable original title → not-found. Empty,
 whitespace-only, and title-placeholder values are treated as missing.
@@ -324,16 +325,11 @@ attribution and no secondary field leaks into primary facts.
 
 ## 12. Detail Capabilities
 
-```text
-DetailCapabilities = { readonly trailer: boolean }
-```
+This feature no longer defines a trailer capability. Trailer presentation, activation, player, and
+external fallback are owned by `specs/008-trailers-video-content/spec.md`.
 
-Production default: `{ trailer: false }` until OD-D3/OD-D6 are resolved. Availability and
-personal-list entry points have no capability or destination in this feature, so nothing renders for
-them. No disabled, placeholder, or "coming soon" control is produced.
-
-When `trailer` is true and a validated trailer reference exists, the trailer action renders as an
-external link with visible external-navigation text; no in-page playback and no autoplay.
+Availability and personal-list entry points have no capability or destination in this feature, so
+nothing renders for them. No disabled, placeholder, or "coming soon" control is produced.
 
 ---
 

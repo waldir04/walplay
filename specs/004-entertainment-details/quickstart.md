@@ -180,10 +180,8 @@ Production defaults disable every entry point. Verify:
 
 1. No availability control, teaser, disabled control, or "coming soon" text appears.
 2. No personal-list or favorites control appears.
-3. No trailer control appears while `DETAIL_CAPABILITIES.trailer` is `false`.
-4. In a test-only render with trailer enabled, a validated reference renders an external link with a
-   visible label, external-navigation text, keyboard operation, and no in-page playback. Returning
-   preserves the detail address and season.
+3. This feature renders no trailer control. Trailer presentation and gating are verified by feature
+   008's quickstart, not here.
 
 ### US7 — Devices, zoom, and assistive technology
 
@@ -191,7 +189,8 @@ Production defaults disable every entry point. Verify:
    content.
 2. At 200 % zoom, verify text and controls remain readable and operable.
 3. With keyboard only, reach every control in logical order with a visible focus indicator: return
-   action, overview expand, season controls, related titles, retries, and any enabled trailer link.
+   action, overview expand, season controls, related titles, and retries. Trailer controls are
+   verified by feature 008.
 4. With a screen reader:
    - exactly one `h1`
    - section headings and lists are announced correctly
