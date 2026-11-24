@@ -28,6 +28,7 @@ export interface AppConfig {
   readonly applicationVersion: string
   readonly apiBaseUrl: string
   readonly availabilityEnabled: boolean
+  readonly trailersEnabled: boolean
 }
 
 export type ConfigResult =
@@ -49,6 +50,8 @@ const API_BASE_URL_REQUIRED_WARNING =
 const API_BASE_URL_INVALID_WARNING = 'VITE_API_BASE_URL is invalid and must be a valid http(s) URL.'
 const AVAILABILITY_ENABLED_INVALID_WARNING =
   'VITE_AVAILABILITY_ENABLED is invalid and must be true or false; availability is disabled.'
+const TRAILERS_ENABLED_INVALID_WARNING =
+  'VITE_TRAILERS_ENABLED is invalid and must be true or false; trailers are disabled.'
 
 const emitWarnings = (warnings: readonly string[]): void => {
   warnings.forEach((warning) => {
@@ -118,6 +121,21 @@ export const parseConfig = (source: EnvSource = import.meta.env): ConfigResult =
     }
   }
 
+  const rawTrailersEnabled = source.VITE_TRAILERS_ENABLED
+  let trailersEnabled = false
+  if (
+    rawTrailersEnabled !== undefined &&
+    rawTrailersEnabled !== null &&
+    rawTrailersEnabled !== ''
+  ) {
+    const normalizedTrailers = String(rawTrailersEnabled).trim().toLowerCase()
+    if (normalizedTrailers === 'true') {
+      trailersEnabled = true
+    } else if (normalizedTrailers !== 'false') {
+      warnings.push(TRAILERS_ENABLED_INVALID_WARNING)
+    }
+  }
+
   const frozenWarnings = Object.freeze([...warnings])
   emitWarnings(frozenWarnings)
   const config: AppConfig = Object.freeze({
@@ -125,6 +143,7 @@ export const parseConfig = (source: EnvSource = import.meta.env): ConfigResult =
     applicationVersion,
     apiBaseUrl,
     availabilityEnabled,
+    trailersEnabled,
   })
 
   return Object.freeze({ status: 'valid', config, warnings: frozenWarnings })

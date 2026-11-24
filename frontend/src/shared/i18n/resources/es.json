@@ -345,10 +345,6 @@
       "sectionLoading": "Cargando esta sección",
       "sectionStale": "Mostrando datos en caché de esta sección"
     },
-    "actions": {
-      "trailer": "Ver tráiler",
-      "trailerExternal": "Abre YouTube en una pestaña nueva"
-    },
     "a11y": {
       "seasonControl": "Temporada {{number}}"
     },
@@ -391,6 +387,83 @@
       "attribution": {
         "justWatch": "Datos de disponibilidad proporcionados por JustWatch",
         "sectionLabel": "Atribución de disponibilidad"
+      }
+    },
+    "trailers": {
+      "heading": "Tráiler",
+      "entry": "Ver tráiler",
+      "disclosure": {
+        "loads": "Al activar un video se carga contenido de {{platform}}.",
+        "terms": "Términos del servicio de {{platform}}",
+        "privacy": "Política de privacidad de {{platform}}",
+        "privacyNote": "La reproducción con privacidad mejorada limita la personalización, pero no elimina el procesamiento de terceros.",
+        "hostingNote": "Walplay no aloja estos videos."
+      },
+      "list": {
+        "label": "Videos disponibles",
+        "selectedState": "Seleccionado",
+        "playingState": "Reproduciéndose en el reproductor",
+        "play": "Reproducir {{title}}",
+        "expand": "Mostrar más videos",
+        "collapse": "Mostrar menos videos",
+        "language": "Idioma: {{language}}",
+        "published": "Publicado {{date}}",
+        "official": "Oficial"
+      },
+      "types": {
+        "trailer": "Tráiler",
+        "teaser": "Adelanto",
+        "clip": "Fragmento",
+        "featurette": "Reportaje",
+        "behindTheScenes": "Detrás de cámaras",
+        "bloopers": "Errores de grabación"
+      },
+      "mode": {
+        "embedded": "Se reproduce dentro de Walplay",
+        "external": "Se abre en {{platform}}"
+      },
+      "player": {
+        "title": "{{title}} — reproductor de {{platform}}",
+        "loading": "Cargando el reproductor de {{platform}} para {{title}}",
+        "ready": "Reproductor de {{title}} cargado",
+        "captionNote": "Los subtítulos los controlan {{platform}} y el propietario del video."
+      },
+      "states": {
+        "loading": "Cargando información del tráiler",
+        "loaded": "Información del tráiler cargada",
+        "noVideos": {
+          "title": "No hay información del tráiler disponible",
+          "description": "Ahora mismo no hay información de videos promocionales para este título."
+        },
+        "error": {
+          "title": "La información del tráiler no está disponible",
+          "description": "Esta sección no se pudo cargar. Inténtalo de nuevo; el resto de la página sigue disponible.",
+          "retry": "Inténtalo de nuevo"
+        },
+        "stale": {
+          "lastChecked": "Última comprobación: {{date}}",
+          "caution": "Esta información puede estar desactualizada."
+        }
+      },
+      "unavailable": {
+        "title": "Este video no se puede reproducir aquí",
+        "description": "Es posible que el propietario haya desactivado la inserción, o que el video sea privado, haya sido eliminado, tenga restricción de edad, no esté disponible en tu región o esté bloqueado por tu red."
+      },
+      "externalOnly": {
+        "title": "El reproductor no se puede mostrar con este ancho",
+        "description": "Abre el video en {{platform}} para verlo."
+      },
+      "external": {
+        "action": "Ver en {{platform}}",
+        "leaves": "Sale de Walplay",
+        "newTab": "Se abre en una pestaña nueva"
+      },
+      "announce": {
+        "inventoryLoaded": "Información del tráiler cargada",
+        "selected": "{{title}} seleccionado. Cargando el reproductor de {{platform}}.",
+        "unavailable": "Este video no se puede reproducir aquí. Hay una opción externa disponible.",
+        "retry": "Cargando la información del tráiler de nuevo",
+        "externalOnly": "Aquí no se puede mostrar un reproductor compatible. Hay una opción externa disponible."
       }
     }
   },

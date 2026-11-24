@@ -20,8 +20,9 @@ import {
   useDetailQuery,
   useSeasonQuery,
   useSimilarQuery,
+  useTrailerQuery,
 } from '@/entities/catalog'
-import type { CatalogItem, DetailResponseMeta, MediaType } from '@/entities/catalog'
+import type { CatalogItem, MediaType } from '@/entities/catalog'
 import { initialSeasonNumber, useSeasonSelection } from '@/features/select-season'
 import {
   AvailabilityRegionSelector,
@@ -34,13 +35,14 @@ import { PAGE_HEADING_ID } from '@/shared/lib/domIds'
 import { useDocumentTitleOverride } from '@/shared/lib/documentTitle'
 import { Link, LiveRegion } from '@/shared/ui'
 import { AvailabilityAttribution, ProviderAttribution } from '@/widgets/provider-attribution'
-import { AvailabilitySection, TitleDetailView } from '@/widgets/title-detail'
+import { AvailabilitySection, TitleDetailView, TrailerSection } from '@/widgets/title-detail'
 import type {
   AvailabilitySectionState,
   AvailabilitySectionStatus,
   CreditsSectionState,
   RelatedSectionState,
   SeasonSectionState,
+  TrailerSectionStatus,
 } from '@/widgets/title-detail'
 
 import { resolveDetailReturn } from './detailReturn'
@@ -73,7 +75,9 @@ const mediaTypeFromPath = (pathname: string): MediaType => {
   return mediaSlug === 'tv-shows' ? 'tv' : 'movie'
 }
 
-const isStaleMeta = (meta: DetailResponseMeta | undefined): boolean =>
+type StaleMeta = { readonly stale: boolean; readonly source: string }
+
+const isStaleMeta = (meta: StaleMeta | undefined): boolean =>
   meta !== undefined && (meta.stale || meta.source === 'stale-cache')
 
 const resolveConfiguredCapabilities = (): DetailCapabilities => {
@@ -128,6 +132,10 @@ export const TitleDetailPage = ({ capabilities }: TitleDetailPageProps = {}) => 
   const regionsQuery = useAvailabilityRegionsQuery({ enabled: availabilityGate })
   const availabilityQuery = useAvailabilityQuery(mediaType, itemId, region, {
     enabled: availabilityGate,
+  })
+  const trailersEnabled = effectiveCapabilities.trailer
+  const trailerQuery = useTrailerQuery(mediaType, itemId, {
+    enabled: isDetail && detail !== undefined && trailersEnabled,
   })
   const returnTarget = resolveDetailReturn(mediaType, location.state)
   const { setOverride } = useDocumentTitleOverride()
@@ -417,6 +425,41 @@ export const TitleDetailPage = ({ capabilities }: TitleDetailPageProps = {}) => 
     retrying: availabilityQuery.isFetching || regionsQuery.isFetching,
   }
 
+  const trailerData = trailersEnabled ? trailerQuery.data?.data : undefined
+  const trailerMeta = trailersEnabled ? trailerQuery.data?.meta : undefined
+  const trailerStatus: TrailerSectionStatus = trailerQuery.isPending
+    ? 'loading'
+    : trailerQuery.isError && trailerData === undefined
+      ? 'error'
+      : trailerQuery.isError || isStaleMeta(trailerMeta)
+        ? 'stale'
+        : 'ready'
+  const retryTrailers = () => {
+    if (trailerQuery.isFetching) {
+      return
+    }
+    void trailerQuery.refetch()
+  }
+  const trailerSection =
+    trailersEnabled && detail !== undefined ? (
+      <TrailerSection
+        state={{
+          status: trailerStatus,
+          ...(trailerData === undefined ? {} : { data: trailerData }),
+          ...(trailerMeta === undefined ? {} : { meta: trailerMeta }),
+          onRetry: retryTrailers,
+          retrying: trailerQuery.isFetching,
+        }}
+      />
+    ) : undefined
+  const showTrailerEntry =
+    trailersEnabled &&
+    trailerData !== undefined &&
+    trailerData.state === 'available' &&
+    trailerData.videos.length > 0 &&
+    trailerStatus !== 'loading' &&
+    trailerStatus !== 'error'
+
   const availabilitySection =
     availabilityEnabled && detail !== undefined ? (
       <AvailabilitySection
@@ -451,6 +494,8 @@ export const TitleDetailPage = ({ capabilities }: TitleDetailPageProps = {}) => 
             : undefined
         }
         capabilities={effectiveCapabilities}
+        trailer={trailerSection}
+        trailerEntry={showTrailerEntry}
         availability={availabilitySection}
         season={seasonSection}
         credits={creditsSection}

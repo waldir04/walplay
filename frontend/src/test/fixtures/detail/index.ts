@@ -44,7 +44,6 @@ export const movieDetail = (overrides: Partial<TitleDetail> = {}): TitleDetail =
     urlLarge: 'https://image.example.test/w1280/backdrop.jpg',
   },
   collection: { name: 'Fight Club Collection' },
-  trailer: { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', site: 'youtube' },
   ...overrides,
 })
 

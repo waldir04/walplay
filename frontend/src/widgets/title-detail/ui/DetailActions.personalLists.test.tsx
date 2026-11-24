@@ -10,7 +10,7 @@ describe('DetailActions personal lists', () => {
   it('renders the watchlist control when the capability is enabled', async () => {
     await renderWithProviders(
       <DetailActions
-        detail={movieDetail({ trailer: undefined })}
+        detail={movieDetail()}
         capabilities={{ trailer: false, availability: false, personalLists: true }}
       />
     )
@@ -22,7 +22,7 @@ describe('DetailActions personal lists', () => {
   it('renders no personal control when the capability is disabled', async () => {
     const { container } = await renderWithProviders(
       <DetailActions
-        detail={movieDetail({ trailer: undefined })}
+        detail={movieDetail()}
         capabilities={{ trailer: false, availability: false, personalLists: false }}
       />
     )

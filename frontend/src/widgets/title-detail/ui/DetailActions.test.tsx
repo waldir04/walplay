@@ -6,23 +6,21 @@ import { renderWithProviders } from '@/test/renderWithProviders'
 
 import { DetailActions } from './DetailActions'
 
-const trailer = { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', site: 'youtube' as const }
-
 describe('DetailActions', () => {
   it('renders nothing when every capability is disabled', async () => {
     const { container } = await renderWithProviders(
       <DetailActions
-        detail={movieDetail({ trailer })}
+        detail={movieDetail()}
         capabilities={{ trailer: false, availability: false, personalLists: false }}
       />
     )
     expect(container).toBeEmptyDOMElement()
   })
 
-  it('renders nothing when the trailer capability is enabled but no validated trailer exists', async () => {
+  it('renders nothing when the trailer capability is enabled without a known inventory', async () => {
     const { container } = await renderWithProviders(
       <DetailActions
-        detail={movieDetail({ trailer: undefined })}
+        detail={movieDetail()}
         capabilities={{ trailer: true, availability: false, personalLists: false }}
       />
     )
@@ -30,23 +28,21 @@ describe('DetailActions', () => {
   })
 
   it('renders personal-list controls with production capability defaults', async () => {
-    await renderWithProviders(<DetailActions detail={movieDetail({ trailer })} />)
+    await renderWithProviders(<DetailActions detail={movieDetail()} />)
 
     expect(screen.getByRole('button', { name: 'Add Fight Club to watchlist' })).toBeInTheDocument()
   })
 
-  it('renders a keyboard-operable external link when enabled with a trailer', async () => {
+  it('renders a keyboard-operable in-page trailer entry only when inventory is known', async () => {
     await renderWithProviders(
       <DetailActions
-        detail={movieDetail({ trailer })}
+        detail={movieDetail()}
         capabilities={{ trailer: true, availability: false, personalLists: false }}
+        trailerEntry={{ headingId: 'trailer-heading' }}
       />
     )
-    const link = screen.getByRole('link', { name: /Watch trailer/ })
-    expect(link).toHaveAttribute('href', trailer.url)
-    expect(link).toHaveAttribute('target', '_blank')
-    expect(link).toHaveAttribute('rel', 'noopener noreferrer')
-    expect(link).toHaveTextContent('Opens YouTube in a new tab')
+    const link = screen.getByRole('link', { name: 'Watch trailer' })
+    expect(link).toHaveAttribute('href', '#trailer-heading')
     expect(screen.getByRole('heading', { level: 2, name: 'Actions' })).toBeInTheDocument()
     expect(document.querySelector('iframe')).toBeNull()
     expect(document.querySelector('video')).toBeNull()
@@ -55,8 +51,9 @@ describe('DetailActions', () => {
   it('never renders availability, disabled, or coming-soon controls', async () => {
     await renderWithProviders(
       <DetailActions
-        detail={movieDetail({ trailer })}
+        detail={movieDetail()}
         capabilities={{ trailer: true, availability: false, personalLists: true }}
+        trailerEntry={{ headingId: 'trailer-heading' }}
       />
     )
     expect(document.body.textContent).not.toMatch(/coming soon|availability/i)

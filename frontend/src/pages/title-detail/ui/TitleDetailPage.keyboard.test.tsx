@@ -125,22 +125,6 @@ describe('TitleDetailPage keyboard and announcements', () => {
     expect(screen.getAllByText('Season 2 selected')).toHaveLength(1)
   })
 
-  it('renders an enabled trailer as a keyboard-reachable external link', async () => {
-    renderWithProviders(
-      <TitleDetailPage
-        capabilities={{ trailer: true, availability: false, personalLists: false }}
-      />,
-      {
-        initialEntries: [moviePath],
-      }
-    )
-    await screen.findByRole('heading', { level: 1, name: 'Fight Club' })
-    const trailer = screen.getByRole('link', { name: /Watch trailer/ })
-    trailer.focus()
-    expect(document.activeElement).toBe(trailer)
-    expect(trailer).toHaveAttribute('target', '_blank')
-  })
-
   it('moves focus to the primary heading on navigation from a catalog card', async () => {
     const { router } = renderApp(['/browse/movies'])
     await waitFor(() => expect(router.state.location.pathname).toBe('/browse/movies'))

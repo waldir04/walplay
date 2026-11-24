@@ -34,6 +34,13 @@ export const TEST_CONFIG: BackendConfig = Object.freeze({
   availabilityCacheMaxEntries: 100,
   availabilityFreshnessWindowMs: 86_400_000,
   availabilityDestinationHosts: Object.freeze(['www.themoviedb.org', 'themoviedb.org']),
+  trailersEnabled: false,
+  trailersCacheTtlMs: 86_400_000,
+  trailersCacheStaleMs: 604_800_000,
+  trailersCacheMaxEntries: 100,
+  trailersMaxInventory: 24,
+  trailersEmbedHosts: Object.freeze(['www.youtube-nocookie.com']),
+  trailersExternalHosts: Object.freeze(['www.youtube.com']),
 })
 
 export const sampleItem = (mediaType: MediaType = 'movie', providerId = 550): CatalogItem => ({

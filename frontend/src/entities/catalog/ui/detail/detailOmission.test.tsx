@@ -55,7 +55,6 @@ describe('detail omission rules', () => {
         poster: undefined,
         backdrop: undefined,
         collection: undefined,
-        trailer: undefined,
       })
     )
     expect(screen.queryByRole('heading', { name: 'Overview' })).toBeNull()

@@ -34,7 +34,6 @@ describe('tmdb detail schemas', () => {
   it('accepts payloads with optional fields missing', () => {
     const movie = movieDetailDto.parse({ id: 1, title: 'Only title' })
     expect(movie.genres).toBeUndefined()
-    expect(movie.videos).toBeUndefined()
 
     const tv = tvDetailDto.parse({ id: 2, name: 'Only name' })
     expect(tv.seasons).toBeUndefined()

@@ -9,17 +9,6 @@ export const detailGenreDto = z.object({
   name: z.string(),
 })
 
-export const detailVideoDto = z.object({
-  site: nullableString,
-  type: nullableString,
-  key: nullableString,
-  official: z.boolean().nullish(),
-})
-
-const videosDto = z.object({
-  results: z.array(detailVideoDto).nullish(),
-})
-
 const collectionRefDto = z.object({
   id: z.number(),
   name: nullableString,
@@ -57,7 +46,6 @@ export const movieDetailDto = z.object({
   status: nullableString,
   genres: z.array(detailGenreDto).nullish(),
   belongs_to_collection: collectionRefDto.nullish(),
-  videos: videosDto.nullish(),
 })
 
 export const tvDetailDto = z.object({
@@ -82,7 +70,6 @@ export const tvDetailDto = z.object({
   number_of_episodes: nullableNumber,
   seasons: z.array(seasonSummaryDto).nullish(),
   networks: z.array(networkDto).nullish(),
-  videos: videosDto.nullish(),
 })
 
 export const creditsDto = z.object({

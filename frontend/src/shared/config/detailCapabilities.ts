@@ -14,7 +14,7 @@ export const DETAIL_CAPABILITIES: DetailCapabilities = Object.freeze({
 
 export const resolveDetailCapabilities = (config: AppConfig): DetailCapabilities =>
   Object.freeze({
-    trailer: DETAIL_CAPABILITIES.trailer,
+    trailer: config.trailersEnabled,
     availability: config.availabilityEnabled,
     personalLists: true,
   })

@@ -89,7 +89,7 @@ export const createTmdbDetailProvider = ({
       if (mediaType === 'movie') {
         const raw = await client.request(
           path,
-          { language, append_to_response: 'videos' },
+          { language },
           movieDetailDto
         )
         let fallback: { fallbackOverview?: string; fallbackTagline?: string } = {}
@@ -117,7 +117,7 @@ export const createTmdbDetailProvider = ({
 
       const raw = await client.request(
         path,
-        { language, append_to_response: 'videos' },
+        { language },
         tvDetailDto
       )
       let fallback: { fallbackOverview?: string; fallbackTagline?: string } = {}

@@ -181,3 +181,70 @@ describe('availability configuration', () => {
     }
   })
 })
+
+describe('trailer configuration', () => {
+  it('applies documented trailer defaults with the capability disabled', () => {
+    const config = loadConfig(baseEnv)
+
+    expect(config.trailersEnabled).toBe(false)
+    expect(config.trailersCacheTtlMs).toBe(86_400_000)
+    expect(config.trailersCacheStaleMs).toBe(604_800_000)
+    expect(config.trailersCacheMaxEntries).toBe(500)
+    expect(config.trailersMaxInventory).toBe(24)
+    expect(config.trailersEmbedHosts).toEqual(['www.youtube-nocookie.com'])
+    expect(config.trailersExternalHosts).toEqual(['www.youtube.com'])
+  })
+
+  it('parses the trailer flag case-insensitively', () => {
+    expect(loadConfig({ ...baseEnv, TRAILERS_ENABLED: ' TRUE ' }).trailersEnabled).toBe(true)
+    expect(loadConfig({ ...baseEnv, TRAILERS_ENABLED: 'False' }).trailersEnabled).toBe(false)
+  })
+
+  it('rejects an invalid trailer flag by field name only', () => {
+    try {
+      loadConfig({ ...baseEnv, TRAILERS_ENABLED: 'sometimes' })
+      expect.fail('expected a configuration error')
+    } catch (error) {
+      expect((error as ConfigError).fields).toEqual(['TRAILERS_ENABLED'])
+      expect((error as ConfigError).message).not.toContain('sometimes')
+    }
+  })
+
+  it('enforces the trailer cache ordering', () => {
+    try {
+      loadConfig({ ...baseEnv, TRAILERS_CACHE_TTL_SECONDS: '700000' })
+      expect.fail('expected a configuration error')
+    } catch (error) {
+      expect((error as ConfigError).fields).toEqual([
+        'TRAILERS_CACHE_TTL_SECONDS',
+        'TRAILERS_CACHE_STALE_SECONDS',
+      ])
+    }
+  })
+
+  it('caps the inventory limit at 24', () => {
+    expect(loadConfig({ ...baseEnv, TRAILERS_MAX_INVENTORY: '6' }).trailersMaxInventory).toBe(6)
+    expect(() => loadConfig({ ...baseEnv, TRAILERS_MAX_INVENTORY: '25' })).toThrow(ConfigError)
+    expect(() => loadConfig({ ...baseEnv, TRAILERS_MAX_INVENTORY: '0' })).toThrow(ConfigError)
+  })
+
+  it('validates and normalizes trailer host allowlists', () => {
+    const config = loadConfig({
+      ...baseEnv,
+      TRAILERS_EMBED_HOSTS: ' WWW.YouTube-Nocookie.com ',
+      TRAILERS_EXTERNAL_HOSTS: 'www.youtube.com, youtu.be ',
+    })
+
+    expect(config.trailersEmbedHosts).toEqual(['www.youtube-nocookie.com'])
+    expect(config.trailersExternalHosts).toEqual(['www.youtube.com', 'youtu.be'])
+
+    for (const value of ['https://www.youtube.com', 'www.youtube.com/watch', ' , ']) {
+      try {
+        loadConfig({ ...baseEnv, TRAILERS_EMBED_HOSTS: value })
+        expect.fail('expected a configuration error')
+      } catch (error) {
+        expect((error as ConfigError).fields).toEqual(['TRAILERS_EMBED_HOSTS'])
+      }
+    }
+  })
+})

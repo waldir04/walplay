@@ -41,7 +41,6 @@ describe('movie detail mapping', () => {
       runtime: { minutes: 139, kind: 'movie' },
       popularity: 63.421,
       collection: { name: 'Fight Club Collection' },
-      trailer: { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', site: 'youtube' },
     })
     expect(detail.genres).toEqual([
       { id: '18', name: 'Drama' },
@@ -95,7 +94,6 @@ describe('movie detail mapping', () => {
     expect(detail).not.toHaveProperty('poster')
     expect(detail).not.toHaveProperty('backdrop')
     expect(detail).not.toHaveProperty('collection')
-    expect(detail).not.toHaveProperty('trailer')
   })
 
   it('treats a placeholder-only identity as not found', () => {
@@ -124,27 +122,6 @@ describe('movie detail mapping', () => {
     expect(detail?.title).toBe('Minimal')
     expect(detail?.genres).toEqual([])
     expect(detail?.rating).toBeUndefined()
-  })
-
-  it('prefers an official trailer and ignores non-YouTube or malformed keys', () => {
-    const detail = mapMovieDetail(
-      completeMovieDetail({
-        videos: {
-          results: [
-            { site: 'Vimeo', type: 'Trailer', key: 'abcdef12345', official: true },
-            { site: 'YouTube', type: 'Teaser', key: 'abcdef12345', official: true },
-            { site: 'YouTube', type: 'Trailer', key: 'x', official: true },
-            { site: 'YouTube', type: 'Trailer', key: 'firstkey', official: false },
-            { site: 'YouTube', type: 'Trailer', key: 'officialkey', official: true },
-          ],
-        },
-      }),
-      artwork
-    )?.detail
-    expect(detail?.trailer).toEqual({
-      url: 'https://www.youtube.com/watch?v=officialkey',
-      site: 'youtube',
-    })
   })
 })
 
@@ -273,17 +250,4 @@ describe('detail de-duplication and bounds', () => {
     expect(tv?.tvSummary?.networks).toEqual(['Netflix', 'HBO', 'BBC', 'ARD', 'ZDF'])
   })
 
-  it('selects the first eligible trailer when none is official', () => {
-    const detail = mapMovieDetail(
-      completeMovieDetail({
-        videos: {
-          results: [
-            { site: 'YouTube', type: 'Trailer', key: 'firstkey', official: false },
-            { site: 'YouTube', type: 'Trailer', key: 'secondkey', official: null },
-          ],
-        },
-      })
-    )?.detail
-    expect(detail?.trailer?.url).toContain('firstkey')
-  })
 })

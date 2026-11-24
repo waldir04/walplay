@@ -20,7 +20,6 @@ const OMITTED_KEYS = [
   'poster',
   'backdrop',
   'collection',
-  'trailer',
 ]
 
 describe('detail omission rules', () => {
@@ -59,7 +58,6 @@ describe('detail omission rules', () => {
           tagline: value,
           status: value,
           genres: [{ id: 1, name: value }],
-          videos: { results: [] },
         })
       )?.detail
       expect(detail?.overview).toBeUndefined()

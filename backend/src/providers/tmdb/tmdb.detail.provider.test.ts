@@ -64,7 +64,7 @@ const createProvider = (
 }
 
 describe('tmdb detail provider', () => {
-  it('requests movie detail with only the videos append and maps it', async () => {
+  it('requests movie detail and maps it', async () => {
     const { provider, request } = createProvider({ '/movie/550': completeMovieDetail() })
     const result = await provider.fetchDetail({
       mediaType: 'movie',
@@ -74,7 +74,7 @@ describe('tmdb detail provider', () => {
 
     expect(request).toHaveBeenCalledWith(
       '/movie/550',
-      { language: 'en-US', append_to_response: 'videos' },
+      { language: 'en-US' },
       expect.anything()
     )
     expect(result?.detail.title).toBe('Fight Club')

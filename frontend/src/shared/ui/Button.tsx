@@ -25,7 +25,7 @@ export const Button = ({
   <button
     type={type}
     className={cn(
-      'inline-flex cursor-pointer items-center justify-center gap-2 rounded-control transition-colors duration-150 ease-out hover:cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:cursor-not-allowed disabled:opacity-60',
+      'inline-flex cursor-pointer items-center justify-center gap-2 rounded-control transition-colors duration-150 ease-out motion-reduce:transition-none hover:cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:cursor-not-allowed disabled:opacity-60',
       variantClasses[variant],
       className
     )}
