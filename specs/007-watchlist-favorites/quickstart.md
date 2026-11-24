@@ -138,3 +138,9 @@ Use the output as `itemId`. The backend will answer `not-found`, exercising the 
 - Both collections survive reloads, new tabs, and later browser sessions on the same device, and disappear when browsing data is cleared.
 - Saved membership never depends on catalog, availability, or network success.
 - All automated checks pass with zero warnings, and the new per-path coverage thresholds are met.
+
+## Validation record
+
+- 2026-11-24: Automated gates executed from `frontend/`: `npm run lint`, `npm run typecheck`, `npm run test` (with coverage), and `npm run build`. All passed, including the new per-path coverage thresholds.
+- Automated tests cover the manual scenarios' observable contracts: persistence and reload, duplicate and absent no-ops, batches and range announcements, cross-tab storage events, corrupt and newer-version recovery with confirmation, deleted and temporarily unavailable titles, manage flows, keyboard focus after removal, axe checks, Spanish copy, and the scope guard.
+- The manual browser walkthrough in this guide was not executed in this environment because it requires running the backend and frontend and a real browser. No behavioral deviation was identified by the automated coverage; a human browser pass remains pending before release sign-off.

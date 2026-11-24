@@ -50,9 +50,12 @@ beforeEach(() => {
 })
 
 const renderPage = () =>
-  renderWithProviders(<TitleDetailPage capabilities={{ trailer: false, availability: true }} />, {
-    initialEntries: [`/browse/movies/title/${MOVIE_ID}`],
-  })
+  renderWithProviders(
+    <TitleDetailPage capabilities={{ trailer: false, availability: true, personalLists: false }} />,
+    {
+      initialEntries: [`/browse/movies/title/${MOVIE_ID}`],
+    }
+  )
 
 describe('TitleDetailPage availability announcements', () => {
   it('produces exactly one region-change announcement', async () => {

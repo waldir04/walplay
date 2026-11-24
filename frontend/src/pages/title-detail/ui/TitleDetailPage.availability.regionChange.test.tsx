@@ -78,9 +78,12 @@ beforeEach(() => {
 })
 
 const renderPage = () =>
-  renderWithProviders(<TitleDetailPage capabilities={{ trailer: false, availability: true }} />, {
-    initialEntries: [`/browse/movies/title/${MOVIE_ID}`],
-  })
+  renderWithProviders(
+    <TitleDetailPage capabilities={{ trailer: false, availability: true, personalLists: false }} />,
+    {
+      initialEntries: [`/browse/movies/title/${MOVIE_ID}`],
+    }
+  )
 
 const ensureRegion = async (user: ReturnType<typeof userEvent.setup>, region: 'CO' | 'US') => {
   const select = await screen.findByLabelText('Availability region')
@@ -147,7 +150,9 @@ describe('TitleDetailPage availability region change', () => {
           <button type="button" onClick={() => navigate(`/browse/movies/title/${SECOND_MOVIE_ID}`)}>
             to B
           </button>
-          <TitleDetailPage capabilities={{ trailer: false, availability: true }} />
+          <TitleDetailPage
+            capabilities={{ trailer: false, availability: true, personalLists: false }}
+          />
         </div>
       )
     }

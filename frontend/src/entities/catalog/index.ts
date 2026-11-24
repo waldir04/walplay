@@ -1,4 +1,5 @@
 export {
+  CATALOG_ITEM_ID_PATTERN,
   catalogItemSchema,
   buildCatalogItemAccessibleName,
   formatRatingValue,

@@ -7,6 +7,7 @@ export type PageKind =
   | 'title-detail'
   | 'catalog-not-found'
   | 'search'
+  | 'saved'
 
 export interface AppRoute {
   readonly path: string
@@ -47,6 +48,16 @@ export const APP_ROUTES: readonly AppRoute[] = [
     titleKey: 'meta.title.search',
     navigationLabelKey: 'navigation.search',
     loadsOnDemand: true,
+  },
+  {
+    path: '/saved',
+    kind: 'saved',
+    navigable: true,
+    isDefault: false,
+    titleKey: 'meta.title.saved',
+    navigationLabelKey: 'navigation.saved',
+    loadsOnDemand: true,
+    matchPrefix: '/saved/',
   },
   {
     path: '/settings',

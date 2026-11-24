@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next'
 
-import type { DetailCapabilities } from '@/shared/config/detailCapabilities'
+import { SaveToListControls, toSavedSnapshot } from '@/features/toggle-saved-title'
 import { DETAIL_CAPABILITIES } from '@/shared/config/detailCapabilities'
+import type { DetailCapabilities } from '@/shared/config/detailCapabilities'
 
 import type { TitleDetail } from '@/entities/catalog'
 
@@ -16,7 +17,9 @@ export const DetailActions = ({
 }: DetailActionsProps) => {
   const { t } = useTranslation()
 
-  if (!capabilities.trailer || detail.trailer === undefined) {
+  const showTrailer = capabilities.trailer && detail.trailer !== undefined
+
+  if (!showTrailer && !capabilities.personalLists) {
     return null
   }
 
@@ -25,17 +28,33 @@ export const DetailActions = ({
       <h2 id="detail-actions-heading" className="text-title text-text">
         {t('detail.sections.actions')}
       </h2>
-      <a
-        href={detail.trailer.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex min-h-11 w-fit flex-col justify-center rounded-control border border-border-strong bg-surface px-4 py-2 font-semibold text-text transition-colors duration-150 ease-out hover:bg-surface-raised focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
-      >
-        <span>{t('detail.actions.trailer')}</span>
-        <span className="text-caption font-normal text-text-muted">
-          {t('detail.actions.trailerExternal')}
-        </span>
-      </a>
+      {capabilities.personalLists ? (
+        <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
+          <SaveToListControls
+            collection="watchlist"
+            title={detail.title}
+            snapshot={toSavedSnapshot(detail)}
+          />
+          <SaveToListControls
+            collection="favorites"
+            title={detail.title}
+            snapshot={toSavedSnapshot(detail)}
+          />
+        </div>
+      ) : null}
+      {showTrailer ? (
+        <a
+          href={detail.trailer?.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex min-h-11 w-fit flex-col justify-center rounded-control border border-border-strong bg-surface px-4 py-2 font-semibold text-text transition-colors duration-150 ease-out hover:bg-surface-raised focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+        >
+          <span>{t('detail.actions.trailer')}</span>
+          <span className="text-caption font-normal text-text-muted">
+            {t('detail.actions.trailerExternal')}
+          </span>
+        </a>
+      ) : null}
     </section>
   )
 }

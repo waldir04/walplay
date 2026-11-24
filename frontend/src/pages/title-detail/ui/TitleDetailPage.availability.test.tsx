@@ -53,14 +53,14 @@ beforeEach(() => {
     .mockResolvedValue(availabilityRegionsEnvelope(['CO', 'US']))
 })
 
-const renderMovie = (capabilities = { trailer: false, availability: true }) =>
+const renderMovie = (capabilities = { trailer: false, availability: true, personalLists: false }) =>
   renderWithProviders(<TitleDetailPage capabilities={capabilities} />, {
     initialEntries: [`/browse/movies/title/${MOVIE_ID}`],
   })
 
 describe('TitleDetailPage availability', () => {
   it('renders no section and issues no availability requests when the capability is off', async () => {
-    await renderMovie({ trailer: false, availability: false })
+    await renderMovie({ trailer: false, availability: false, personalLists: false })
     await screen.findByRole('heading', { level: 1, name: 'Fight Club' })
 
     expect(screen.queryByRole('heading', { name: 'Where to watch' })).toBeNull()
@@ -97,7 +97,9 @@ describe('TitleDetailPage availability', () => {
     )
     vi.mocked(fetchSeason).mockResolvedValue(seasonEnvelope(1))
     await renderWithProviders(
-      <TitleDetailPage capabilities={{ trailer: true, availability: true }} />,
+      <TitleDetailPage
+        capabilities={{ trailer: true, availability: true, personalLists: false }}
+      />,
       { initialEntries: [`/browse/tv-shows/title/${TV_ID}`] }
     )
 
@@ -123,7 +125,9 @@ describe('TitleDetailPage availability', () => {
   it('works for TV titles', async () => {
     vi.mocked(fetchDetail).mockResolvedValue(detailEnvelope(tvDetail()))
     await renderWithProviders(
-      <TitleDetailPage capabilities={{ trailer: false, availability: true }} />,
+      <TitleDetailPage
+        capabilities={{ trailer: false, availability: true, personalLists: false }}
+      />,
       { initialEntries: [`/browse/tv-shows/title/${TV_ID}`] }
     )
 
