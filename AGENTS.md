@@ -49,6 +49,20 @@ Before creating or modifying any feature specification, implementation plan, tas
 1. `.specify/memory/constitution.md` — authoritative source for engineering principles, architectural standards, and development rules.
 2. `docs/product-overview.md` — authoritative source for product vision, MVP scope, general business rules, user expectations, and feature relationships.
 
+## Modern Web Development Guidelines
+
+When working on frontend features, you MUST use the installed Modern Web Guidance skill when relevant.
+
+- Consult relevant guidance before implementing or modifying browser APIs, HTML, CSS, responsive layouts, accessibility, UI interactions, or frontend performance optimizations.
+- Prefer native browser capabilities and semantic HTML over unnecessary JavaScript or additional dependencies.
+- Check Baseline browser compatibility before adopting modern web platform features.
+- Respect the project's browser support requirements and existing architectural decisions.
+- Apply progressive enhancement when necessary to ensure a reliable user experience.
+- Avoid experimental or limited-availability APIs unless explicitly justified.
+- Do not introduce unnecessary dependencies or replace existing libraries solely because a newer native alternative exists.
+- Apply only the guidance relevant to the current task. Do not load or follow unrelated recommendations.
+- If the skill is unavailable, continue following the project's existing engineering standards and do not assume that external guidance has been consulted.
+
 ## Specification Rules
 
 - All feature specifications MUST align with the product scope and principles defined in these documents.
