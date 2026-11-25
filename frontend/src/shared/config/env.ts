@@ -29,6 +29,7 @@ export interface AppConfig {
   readonly apiBaseUrl: string
   readonly availabilityEnabled: boolean
   readonly trailersEnabled: boolean
+  readonly recommendationsEnabled: boolean
 }
 
 export type ConfigResult =
@@ -52,6 +53,8 @@ const AVAILABILITY_ENABLED_INVALID_WARNING =
   'VITE_AVAILABILITY_ENABLED is invalid and must be true or false; availability is disabled.'
 const TRAILERS_ENABLED_INVALID_WARNING =
   'VITE_TRAILERS_ENABLED is invalid and must be true or false; trailers are disabled.'
+const RECOMMENDATIONS_ENABLED_INVALID_WARNING =
+  'VITE_RECOMMENDATIONS_ENABLED is invalid and must be true or false; recommendations are disabled.'
 
 const emitWarnings = (warnings: readonly string[]): void => {
   warnings.forEach((warning) => {
@@ -136,6 +139,21 @@ export const parseConfig = (source: EnvSource = import.meta.env): ConfigResult =
     }
   }
 
+  const rawRecommendationsEnabled = source.VITE_RECOMMENDATIONS_ENABLED
+  let recommendationsEnabled = false
+  if (
+    rawRecommendationsEnabled !== undefined &&
+    rawRecommendationsEnabled !== null &&
+    rawRecommendationsEnabled !== ''
+  ) {
+    const normalizedRecommendations = String(rawRecommendationsEnabled).trim().toLowerCase()
+    if (normalizedRecommendations === 'true') {
+      recommendationsEnabled = true
+    } else if (normalizedRecommendations !== 'false') {
+      warnings.push(RECOMMENDATIONS_ENABLED_INVALID_WARNING)
+    }
+  }
+
   const frozenWarnings = Object.freeze([...warnings])
   emitWarnings(frozenWarnings)
   const config: AppConfig = Object.freeze({
@@ -144,6 +162,7 @@ export const parseConfig = (source: EnvSource = import.meta.env): ConfigResult =
     apiBaseUrl,
     availabilityEnabled,
     trailersEnabled,
+    recommendationsEnabled,
   })
 
   return Object.freeze({ status: 'valid', config, warnings: frozenWarnings })

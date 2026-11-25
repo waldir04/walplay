@@ -9,6 +9,7 @@ const config = (overrides: Partial<AppConfig> = {}): AppConfig => ({
   apiBaseUrl: 'http://localhost:4000',
   availabilityEnabled: false,
   trailersEnabled: false,
+  recommendationsEnabled: false,
   ...overrides,
 })
 

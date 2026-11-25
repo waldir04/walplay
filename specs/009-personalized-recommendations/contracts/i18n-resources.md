@@ -25,7 +25,7 @@ render.
 | `recommendations.section.mediaScope.label` | Show popular titles for | Mostrar títulos populares de |
 | `recommendations.section.mediaScope.movie` | Movies | Películas |
 | `recommendations.section.mediaScope.tv` | TV shows | Series |
-| `recommendations.section.accessibleName` | Popular now, {mediaType} | Popular ahora, {mediaType} |
+| `recommendations.section.accessibleName` | Popular now, {{mediaType}} | Popular ahora, {{mediaType}} |
 | `recommendations.section.listLabel` | Popular titles | Títulos populares |
 | `recommendations.states.loading` | Recommendations are loading | Las recomendaciones se están cargando |
 | `recommendations.states.empty.noProvider.title` | No suggestions are available right now | No hay sugerencias disponibles ahora |
@@ -39,7 +39,7 @@ render.
 | `recommendations.states.error.timedOut.title` | Suggestions took too long | Las sugerencias tardaron demasiado |
 | `recommendations.states.error.timedOut.description` | The provider did not answer in time. Try again. | El proveedor no respondió a tiempo. Vuelve a intentarlo. |
 | `recommendations.states.stale.label` | These suggestions were loaded earlier and may not be current. | Estas sugerencias se cargaron antes y pueden no estar actualizadas. |
-| `recommendations.states.stale.lastUpdated` | Loaded on {date} | Datos cargados el {date} |
+| `recommendations.states.stale.lastUpdated` | Loaded on {{date}} | Datos cargados el {{date}} |
 | `recommendations.actions.retry` | Try again | Volver a intentar |
 | `recommendations.actions.retrying` | Trying again… | Intentando de nuevo… |
 | `recommendations.actions.browse` | Browse the catalog | Explorar el catálogo |

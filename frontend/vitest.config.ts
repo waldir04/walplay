@@ -20,6 +20,7 @@ export default defineConfig({
       VITE_API_BASE_URL: 'http://localhost:4000',
       VITE_AVAILABILITY_ENABLED: 'false',
       VITE_TRAILERS_ENABLED: 'false',
+      VITE_RECOMMENDATIONS_ENABLED: 'false',
     },
     setupFiles: ['./src/test/setup.ts'],
     css: false,
@@ -124,6 +125,12 @@ export default defineConfig({
           lines: 90,
         },
         'src/features/select-availability-region/model/*': {
+          statements: 90,
+          branches: 90,
+          functions: 90,
+          lines: 90,
+        },
+        'src/widgets/recommendation-area/model/*': {
           statements: 90,
           branches: 90,
           functions: 90,

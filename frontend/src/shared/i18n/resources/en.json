@@ -574,5 +574,74 @@
       "reset": "Reset saved titles",
       "confirmReset": "Confirm reset saved titles"
     }
+  },
+  "recommendations": {
+    "area": {
+      "heading": "Discover",
+      "description": "Popular titles from the provider."
+    },
+    "explanation": {
+      "summary": "How recommendations work",
+      "basis": "This section shows the provider's popular titles. It is not personalized.",
+      "savedTitles": "Walplay does not use the titles you saved to choose these suggestions.",
+      "noAi": "Walplay does not apply AI or machine learning to your activity and does not create a separate visitor profile.",
+      "scope": "You are browsing as a guest. Personalized recommendations are not available in guest mode.",
+      "retention": "Your saved lists stay in this browser and may be lost if you clear browsing data.",
+      "controls": "You can switch between movies and TV shows and try again if something fails. Guest mode has no personalization controls."
+    },
+    "section": {
+      "popular": {
+        "heading": "Popular now",
+        "basis": "Based on provider popularity, not personalized"
+      },
+      "mediaScope": {
+        "label": "Show popular titles for",
+        "movie": "Movies",
+        "tv": "TV shows"
+      },
+      "accessibleName": "Popular now, {{mediaType}}",
+      "listLabel": "Popular titles"
+    },
+    "states": {
+      "loading": "Recommendations are loading",
+      "empty": {
+        "noProvider": {
+          "title": "No suggestions are available right now",
+          "description": "The provider did not return any popular titles to show. Try again or browse the catalog."
+        },
+        "allExcluded": {
+          "title": "No suggestions are left to show",
+          "description": "The available popular titles are already in your saved lists. Browse the catalog or search for another title."
+        }
+      },
+      "error": {
+        "title": "This area could not be loaded",
+        "description": "Suggestions are temporarily unavailable. Try again or keep browsing.",
+        "rateLimited": {
+          "title": "Suggestions are temporarily limited",
+          "description": "Too many requests reached the provider. Try again in a moment."
+        },
+        "timedOut": {
+          "title": "Suggestions took too long",
+          "description": "The provider did not answer in time. Try again."
+        }
+      },
+      "stale": {
+        "label": "These suggestions were loaded earlier and may not be current.",
+        "lastUpdated": "Loaded on {{date}}"
+      }
+    },
+    "actions": {
+      "retry": "Try again",
+      "retrying": "Trying again…",
+      "browse": "Browse the catalog",
+      "search": "Search titles"
+    },
+    "announcements": {
+      "ready": "Popular suggestions updated.",
+      "empty": "No popular suggestions are available.",
+      "error": "Suggestions could not be loaded.",
+      "stale": "Showing previously loaded suggestions."
+    }
   }
 }

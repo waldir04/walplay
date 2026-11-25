@@ -252,3 +252,69 @@ describe('trailers capability flag', () => {
     clearExpectedWarnings()
   })
 })
+
+describe('recommendations capability flag', () => {
+  const base = {
+    VITE_APP_ENV: 'local',
+    VITE_APP_VERSION: '1.0.0',
+    VITE_API_BASE_URL: 'http://localhost:4000',
+  }
+
+  it('defaults recommendations to disabled when the flag is absent or empty', () => {
+    const absent = parseConfig(base)
+    const empty = parseConfig({ ...base, VITE_RECOMMENDATIONS_ENABLED: '' })
+
+    if (absent.status !== 'valid' || empty.status !== 'valid') {
+      throw new Error('expected valid configuration')
+    }
+    expect(absent.config.recommendationsEnabled).toBe(false)
+    expect(empty.config.recommendationsEnabled).toBe(false)
+    expect(absent.warnings.join(' ')).not.toContain('VITE_RECOMMENDATIONS_ENABLED')
+    expect(empty.warnings.join(' ')).not.toContain('VITE_RECOMMENDATIONS_ENABLED')
+    clearExpectedWarnings()
+  })
+
+  it('disables recommendations for an explicit false value without a warning', () => {
+    const result = parseConfig({ ...base, VITE_RECOMMENDATIONS_ENABLED: 'false' })
+
+    if (result.status !== 'valid') {
+      throw new Error('expected valid configuration')
+    }
+    expect(result.config.recommendationsEnabled).toBe(false)
+    expect(result.warnings.join(' ')).not.toContain('VITE_RECOMMENDATIONS_ENABLED')
+    clearExpectedWarnings()
+  })
+
+  it('enables recommendations only for a normalized true value', () => {
+    const enabled = parseConfig({ ...base, VITE_RECOMMENDATIONS_ENABLED: ' true ' })
+
+    if (enabled.status !== 'valid') {
+      throw new Error('expected valid configuration')
+    }
+    expect(enabled.config.recommendationsEnabled).toBe(true)
+    clearExpectedWarnings()
+  })
+
+  it('warns without leaking the value and stays disabled for invalid input', () => {
+    const result = parseConfig({ ...base, VITE_RECOMMENDATIONS_ENABLED: 'enabled-maybe' })
+
+    if (result.status !== 'valid') {
+      throw new Error('expected valid configuration')
+    }
+    expect(result.config.recommendationsEnabled).toBe(false)
+    expect(result.warnings.join(' ')).toContain('VITE_RECOMMENDATIONS_ENABLED')
+    expect(result.warnings.join(' ')).not.toContain('enabled-maybe')
+    clearExpectedWarnings()
+  })
+
+  it('keeps the parsed configuration and warnings frozen', () => {
+    const result = parseConfig({ ...base, VITE_RECOMMENDATIONS_ENABLED: 'true' })
+
+    if (result.status !== 'valid') {
+      throw new Error('expected valid configuration')
+    }
+    expect(Object.isFrozen(result.config)).toBe(true)
+    expect(Object.isFrozen(result.warnings)).toBe(true)
+    clearExpectedWarnings()
+  })
+})
