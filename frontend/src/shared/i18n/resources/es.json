@@ -574,5 +574,74 @@
       "reset": "Restablecer títulos guardados",
       "confirmReset": "Confirmar restablecer títulos guardados"
     }
+  },
+  "recommendations": {
+    "area": {
+      "heading": "Descubre",
+      "description": "Títulos populares del proveedor."
+    },
+    "explanation": {
+      "summary": "Cómo funcionan las recomendaciones",
+      "basis": "Esta sección muestra los títulos populares del proveedor. No es personalizada.",
+      "savedTitles": "Walplay no usa los títulos que guardaste para elegir estas sugerencias.",
+      "noAi": "Walplay no aplica inteligencia artificial ni aprendizaje automático a tu actividad y no crea un perfil separado de visitante.",
+      "scope": "Estás en modo invitado. Las recomendaciones personalizadas no están disponibles en este modo.",
+      "retention": "Tus listas guardadas permanecen en este navegador y pueden perderse si borras los datos de navegación.",
+      "controls": "Puedes cambiar entre películas y series y volver a intentar si algo falla. El modo invitado no tiene controles de personalización."
+    },
+    "section": {
+      "popular": {
+        "heading": "Popular ahora",
+        "basis": "Según la popularidad del proveedor, no personalizado"
+      },
+      "mediaScope": {
+        "label": "Mostrar títulos populares de",
+        "movie": "Películas",
+        "tv": "Series"
+      },
+      "accessibleName": "Popular ahora, {{mediaType}}",
+      "listLabel": "Títulos populares"
+    },
+    "states": {
+      "loading": "Las recomendaciones se están cargando",
+      "empty": {
+        "noProvider": {
+          "title": "No hay sugerencias disponibles ahora",
+          "description": "El proveedor no devolvió títulos populares para mostrar. Vuelve a intentarlo o explora el catálogo."
+        },
+        "allExcluded": {
+          "title": "No quedan sugerencias para mostrar",
+          "description": "Los títulos populares disponibles ya están en tus listas guardadas. Explora el catálogo o busca otro título."
+        }
+      },
+      "error": {
+        "title": "No se pudo cargar esta sección",
+        "description": "Las sugerencias no están disponibles temporalmente. Vuelve a intentarlo o sigue explorando.",
+        "rateLimited": {
+          "title": "Las sugerencias están limitadas temporalmente",
+          "description": "Se alcanzó el límite de solicitudes al proveedor. Vuelve a intentarlo en un momento."
+        },
+        "timedOut": {
+          "title": "Las sugerencias tardaron demasiado",
+          "description": "El proveedor no respondió a tiempo. Vuelve a intentarlo."
+        }
+      },
+      "stale": {
+        "label": "Estas sugerencias se cargaron antes y pueden no estar actualizadas.",
+        "lastUpdated": "Datos cargados el {{date}}"
+      }
+    },
+    "actions": {
+      "retry": "Volver a intentar",
+      "retrying": "Intentando de nuevo…",
+      "browse": "Explorar el catálogo",
+      "search": "Buscar títulos"
+    },
+    "announcements": {
+      "ready": "Sugerencias populares actualizadas.",
+      "empty": "No hay sugerencias populares disponibles.",
+      "error": "No se pudieron cargar las sugerencias.",
+      "stale": "Mostrando sugerencias cargadas anteriormente."
+    }
   }
 }
