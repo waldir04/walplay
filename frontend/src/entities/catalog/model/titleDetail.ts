@@ -144,7 +144,6 @@ export const titleDetailSchema = z.object({
   tvSummary: tvSummarySchema.optional(),
   seasons: z.array(seasonSchema).readonly().optional(),
   collection: z.object({ name: z.string().trim().min(1) }).optional(),
-  trailer: z.object({ url: z.url(), site: z.literal('youtube') }).optional(),
 })
 export type TitleDetail = z.infer<typeof titleDetailSchema>
 

@@ -88,17 +88,11 @@ describe('TitleDetailPage availability', () => {
   })
 
   it('places the section after the action area and before seasons and credits', async () => {
-    vi.mocked(fetchDetail).mockResolvedValue(
-      detailEnvelope(
-        tvDetail({
-          trailer: { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', site: 'youtube' },
-        })
-      )
-    )
+    vi.mocked(fetchDetail).mockResolvedValue(detailEnvelope(tvDetail()))
     vi.mocked(fetchSeason).mockResolvedValue(seasonEnvelope(1))
     await renderWithProviders(
       <TitleDetailPage
-        capabilities={{ trailer: true, availability: true, personalLists: false }}
+        capabilities={{ trailer: false, availability: true, personalLists: true }}
       />,
       { initialEntries: [`/browse/tv-shows/title/${TV_ID}`] }
     )

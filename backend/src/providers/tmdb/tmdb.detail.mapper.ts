@@ -65,7 +65,6 @@ const DESCRIPTIVE_PLACEHOLDERS = new Set([
 
 const DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/
 const YEAR_PREFIX_PATTERN = /^(\d{4})(?:-|$)/
-const TRAILER_KEY_PATTERN = /^[A-Za-z0-9_-]{6,20}$/
 
 const STATUS_BY_NAME: Readonly<Record<string, TitleStatus>> = Object.freeze({
   released: 'released',
@@ -317,34 +316,6 @@ const mapGenres = (
   return mapped
 }
 
-interface VideoInput {
-  readonly site?: string | null | undefined
-  readonly type?: string | null | undefined
-  readonly key?: string | null | undefined
-  readonly official?: boolean | null | undefined
-}
-
-const selectTrailer = (
-  videos: readonly VideoInput[] | null | undefined
-): { readonly url: string; readonly site: 'youtube' } | undefined => {
-  if (videos === null || videos === undefined) {
-    return undefined
-  }
-  const eligible = videos.filter(
-    (video) =>
-      normalizeRawText(video.site)?.toLowerCase() === 'youtube' &&
-      normalizeRawText(video.type)?.toLowerCase() === 'trailer' &&
-      typeof video.key === 'string' &&
-      TRAILER_KEY_PATTERN.test(video.key)
-  )
-  const selected = eligible.find((video) => video.official === true) ?? eligible[0]
-  const key = selected?.key
-  if (key === undefined || key === null) {
-    return undefined
-  }
-  return { url: `https://www.youtube.com/watch?v=${key}`, site: 'youtube' }
-}
-
 const buildPerson = (
   name: string | null | undefined,
   profilePath: string | null | undefined,
@@ -552,10 +523,6 @@ const mapSeasons = (
   return mapped.length === 0 ? undefined : orderSeasons(mapped)
 }
 
-const trailerOf = (
-  videos: { readonly results?: readonly VideoInput[] | null } | null | undefined
-) => selectTrailer(videos?.results)
-
 export const mapMovieDetail = (
   raw: MovieDetailDto,
   context: CoreMappingContext = {}
@@ -578,7 +545,6 @@ export const mapMovieDetail = (
   const status = mapTitleStatus(raw.status)
   const poster = context.poster?.(raw.poster_path)
   const backdrop = context.backdrop?.(raw.backdrop_path)
-  const trailer = trailerOf(raw.videos)
   const collectionName = normalizeDescriptiveText(raw.belongs_to_collection?.name)
   const collectionProviderId =
     raw.belongs_to_collection !== null &&
@@ -606,7 +572,6 @@ export const mapMovieDetail = (
     ...(poster === undefined ? {} : { poster }),
     ...(backdrop === undefined ? {} : { backdrop }),
     ...(collectionName === undefined ? {} : { collection: { name: collectionName } }),
-    ...(trailer === undefined ? {} : { trailer }),
   }
 
   return {
@@ -637,7 +602,6 @@ export const mapTvDetail = (
   const status = mapTitleStatus(raw.status)
   const poster = context.poster?.(raw.poster_path)
   const backdrop = context.backdrop?.(raw.backdrop_path)
-  const trailer = trailerOf(raw.videos)
   const tvSummary = buildTvSummary(raw)
   const seasons = mapSeasons(raw.seasons)
 
@@ -660,7 +624,6 @@ export const mapTvDetail = (
     ...(backdrop === undefined ? {} : { backdrop }),
     ...(tvSummary === undefined ? {} : { tvSummary }),
     ...(seasons === undefined ? {} : { seasons }),
-    ...(trailer === undefined ? {} : { trailer }),
   }
 
   return { detail }

@@ -32,3 +32,17 @@ export type {
   AvailabilitySectionState,
   AvailabilitySectionStatus,
 } from './ui/AvailabilitySection'
+export { TRAILER_SECTION_HEADING_ID, TrailerSection } from './ui/TrailerSection'
+export type {
+  TrailerSectionProps,
+  TrailerSectionState,
+  TrailerSectionStatus,
+} from './ui/TrailerSection'
+export { TrailerCover, TrailerDisclosure, TrailerExternalLink } from './ui/TrailerCover'
+export type { TrailerCoverProps } from './ui/TrailerCover'
+export { TrailerPlayer } from './ui/TrailerPlayer'
+export type { TrailerPlayerProps, TrailerPlayerStatus } from './ui/TrailerPlayer'
+export { TRAILER_LIST_ID, TrailerList } from './ui/TrailerList'
+export type { TrailerListProps } from './ui/TrailerList'
+export { TrailerItem } from './ui/TrailerItem'
+export type { TrailerItemProps } from './ui/TrailerItem'

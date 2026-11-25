@@ -6,6 +6,7 @@ import { CatalogService } from './services/catalog.service.js'
 import { TEST_CONFIG, createFakeProvider } from './test/fixtures/fakeProvider.js'
 import { createTestDetailService } from './test/fixtures/fakeDetailProvider.js'
 import { createTestSearchService } from './test/fixtures/fakeSearchProvider.js'
+import { createTestTrailerService } from './test/fixtures/fakeTrailerProvider.js'
 import { startTestServer } from './test/fixtures/testServer.js'
 import type { TestServer } from './test/fixtures/testServer.js'
 
@@ -96,5 +97,56 @@ describe('availability release gating', () => {
 
     expect(response.status).toBe(400)
     expect(body.error.code).toBe('VALIDATION_ERROR')
+  })
+})
+
+
+describe('trailer gating', () => {
+  it('mounts the trailer route when enabled and the service is provided', async () => {
+    const app = createApp({
+      config: { ...TEST_CONFIG, trailersEnabled: true },
+      service: new CatalogService({
+        provider: createFakeProvider(),
+        cache: new CatalogCache({ freshTtlMs: 1000, staleTtlMs: 10_000, maxEntries: 10 }),
+      }),
+      searchService: createTestSearchService(),
+      detailService: createTestDetailService(),
+      trailerService: createTestTrailerService(),
+    })
+    server = await startTestServer(app)
+
+    const response = await fetch(
+      `${server.baseUrl}/api/catalog/movie/titles/d2wxOm1vdmllOjU1MA/videos`
+    )
+    const body = (await response.json()) as { data: { state: string } }
+
+    expect(response.status).toBe(200)
+    expect(body.data.state).toBeDefined()
+  })
+
+  it('refuses to start with trailers enabled and no service', () => {
+    expect(() =>
+      createApp({
+        config: { ...TEST_CONFIG, trailersEnabled: true },
+        service: new CatalogService({
+          provider: createFakeProvider(),
+          cache: new CatalogCache({ freshTtlMs: 1000, staleTtlMs: 10_000, maxEntries: 10 }),
+        }),
+        searchService: createTestSearchService(),
+        detailService: createTestDetailService(),
+      })
+    ).toThrow(/no trailer service/i)
+  })
+
+  it('does not mount the trailer route when disabled', async () => {
+    server = await startTestServer(buildApp())
+
+    const response = await fetch(
+      `${server.baseUrl}/api/catalog/movie/titles/d2wxOm1vdmllOjU1MA/videos`
+    )
+    const body = (await response.json()) as { error: { code: string } }
+
+    expect(response.status).toBe(404)
+    expect(body.error.code).toBe('ROUTE_NOT_FOUND')
   })
 })

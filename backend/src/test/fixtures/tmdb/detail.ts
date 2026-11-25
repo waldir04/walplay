@@ -9,14 +9,6 @@ import type {
   TvDetailDto,
 } from '../../../providers/tmdb/tmdb.detail.schemas.js'
 
-const trailer = (overrides: Record<string, unknown> = {}) => ({
-  site: 'YouTube',
-  type: 'Trailer',
-  key: 'dQw4w9WgXcQ',
-  official: true,
-  ...overrides,
-})
-
 export const completeMovieDetail = (
   overrides: Partial<MovieDetailDto> = {}
 ): MovieDetailDto => ({
@@ -40,7 +32,6 @@ export const completeMovieDetail = (
     { id: 53, name: 'Thriller' },
   ],
   belongs_to_collection: { id: 100, name: 'Fight Club Collection' },
-  videos: { results: [trailer()] },
   ...overrides,
 })
 
@@ -99,7 +90,6 @@ export const completeTvDetail = (overrides: Partial<TvDetailDto> = {}): TvDetail
     },
   ],
   networks: [{ id: 213, name: 'Netflix' }],
-  videos: { results: [trailer({ key: 'abcdef12345' })] },
   ...overrides,
 })
 
@@ -124,7 +114,6 @@ export const emptyStringMovieDetail = (): MovieDetailDto => ({
   vote_average: 0,
   vote_count: 0,
   popularity: 0,
-  videos: { results: [] },
 })
 
 export const zeroNumericMovieDetail = (): MovieDetailDto => ({

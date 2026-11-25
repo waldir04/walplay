@@ -19,6 +19,7 @@ export default defineConfig({
       VITE_APP_VERSION: '0.0.0',
       VITE_API_BASE_URL: 'http://localhost:4000',
       VITE_AVAILABILITY_ENABLED: 'false',
+      VITE_TRAILERS_ENABLED: 'false',
     },
     setupFiles: ['./src/test/setup.ts'],
     css: false,

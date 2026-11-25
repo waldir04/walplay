@@ -210,3 +210,45 @@ describe('availability capability flag', () => {
     clearExpectedWarnings()
   })
 })
+
+describe('trailers capability flag', () => {
+  const base = {
+    VITE_APP_ENV: 'local',
+    VITE_APP_VERSION: '1.0.0',
+    VITE_API_BASE_URL: 'http://localhost:4000',
+  }
+
+  it('defaults trailers to disabled when the flag is absent', () => {
+    const result = parseConfig(base)
+
+    if (result.status !== 'valid') {
+      throw new Error('expected valid configuration')
+    }
+    expect(result.config.trailersEnabled).toBe(false)
+    clearExpectedWarnings()
+  })
+
+  it('enables trailers only for a true value', () => {
+    const enabled = parseConfig({ ...base, VITE_TRAILERS_ENABLED: ' true ' })
+    const disabled = parseConfig({ ...base, VITE_TRAILERS_ENABLED: 'false' })
+
+    if (enabled.status !== 'valid' || disabled.status !== 'valid') {
+      throw new Error('expected valid configuration')
+    }
+    expect(enabled.config.trailersEnabled).toBe(true)
+    expect(disabled.config.trailersEnabled).toBe(false)
+    clearExpectedWarnings()
+  })
+
+  it('warns without leaking the value and stays disabled for invalid input', () => {
+    const result = parseConfig({ ...base, VITE_TRAILERS_ENABLED: 'sometimes' })
+
+    if (result.status !== 'valid') {
+      throw new Error('expected valid configuration')
+    }
+    expect(result.config.trailersEnabled).toBe(false)
+    expect(result.warnings.join(' ')).toContain('VITE_TRAILERS_ENABLED')
+    expect(result.warnings.join(' ')).not.toContain('sometimes')
+    clearExpectedWarnings()
+  })
+})

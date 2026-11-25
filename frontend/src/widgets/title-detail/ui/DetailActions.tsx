@@ -6,20 +6,26 @@ import type { DetailCapabilities } from '@/shared/config/detailCapabilities'
 
 import type { TitleDetail } from '@/entities/catalog'
 
+export interface DetailTrailerEntry {
+  readonly headingId: string
+}
+
 export interface DetailActionsProps {
   readonly detail: TitleDetail
   readonly capabilities?: DetailCapabilities
+  readonly trailerEntry?: DetailTrailerEntry | undefined
 }
 
 export const DetailActions = ({
   detail,
   capabilities = DETAIL_CAPABILITIES,
+  trailerEntry,
 }: DetailActionsProps) => {
   const { t } = useTranslation()
 
-  const showTrailer = capabilities.trailer && detail.trailer !== undefined
+  const showTrailerEntry = capabilities.trailer && trailerEntry !== undefined
 
-  if (!showTrailer && !capabilities.personalLists) {
+  if (!showTrailerEntry && !capabilities.personalLists) {
     return null
   }
 
@@ -42,17 +48,21 @@ export const DetailActions = ({
           />
         </div>
       ) : null}
-      {showTrailer ? (
+      {showTrailerEntry && trailerEntry !== undefined ? (
         <a
-          href={detail.trailer?.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex min-h-11 w-fit flex-col justify-center rounded-control border border-border-strong bg-surface px-4 py-2 font-semibold text-text transition-colors duration-150 ease-out hover:bg-surface-raised focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+          href={`#${trailerEntry.headingId}`}
+          onClick={(event) => {
+            const target = document.getElementById(trailerEntry.headingId)
+            if (target === null) {
+              return
+            }
+            event.preventDefault()
+            target.focus()
+            target.scrollIntoView?.({ block: 'start' })
+          }}
+          className="inline-flex min-h-11 w-fit items-center justify-center rounded-control border border-border-strong bg-surface px-4 py-2 font-semibold text-text transition-colors duration-150 ease-out hover:bg-surface-raised focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus motion-reduce:transition-none"
         >
-          <span>{t('detail.actions.trailer')}</span>
-          <span className="text-caption font-normal text-text-muted">
-            {t('detail.actions.trailerExternal')}
-          </span>
+          {t('detail.trailers.entry')}
         </a>
       ) : null}
     </section>

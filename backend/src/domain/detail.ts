@@ -125,7 +125,6 @@ export interface TitleDetail {
   readonly tvSummary?: TvSummary
   readonly seasons?: readonly Season[]
   readonly collection?: { readonly name: string }
-  readonly trailer?: { readonly url: string; readonly site: 'youtube' }
 }
 
 export type DetailResponseMeta = CatalogResponseMeta

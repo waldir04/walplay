@@ -279,3 +279,41 @@ export {
   useAvailabilityQuery,
   useAvailabilityRegionsQuery,
 } from './api/availabilityQueries'
+export {
+  TRAILER_MAX_INVENTORY,
+  TRAILER_MAX_VISIBLE,
+  TRAILER_TYPE_ORDER,
+  TRAILER_TYPE_RANK,
+  availableTrailersDataSchema,
+  noVideosTrailersDataSchema,
+  playbackModeFor,
+  promotionalTypeSchema,
+  rankTrailerVideos,
+  trailerEnvelopeSchema,
+  trailerMetaSchema,
+  trailersDataSchema,
+  trailerVideoSchema,
+} from './model/trailer'
+export type {
+  AvailableTrailersData,
+  NoVideosTrailersData,
+  PlayerUnavailableReason,
+  PromotionalType,
+  TrailerEnvelope,
+  TrailerMeta,
+  TrailerPlaybackMode,
+  TrailerPlaybackSession,
+  TrailerPlaybackStatus,
+  TrailerVideo,
+  TrailersData,
+} from './model/trailer'
+export {
+  TRAILER_TYPE_LABEL_KEYS,
+  formatTrailerLanguage,
+  formatTrailerPublishedAt,
+  resetTrailerFormattingCaches,
+  trailerTypeLabelKey,
+} from './model/trailerFormatting'
+export { createTrailerClient, fetchTrailers, getTrailerClient } from './api/trailerClient'
+export type { TrailerClient, TrailerRequest } from './api/trailerClient'
+export { TRAILER_GC_TIME_MS, TRAILER_STALE_TIME_MS, useTrailerQuery } from './api/trailerQueries'

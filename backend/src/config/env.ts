@@ -24,6 +24,13 @@ export interface BackendConfig {
   readonly availabilityCacheMaxEntries: number
   readonly availabilityFreshnessWindowMs: number
   readonly availabilityDestinationHosts: readonly string[]
+  readonly trailersEnabled: boolean
+  readonly trailersCacheTtlMs: number
+  readonly trailersCacheStaleMs: number
+  readonly trailersCacheMaxEntries: number
+  readonly trailersMaxInventory: number
+  readonly trailersEmbedHosts: readonly string[]
+  readonly trailersExternalHosts: readonly string[]
 }
 
 export type EnvSource = Readonly<Record<string, string | undefined>>
@@ -41,6 +48,9 @@ export class ConfigError extends Error {
 const DEFAULT_CORS_ORIGIN = 'http://localhost:5173'
 const DEFAULT_AVAILABILITY_REGIONS = 'CO'
 const DEFAULT_AVAILABILITY_DESTINATION_HOSTS = 'www.themoviedb.org,themoviedb.org'
+const DEFAULT_TRAILERS_EMBED_HOSTS = 'www.youtube-nocookie.com'
+const DEFAULT_TRAILERS_EXTERNAL_HOSTS = 'www.youtube.com'
+const TRAILER_MAX_INVENTORY_LIMIT = 24
 const AVAILABILITY_REGION_PATTERN = /^[A-Z]{2}$/
 const HOSTNAME_PATTERN = /^(?=.{1,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/
 const AVAILABILITY_REQUIRED_REGION = 'CO'
@@ -86,6 +96,18 @@ const envSchema = z.object({
   AVAILABILITY_CACHE_MAX_ENTRIES: z.coerce.number().int().min(1).default(500),
   AVAILABILITY_FRESHNESS_WINDOW_SECONDS: z.coerce.number().int().min(0).default(86_400),
   AVAILABILITY_DESTINATION_HOSTS: z.string().optional(),
+  TRAILERS_ENABLED: z.string().optional(),
+  TRAILERS_CACHE_TTL_SECONDS: z.coerce.number().int().min(0).default(86_400),
+  TRAILERS_CACHE_STALE_SECONDS: z.coerce.number().int().min(0).default(604_800),
+  TRAILERS_CACHE_MAX_ENTRIES: z.coerce.number().int().min(1).default(500),
+  TRAILERS_MAX_INVENTORY: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(TRAILER_MAX_INVENTORY_LIMIT)
+    .default(TRAILER_MAX_INVENTORY_LIMIT),
+  TRAILERS_EMBED_HOSTS: z.string().optional(),
+  TRAILERS_EXTERNAL_HOSTS: z.string().optional(),
 })
 
 const parseOrigins = (value: string | undefined, nodeEnv: NodeEnv): readonly string[] => {
@@ -143,15 +165,18 @@ const parseSupportedRegions = (value: string | undefined): readonly string[] => 
   return Object.freeze([...regions].sort())
 }
 
-const parseDestinationHosts = (value: string | undefined): readonly string[] => {
-  const source =
-    value === undefined || value.trim() === '' ? DEFAULT_AVAILABILITY_DESTINATION_HOSTS : value
+const parseHostList = (
+  value: string | undefined,
+  field: string,
+  fallback: string
+): readonly string[] => {
+  const source = value === undefined || value.trim() === '' ? fallback : value
   const hosts = [...new Set(source.split(',').map((host) => host.trim().toLowerCase()))].filter(
     (host) => host.length > 0
   )
 
   if (hosts.length === 0 || hosts.some((host) => !HOSTNAME_PATTERN.test(host))) {
-    throw new ConfigError(['AVAILABILITY_DESTINATION_HOSTS'])
+    throw new ConfigError([field])
   }
 
   return Object.freeze([...hosts])
@@ -179,8 +204,10 @@ export const loadConfig = (source: EnvSource = process.env): BackendConfig => {
   const availabilitySupportedRegions = parseSupportedRegions(
     parsed.AVAILABILITY_SUPPORTED_REGIONS
   )
-  const availabilityDestinationHosts = parseDestinationHosts(
-    parsed.AVAILABILITY_DESTINATION_HOSTS
+  const availabilityDestinationHosts = parseHostList(
+    parsed.AVAILABILITY_DESTINATION_HOSTS,
+    'AVAILABILITY_DESTINATION_HOSTS',
+    DEFAULT_AVAILABILITY_DESTINATION_HOSTS
   )
   const availabilityCacheTtlMs = secondsToMilliseconds(parsed.AVAILABILITY_CACHE_TTL_SECONDS)
   const availabilityCacheStaleMs = secondsToMilliseconds(
@@ -189,6 +216,23 @@ export const loadConfig = (source: EnvSource = process.env): BackendConfig => {
   const availabilityFreshnessWindowMs = secondsToMilliseconds(
     parsed.AVAILABILITY_FRESHNESS_WINDOW_SECONDS
   )
+  const trailersEnabled = parseBoolean(parsed.TRAILERS_ENABLED, 'TRAILERS_ENABLED')
+  const trailersEmbedHosts = parseHostList(
+    parsed.TRAILERS_EMBED_HOSTS,
+    'TRAILERS_EMBED_HOSTS',
+    DEFAULT_TRAILERS_EMBED_HOSTS
+  )
+  const trailersExternalHosts = parseHostList(
+    parsed.TRAILERS_EXTERNAL_HOSTS,
+    'TRAILERS_EXTERNAL_HOSTS',
+    DEFAULT_TRAILERS_EXTERNAL_HOSTS
+  )
+  const trailersCacheTtlMs = secondsToMilliseconds(parsed.TRAILERS_CACHE_TTL_SECONDS)
+  const trailersCacheStaleMs = secondsToMilliseconds(parsed.TRAILERS_CACHE_STALE_SECONDS)
+
+  if (trailersCacheTtlMs > trailersCacheStaleMs) {
+    throw new ConfigError(['TRAILERS_CACHE_TTL_SECONDS', 'TRAILERS_CACHE_STALE_SECONDS'])
+  }
 
   if (availabilityCacheTtlMs > availabilityCacheStaleMs) {
     throw new ConfigError(['AVAILABILITY_CACHE_TTL_SECONDS', 'AVAILABILITY_CACHE_STALE_SECONDS'])
@@ -221,5 +265,12 @@ export const loadConfig = (source: EnvSource = process.env): BackendConfig => {
     availabilityCacheMaxEntries: parsed.AVAILABILITY_CACHE_MAX_ENTRIES,
     availabilityFreshnessWindowMs,
     availabilityDestinationHosts,
+    trailersEnabled,
+    trailersCacheTtlMs,
+    trailersCacheStaleMs,
+    trailersCacheMaxEntries: parsed.TRAILERS_CACHE_MAX_ENTRIES,
+    trailersMaxInventory: parsed.TRAILERS_MAX_INVENTORY,
+    trailersEmbedHosts,
+    trailersExternalHosts,
   })
 }

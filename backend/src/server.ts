@@ -10,11 +10,13 @@ import { createTmdbAvailabilityProvider } from './providers/tmdb/tmdb.availabili
 import { createTmdbDetailProvider } from './providers/tmdb/tmdb.detail.provider.js'
 import { createTmdbProvider } from './providers/tmdb/tmdb.provider.js'
 import { createTmdbSearchProvider } from './providers/tmdb/tmdb.search.provider.js'
+import { createTmdbTrailerProvider } from './providers/tmdb/tmdb.trailer.provider.js'
 import { AvailabilityService } from './services/availability.service.js'
 import { CatalogCache } from './services/catalog-cache.js'
 import { CatalogService } from './services/catalog.service.js'
 import { DetailService } from './services/detail.service.js'
 import { SearchService } from './services/search.service.js'
+import { TrailerService } from './services/trailer.service.js'
 
 const loadLocalEnvironment = (): void => {
   if (!existsSync('.env.local')) {
@@ -54,6 +56,12 @@ const start = (): void => {
   const provider = createTmdbProvider({ client, images, genres })
   const searchProvider = createTmdbSearchProvider({ client, images, genres })
   const detailProvider = createTmdbDetailProvider({ client, images, genres })
+  const trailerProvider = createTmdbTrailerProvider({
+    client,
+    embedHosts: config.trailersEmbedHosts,
+    externalHosts: config.trailersExternalHosts,
+    maxInventory: config.trailersMaxInventory,
+  })
   const cacheOptions = {
     freshTtlMs: config.tmdbCacheTtlMs,
     staleTtlMs: config.tmdbCacheStaleMs,
@@ -73,6 +81,17 @@ const start = (): void => {
     staleTtlMs: config.availabilityCacheStaleMs,
     maxEntries: config.availabilityCacheMaxEntries,
   })
+  const trailerCache = new CatalogCache({
+    freshTtlMs: config.trailersCacheTtlMs,
+    staleTtlMs: config.trailersCacheStaleMs,
+    maxEntries: config.trailersCacheMaxEntries,
+  })
+  const trailerService = new TrailerService({
+    provider: trailerProvider,
+    cache: trailerCache,
+    freshnessWindowMs: config.trailersCacheTtlMs,
+    retentionMs: config.trailersCacheStaleMs,
+  })
   const availabilityService = new AvailabilityService({
     provider: availabilityProvider,
     cache: availabilityCache,
@@ -86,6 +105,7 @@ const start = (): void => {
     detailService: new DetailService({ provider: detailProvider, cache: detailCache }),
     searchService: new SearchService({ provider: searchProvider, cache: searchCache }),
     availabilityService,
+    trailerService,
     logger,
   })
 

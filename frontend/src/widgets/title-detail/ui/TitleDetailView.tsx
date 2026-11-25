@@ -14,6 +14,7 @@ import { RelatedSection } from './RelatedSection'
 import type { RelatedSectionState } from './RelatedSection'
 import { SeasonEpisodesSection } from './SeasonEpisodesSection'
 import type { SeasonSectionState } from './SeasonEpisodesSection'
+import { TRAILER_SECTION_HEADING_ID } from './TrailerSection'
 
 export interface DetailStaleNote {
   readonly lastUpdatedLabel: string
@@ -33,6 +34,8 @@ export interface TitleDetailViewProps {
   readonly returnAction: ReactNode
   readonly attribution: ReactNode
   readonly availability?: ReactNode | undefined
+  readonly trailer?: ReactNode | undefined
+  readonly trailerEntry?: boolean | undefined
   readonly stale?: DetailStaleNote | undefined
   readonly season?: TitleDetailSeasonProps | undefined
   readonly credits?: CreditsSectionState | undefined
@@ -46,6 +49,8 @@ export const TitleDetailView = ({
   returnAction,
   attribution,
   availability,
+  trailer,
+  trailerEntry,
   stale,
   season,
   credits,
@@ -76,7 +81,12 @@ export const TitleDetailView = ({
       />
       <DetailFacts detail={detail} />
       <DetailOverview detail={detail} />
-      <DetailActions detail={detail} capabilities={capabilities} />
+      <DetailActions
+        detail={detail}
+        capabilities={capabilities}
+        trailerEntry={trailerEntry === true ? { headingId: TRAILER_SECTION_HEADING_ID } : undefined}
+      />
+      {trailer === undefined ? null : trailer}
       {availability === undefined ? null : availability}
       {detail.mediaType === 'tv' && season !== undefined && season.seasons.length > 0 ? (
         <SeasonEpisodesSection
